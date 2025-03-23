@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const URL = "http://localhost:8010/products";
+const URL = "http://localhost:8090/products";
 
 const fetchHandler = async () => {
   return await axios.get(URL).then((res) => res.data);

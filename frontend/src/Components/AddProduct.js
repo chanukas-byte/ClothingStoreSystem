@@ -38,7 +38,7 @@ const AddProduct = () => {
 
   const sendRequest = async () => {
     await axios
-      .post("http://Localhost:8010/products", {
+      .post("http://Localhost:8090/products", {
         name: String(inputs.name),
         description: String(inputs.description),
         price: Number(inputs.price),

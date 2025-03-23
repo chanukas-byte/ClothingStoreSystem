@@ -7,7 +7,7 @@ require("dotenv").config(); // Load .env variables
 const app = express();
 
 // Server Port Configuration
-const PORT = process.env.PORT || 8010; // Fixed port number
+const PORT = process.env.PORT || 8090; // Fixed port number
 
 // Middleware
 app.use(cors());
