@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import Header from "./Header";
+import Footer from "./Footer"; 
+
 import {
   Box,
   Button,
@@ -150,6 +153,8 @@ function AddReport() {
   };
 
   return (
+    <div>
+      <Header/>
     <Container maxWidth="sm" sx={{ py: 10 }}>
       <Card sx={{ background: "linear-gradient(135deg, #e3f2fd, #bbdefb)", boxShadow: 8, borderRadius: 3, padding: 4 }}>
         <CardContent>
@@ -226,6 +231,8 @@ function AddReport() {
         </CardContent>
       </Card>
     </Container>
+    <Footer/>
+    </div>
   );
 }
 

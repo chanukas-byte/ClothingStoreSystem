@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer"; 
+
 import {
   Table,
   Badge,
@@ -184,6 +187,8 @@ function AllReport() {
   
 
   return (
+    <div>
+      <Header/>
     <Container className="my-5">
       <h2 className="text-center mb-4" style={{ color: "#6a1b9a", fontWeight: "bold" }}>
         All Finance Reports - Live Art Clothing Pvt Ltd
@@ -296,6 +301,8 @@ function AllReport() {
         </>
       )}
     </Container>
+    <Footer/>
+    </div>
   );
 }
 

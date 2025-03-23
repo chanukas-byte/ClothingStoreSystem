@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Header from "./Header";
+import Footer from "./Footer"; 
 
 function ViewEmployee() {
   const { id } = useParams();
@@ -13,7 +15,10 @@ function ViewEmployee() {
   }, [id]);
 
   return (
+    <div>
+      <Header/>
     <div className="container mt-5">
+      
       <h3>Employee Details</h3>
       <p><strong>Name:</strong> {employee.name}</p>
       <p><strong>Age:</strong> {employee.age}</p>
@@ -22,6 +27,8 @@ function ViewEmployee() {
       <p><strong>Mobile:</strong> {employee.mobile}</p>
       <p><strong>Status:</strong> {employee.status}</p>
       <p><strong>Salary:</strong> ${employee.salary}</p>
+    </div>
+    <Footer/>
     </div>
   );
 }

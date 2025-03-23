@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import Header from "./Header";
+import Footer from "./Footer"; 
 
 function UpdateEmployee() {
   const { id } = useParams();
@@ -28,7 +30,10 @@ function UpdateEmployee() {
   };
 
   return (
+    <div>
+      <Header/>
     <div className="container mt-5">
+      
       <div className="card shadow-lg p-4 rounded-lg">
         <h3 className="text-center text-primary mb-4">Update Employee Details</h3>
 
@@ -84,6 +89,8 @@ function UpdateEmployee() {
           </button>
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 }

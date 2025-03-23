@@ -1,4 +1,6 @@
 import React from "react";
+import Header from "./Header";
+import Footer from "./Footer"; 
 
 function Home() {
   const styles = {
@@ -52,6 +54,8 @@ function Home() {
   };
 
   return (
+    <div>
+      <Header/>
     <div style={styles.homeContainer}>
       {/* Content Overlay */}
       <div style={styles.overlayContent}>
@@ -70,6 +74,8 @@ function Home() {
           Explore Now
         </button>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 }
