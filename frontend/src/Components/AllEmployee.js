@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Modal, Button } from "react-bootstrap";
+import Header from "./Header";
+import Footer from "./Footer"; 
 
 function AllEmployees() {
   const [employees, setEmployees] = useState([]);
@@ -16,7 +18,7 @@ function AllEmployees() {
   // Enhanced function to fetch employees with error handling and improved logging
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/employee/");
+      const response = await axios.get("http://localhost:8010/api/employee/");
       if (response.status === 200) {
         setEmployees(response.data || []);
       } else {
@@ -49,7 +51,7 @@ function AllEmployees() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:8000/api/employee/delete/${employeeId}`);
+          await axios.delete(`http://localhost:8010/api/employee/delete/${employeeId}`);
           setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.employeeid !== employeeId));
           Swal.fire("Deleted!", "The employee has been deleted.", "success");
         } catch (error) {
@@ -68,7 +70,7 @@ function AllEmployees() {
 
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/employee/update/${selectedEmployee.employeeid}`,
+        `http://localhost:8010/api/employee/update/${selectedEmployee.employeeid}`,
         selectedEmployee
       );
       if (response.status === 200) {
@@ -107,6 +109,8 @@ function AllEmployees() {
   );
 
   return (
+    <div>
+      <Header/>
     <div className="container mt-5">
       <div className="card shadow-lg rounded-lg">
         <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
@@ -197,6 +201,8 @@ function AllEmployees() {
           </Modal.Footer>
         </Modal>
       )}
+    </div>
+    <Footer/>
     </div>
   );
 }

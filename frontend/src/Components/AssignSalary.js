@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { Modal, Button, Table, Form, Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
 import { FaSearch, FaSortAlphaDown, FaSortAlphaUpAlt } from "react-icons/fa";
 import Select from "react-select";
+import Header from "./Header";
+import Footer from "./Footer"; 
 
 function AllEmployees() {
   const [employees, setEmployees] = useState([]);
@@ -95,6 +97,8 @@ function AllEmployees() {
     );
 
   return (
+    <div>
+      <Header/>
     <div className="container mt-5">
       <div className="card shadow-lg rounded-lg border-0 bg-light">
         <div
@@ -237,8 +241,10 @@ function AllEmployees() {
               Close
             </Button>
           </Modal.Footer>
+          <Footer/>
         </Modal>
       )}
+    </div>
     </div>
   );
 }

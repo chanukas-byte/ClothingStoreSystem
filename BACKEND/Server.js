@@ -31,13 +31,14 @@ mongoose
 // Import Routers (Fixed path and naming)
 const EmployeeRouter = require("./Routes/EmployeeRoutes");
 const FinanceRouter = require("./Routes/financeRoutes");
-
-
-
+const supplierRoutes = require("./Routes/SupplierRegiRoutes");
+const productRoutes = require("./Routes/ProductRoutes");
 
 // Use Routers (correct path and usage)
 app.use("/api/employee", EmployeeRouter); // Employee routes
 app.use("/api/finance", FinanceRouter);   // Finance routes
+app.use("/suppliers", supplierRoutes); //suppliers Route
+app.use("/products", productRoutes); //product Routes
 
 // Test Route
 app.get("/", (req, res) => {

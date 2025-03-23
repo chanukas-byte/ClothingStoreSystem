@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { PDFDocument, rgb } from "pdf-lib";
+import Header from "./Header";
+import Footer from "./Footer"; 
 
 function AddEmployee({ isAdmin }) {
   const [employeeData, setEmployeeData] = useState({
@@ -26,7 +28,7 @@ function AddEmployee({ isAdmin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8020/api/employee/add", employeeData);
+      const response = await axios.post("http://localhost:8010/api/employee/add", employeeData);
 
       if (response.status === 201) {
         Swal.fire({
@@ -90,6 +92,8 @@ function AddEmployee({ isAdmin }) {
   };
 
   return (
+    <div>
+      <Header/>
     <div className="container mt-5">
       <div className="card shadow-lg rounded-lg">
         <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
@@ -171,6 +175,8 @@ function AddEmployee({ isAdmin }) {
           </form>
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 }

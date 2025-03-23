@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { Button, Table, Form } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
 import { PDFDocument, rgb } from "pdf-lib"; // Import from pdf-lib
+import Header from "./Header";
+import Footer from "./Footer"; 
 
 function AllEmployees() {
   const [employees, setEmployees] = useState([]);
@@ -114,7 +116,10 @@ function AllEmployees() {
     .sort((a, b) => (sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
 
   return (
+    <div>
+      <Header/>
     <div className="container mt-5">
+      
       <div className="card shadow-lg rounded-lg border-0 bg-light">
         <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#673ab7" }}>
           <h3>Employee Salaries</h3>
@@ -183,6 +188,8 @@ function AllEmployees() {
           </div>
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 }

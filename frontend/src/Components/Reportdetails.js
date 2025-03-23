@@ -5,6 +5,8 @@ import { Container, Card, Spinner, Alert, ProgressBar, Button } from "react-boot
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "./Header";
+import Footer from "./Footer"; 
 
 function ReportDetails() {
   const { id } = useParams();
@@ -66,6 +68,8 @@ function ReportDetails() {
   const lossPercentage = profitValue < 0 ? ((Math.abs(profitValue) / totalRevenue) * 100).toFixed(1) : 0;
 
   return (
+    <div>
+      <Header/>
     <Container className="my-5">
       <Card className="shadow-lg border-0">
         <Card.Header
@@ -149,6 +153,8 @@ function ReportDetails() {
         </Card.Footer>
       </Card>
     </Container>
+    <Footer/>
+    </div>
   );
 }
 
