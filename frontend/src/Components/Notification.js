@@ -8,7 +8,7 @@ function Notification() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8010/products');
+        const response = await axios.get('http://localhost:8090/products');
         const products = response.data.products;
 
         // Filter products with stock quantity < 3

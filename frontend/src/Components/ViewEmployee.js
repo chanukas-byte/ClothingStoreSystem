@@ -9,7 +9,7 @@ function ViewEmployee() {
   const [employee, setEmployee] = useState({});
 
   useEffect(() => {
-    axios.get(`http://localhost:8070/api/employee/${id}`).then((response) => {
+    axios.get(`http://localhost:8090/api/employee/${id}`).then((response) => {
       setEmployee(response.data);
     });
   }, [id]);

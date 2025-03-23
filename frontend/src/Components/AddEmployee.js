@@ -28,7 +28,7 @@ function AddEmployee({ isAdmin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8010/api/employee/add", employeeData);
+      const response = await axios.post("http://localhost:8090/api/employee/add", employeeData);
 
       if (response.status === 201) {
         Swal.fire({
