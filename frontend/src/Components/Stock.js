@@ -6,8 +6,31 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const URL = "http://localhost:8090/products";
 
+// Updated fetchHandler with error handling
 const fetchHandler = async () => {
-  return await axios.get(URL).then((res) => res.data);
+  try {
+    const response = await axios.get(URL);
+    if (response.data && response.data.products) {
+      return response.data.products;  // Return only the products
+    }
+    return [];  // Return an empty array if no products
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];  // Return an empty array in case of error
+  }
+};
+
+// Updated deleteHandler
+const deleteHandler = async (id) => {
+  try {
+    await axios.delete(`${URL}/${id}`); // Send DELETE request to the backend
+    alert("Product deleted successfully");
+    return true;
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    alert("Failed to delete product");
+    return false;
+  }
 };
 
 function Stock() {
@@ -16,8 +39,9 @@ function Stock() {
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
+  // Fetch products from backend and update the state
   useEffect(() => {
-    fetchHandler().then((data) => setProducts(data.products));
+    fetchHandler().then((data) => setProducts(data)); // Fetch products initially
   }, []);
 
   const handleSearchChange = (event) => {
@@ -58,6 +82,14 @@ function Stock() {
     }
   };
 
+  const handleDelete = async (id) => {
+    const success = await deleteHandler(id);
+    if (success) {
+      // After deleting, re-fetch the updated list of products from the server
+      fetchHandler().then((data) => setProducts(data));
+    }
+  };
+
   return (
     <div>
       <Nav />
@@ -72,51 +104,50 @@ function Stock() {
         />
       </div>
       <div className="container-fluid">
-        {/* Added table-responsive class for responsiveness */}
         <div className="table-responsive">
-          <table className="table table-striped table-bordered table-hover">
+          <table className="table table-striped table-bordered table-hover" style={{ width: "100%" }}>
             <thead className="bg-dark text-white">
               <tr>
-                <th onClick={() => handleSortChange("name")} className="cursor-pointer">
+                <th onClick={() => handleSortChange("name")} className="cursor-pointer text-center">
                   Item Name {sortField === "name" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
                 </th>
-                <th>Description</th>
-                <th onClick={() => handleSortChange("price")} className="cursor-pointer">
+                <th className="text-center">Description</th>
+                <th onClick={() => handleSortChange("price")} className="cursor-pointer text-center">
                   Price {sortField === "price" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
                 </th>
-                <th>Category</th>
-                <th onClick={() => handleSortChange("stockQuantity")} className="cursor-pointer">
+                <th className="text-center">Category</th>
+                <th onClick={() => handleSortChange("stockQuantity")} className="cursor-pointer text-center">
                   Stock Quantity {sortField === "stockQuantity" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
                 </th>
-                <th>Image</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Action</th>
+                <th className="text-center">Image</th>
+                <th className="text-center">Created At</th>
+                <th className="text-center">Updated At</th>
+                <th className="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
               {sortedProducts.length > 0 ? (
                 sortedProducts.map((product) => (
                   <tr key={product._id}>
-                    <td>{product.name}</td>
-                    <td>{product.description}</td>
-                    <td>${product.price}</td>
-                    <td>{product.category}</td>
-                    <td>{product.stockQuantity}</td>
-                    <td>
+                    <td className="text-center">{product.name}</td>
+                    <td className="text-center">{product.description}</td>
+                    <td className="text-center">${product.price}</td>
+                    <td className="text-center">{product.category}</td>
+                    <td className="text-center">{product.stockQuantity}</td>
+                    <td className="text-center">
                       {product.imageUrl ? (
                         <img src={product.imageUrl} alt={product.name} width="50" />
                       ) : (
                         <p>No image</p>
                       )}
                     </td>
-                    <td>{new Date(product.createdAt).toLocaleString()}</td>
-                    <td>{new Date(product.updatedAt).toLocaleString()}</td>
-                    <td>
+                    <td className="text-center">{new Date(product.createdAt).toLocaleString()}</td>
+                    <td className="text-center">{new Date(product.updatedAt).toLocaleString()}</td>
+                    <td className="text-center">
                       <Link to={`/stock/update/${product._id}`} className="btn btn-secondary btn-sm mx-2">
                         Update
                       </Link>
-                      <button className="btn btn-danger btn-sm" onClick={() => {/* Add delete functionality */}}>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete(product._id)}>
                         Delete
                       </button>
                     </td>
