@@ -3,7 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { PDFDocument, rgb } from "pdf-lib";
 import Header from "./Header";
-import Footer from "./Footer"; 
+import Footer from "./Footer";
 
 function AddEmployee({ isAdmin }) {
   const [employeeData, setEmployeeData] = useState({
@@ -15,8 +15,27 @@ function AddEmployee({ isAdmin }) {
     mobile: "",
     status: "",
     address: "",
-    salary: isAdmin ? "" : "Not Assigned", // Disable for non-admins
+    salary: isAdmin ? "" : "Not Assigned",
   });
+
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!employeeData.employeeid) newErrors.employeeid = "Employee ID is required";
+    if (!employeeData.name) newErrors.name = "Name is required";
+    if (!employeeData.age || employeeData.age < 18) newErrors.age = "Age must be at least 18";
+    if (!employeeData.department) newErrors.department = "Department is required";
+    if (!employeeData.email || !/\S+@\S+\.\S+/.test(employeeData.email)) newErrors.email = "Valid email is required";
+    if (!employeeData.mobile || !/^\d{10}$/.test(employeeData.mobile)) newErrors.mobile = "Valid 10-digit mobile number is required";
+    if (!employeeData.status) newErrors.status = "Employment status is required";
+    if (!employeeData.address) newErrors.address = "Address is required";
+    if (isAdmin && (!employeeData.salary || employeeData.salary < 0)) newErrors.salary = "Valid salary is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     setEmployeeData({
@@ -27,8 +46,10 @@ function AddEmployee({ isAdmin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     try {
-      const response = await axios.post("http://localhost:8090/api/employee/add", employeeData);
+      const response = await axios.post("http://localhost:7050/api/employee/add", employeeData);
 
       if (response.status === 201) {
         Swal.fire({
@@ -50,6 +71,7 @@ function AddEmployee({ isAdmin }) {
           address: "",
           salary: isAdmin ? "" : "Not Assigned",
         });
+        setErrors({});
       }
     } catch (error) {
       Swal.fire({
@@ -93,90 +115,99 @@ function AddEmployee({ isAdmin }) {
 
   return (
     <div>
-      <Header/>
-    <div className="container mt-5">
-      <div className="card shadow-lg rounded-lg">
-        <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
-          <h3>Employee Registration Form</h3>
-        </div>
+      <Header />
+      <div className="container mt-5">
+        <div className="card shadow-lg rounded-lg">
+          <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
+            <h3>Employee Registration Form</h3>
+          </div>
 
-        <div className="card-body p-5">
-          <form onSubmit={handleSubmit}>
-            <div className="row g-3">
-              {/* Employee ID and Name */}
-              <div className="col-md-6">
-                <label htmlFor="employeeId" className="form-label fw-bold">Employee ID</label>
-                <input type="text" className="form-control shadow-sm rounded" id="employeeId" name="employeeid" value={employeeData.employeeid} onChange={handleChange} required />
-              </div>
-
-              <div className="col-md-6">
-                <label htmlFor="name" className="form-label fw-bold">Name</label>
-                <input type="text" className="form-control shadow-sm rounded" id="name" name="name" value={employeeData.name} onChange={handleChange} required />
-              </div>
-
-              {/* Age and Department */}
-              <div className="col-md-6">
-                <label htmlFor="age" className="form-label fw-bold">Age</label>
-                <input type="number" className="form-control shadow-sm rounded" id="age" name="age" value={employeeData.age} onChange={handleChange} required min="18" />
-              </div>
-
-              <div className="col-md-6">
-                <label htmlFor="department" className="form-label fw-bold">Department</label>
-                <select className="form-select shadow-sm rounded" id="department" name="department" value={employeeData.department} onChange={handleChange} required>
-                  <option value="" disabled>Select Department</option>
-                  <option value="Sales">Sales</option>
-                  <option value="Inventory">Inventory</option>
-                  <option value="Customer Support">Customer Support</option>
-                  <option value="Operation Management">Operation Management</option>
-                </select>
-              </div>
-
-              {/* Email and Mobile */}
-              <div className="col-md-6">
-                <label htmlFor="email" className="form-label fw-bold">Email Address</label>
-                <input type="email" className="form-control shadow-sm rounded" id="email" name="email" value={employeeData.email} onChange={handleChange} required />
-              </div>
-
-              <div className="col-md-6">
-                <label htmlFor="mobile" className="form-label fw-bold">Mobile</label>
-                <input type="text" className="form-control shadow-sm rounded" id="mobile" name="mobile" value={employeeData.mobile} onChange={handleChange} required />
-              </div>
-
-              {/* Employment Status Dropdown */}
-              <div className="col-md-12">
-                <label htmlFor="status" className="form-label fw-bold">Employment Status</label>
-                <select className="form-select shadow-sm rounded" id="status" name="status" value={employeeData.status} onChange={handleChange} required>
-                  <option value="" disabled>Select Employment Status</option>
-                  <option value="Active">Active</option>
-                  <option value="On Leave">On Leave</option>
-                  <option value="Retired">Retired</option>
-                  <option value="Terminated">Terminated</option>
-                </select>
-              </div>
-
-              <div className="col-md-12">
-                <label htmlFor="address" className="form-label fw-bold">Address</label>
-                <textarea className="form-control shadow-sm rounded" id="address" name="address" value={employeeData.address} onChange={handleChange} required rows="3"></textarea>
-              </div>
-
-              {isAdmin && (
+          <div className="card-body p-5">
+            <form onSubmit={handleSubmit}>
+              <div className="row g-3">
+                {/* Employee ID and Name */}
                 <div className="col-md-6">
-                  <label htmlFor="salary" className="form-label fw-bold">Salary ($)</label>
-                  <input type="number" className="form-control shadow-sm rounded" id="salary" name="salary" value={employeeData.salary} onChange={handleChange} required />
+                  <label htmlFor="employeeId" className="form-label fw-bold">Employee ID</label>
+                  <input type="text" className="form-control shadow-sm rounded" id="employeeId" name="employeeid" value={employeeData.employeeid} onChange={handleChange} required />
+                  {errors.employeeid && <div className="text-danger">{errors.employeeid}</div>}
                 </div>
-              )}
-            </div>
 
-            <div className="text-center mt-4">
-              <button type="submit" className="btn btn-primary btn-lg rounded-pill shadow-sm px-4">
-                Register Employee
-              </button>
-            </div>
-          </form>
+                <div className="col-md-6">
+                  <label htmlFor="name" className="form-label fw-bold">Name</label>
+                  <input type="text" className="form-control shadow-sm rounded" id="name" name="name" value={employeeData.name} onChange={handleChange} required />
+                  {errors.name && <div className="text-danger">{errors.name}</div>}
+                </div>
+
+                {/* Age and Department */}
+                <div className="col-md-6">
+                  <label htmlFor="age" className="form-label fw-bold">Age</label>
+                  <input type="number" className="form-control shadow-sm rounded" id="age" name="age" value={employeeData.age} onChange={handleChange} required min="18" />
+                  {errors.age && <div className="text-danger">{errors.age}</div>}
+                </div>
+
+                <div className="col-md-6">
+                  <label htmlFor="department" className="form-label fw-bold">Department</label>
+                  <select className="form-select shadow-sm rounded" id="department" name="department" value={employeeData.department} onChange={handleChange} required>
+                    <option value="" disabled>Select Department</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Inventory">Inventory</option>
+                    <option value="Customer Support">Customer Support</option>
+                    <option value="Operation Management">Operation Management</option>
+                  </select>
+                  {errors.department && <div className="text-danger">{errors.department}</div>}
+                </div>
+
+                {/* Email and Mobile */}
+                <div className="col-md-6">
+                  <label htmlFor="email" className="form-label fw-bold">Email Address</label>
+                  <input type="email" className="form-control shadow-sm rounded" id="email" name="email" value={employeeData.email} onChange={handleChange} required />
+                  {errors.email && <div className="text-danger">{errors.email}</div>}
+                </div>
+
+                <div className="col-md-6">
+                  <label htmlFor="mobile" className="form-label fw-bold">Mobile</label>
+                  <input type="text" className="form-control shadow-sm rounded" id="mobile" name="mobile" value={employeeData.mobile} onChange={handleChange} required />
+                  {errors.mobile && <div className="text-danger">{errors.mobile}</div>}
+                </div>
+
+                {/* Employment Status Dropdown */}
+                <div className="col-md-12">
+                  <label htmlFor="status" className="form-label fw-bold">Employment Status</label>
+                  <select className="form-select shadow-sm rounded" id="status" name="status" value={employeeData.status} onChange={handleChange} required>
+                    <option value="" disabled>Select Employment Status</option>
+                    <option value="Active">Active</option>
+                    <option value="On Leave">On Leave</option>
+                    <option value="Retired">Retired</option>
+                    <option value="Terminated">Terminated</option>
+                  </select>
+                  {errors.status && <div className="text-danger">{errors.status}</div>}
+                </div>
+
+                <div className="col-md-12">
+                  <label htmlFor="address" className="form-label fw-bold">Address</label>
+                  <textarea className="form-control shadow-sm rounded" id="address" name="address" value={employeeData.address} onChange={handleChange} required rows="3"></textarea>
+                  {errors.address && <div className="text-danger">{errors.address}</div>}
+                </div>
+
+                {isAdmin && (
+                  <div className="col-md-6">
+                    <label htmlFor="salary" className="form-label fw-bold">Salary ($)</label>
+                    <input type="number" className="form-control shadow-sm rounded" id="salary" name="salary" value={employeeData.salary} onChange={handleChange} required />
+                    {errors.salary && <div className="text-danger">{errors.salary}</div>}
+                  </div>
+                )}
+              </div>
+
+              <div className="text-center mt-4">
+                <button type="submit" className="btn btn-primary btn-lg rounded-pill shadow-sm px-4">
+                  Register Employee
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </div>
   );
 }
