@@ -94,6 +94,51 @@ function Stock() {
     <div>
       <Nav />
       <h1 className="text-center mt-4 mb-3">Product Stock</h1>
+      
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
+        {/* Section 1 */}
+        <div
+          className="section"
+          style={{
+            padding: "20px",
+            backgroundColor: "#e0f7fa",
+            margin: "0 10px",
+            flex: 1,
+          }}
+        >
+          <h2>Section 1</h2>
+          <p>Content for Section 1.</p>
+        </div>
+
+        {/* Section 2 */}
+        <div
+          className="section"
+          style={{
+            padding: "20px",
+            backgroundColor: "#ffeb3b",
+            margin: "0 10px",
+            flex: 1,
+          }}
+        >
+          <h2>Section 2</h2>
+          <p>Content for Section 2.</p>
+        </div>
+
+        {/* Section 3 */}
+        <div
+          className="section"
+          style={{
+            padding: "20px",
+            backgroundColor: "#c8e6c9",
+            margin: "0 10px",
+            flex: 1,
+          }}
+        >
+          <h2>Section 3</h2>
+          <p>Content for Section 3.</p>
+        </div>
+      </div>
+
       <div className="d-flex justify-content-center mb-4">
         <input
           type="text"
@@ -103,6 +148,7 @@ function Stock() {
           onChange={handleSearchChange}
         />
       </div>
+
       <div className="container-fluid">
         <div className="table-responsive">
           <table className="table table-striped table-bordered table-hover" style={{ width: "100%" }}>
