@@ -21,45 +21,44 @@ function SupplierRegi() {
   };
 
   return (
-    <div>
+    <div style={styles.mainContainer}>
       <Nav />
-      <div className="container">
-        <h2 className="title">Register Supplier</h2>
-        {message && <p className="message">{message}</p>}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-group">
-            <label>Name</label>
-            <input
-              type="text"
-              {...register("name", { required: true })}
-              className="input-field"
-            />
+      <div style={styles.formWrapper}>
+        <h2 style={styles.formTitle}>Register Supplier</h2>
+
+        {message && (
+          <p
+            style={{
+              ...styles.message,
+              ...(message.includes("successfully") ? styles.success : styles.error),
+            }}
+          >
+            {message}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit(onSubmit)} style={styles.formContainer}>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Name</label>
+            <input type="text" {...register("name", { required: true })} placeholder="Enter supplier name" style={styles.input} />
           </div>
-          <div className="form-group">
-            <label>Contact Number</label>
-            <input
-              type="text"
-              {...register("contactNumber", { required: true })}
-              className="input-field"
-            />
+
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Contact Number</label>
+            <input type="text" {...register("contactNumber", { required: true })} placeholder="Enter contact number" style={styles.input} />
           </div>
-          <div className="form-group">
-            <label>Address</label>
-            <input
-              type="text"
-              {...register("address", { required: true })}
-              className="input-field"
-            />
+
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Address</label>
+            <input type="text" {...register("address", { required: true })} placeholder="Enter supplier address" style={styles.input} />
           </div>
-          <div className="form-group">
-            <label>Items</label>
-            <input
-              type="text"
-              {...register("items", { required: true })}
-              className="input-field"
-            />
+
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Items</label>
+            <input type="text" {...register("items", { required: true })} placeholder="Enter supplied items" style={styles.input} />
           </div>
-          <button type="submit" className="submit-button">
+
+          <button type="submit" style={styles.submitButton}>
             Register Supplier
           </button>
         </form>
@@ -69,3 +68,78 @@ function SupplierRegi() {
 }
 
 export default SupplierRegi;
+
+const styles = {
+  mainContainer: {
+    background: "linear-gradient(to right, #ece9e6, #ffffff)",
+    minHeight: "100vh",
+    padding: "40px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  formWrapper: {
+    backgroundColor: "#fff",
+    padding: "30px 40px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+    maxWidth: "500px",
+    width: "100%",
+  },
+  formTitle: {
+    textAlign: "center",
+    fontSize: "28px",
+    color: "#333",
+    marginBottom: "20px",
+  },
+  message: {
+    textAlign: "center",
+    padding: "10px",
+    marginBottom: "20px",
+    borderRadius: "5px",
+    fontWeight: "bold",
+  },
+  success: {
+    backgroundColor: "#d4edda",
+    color: "#155724",
+  },
+  error: {
+    backgroundColor: "#f8d7da",
+    color: "#721c24",
+  },
+  formContainer: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  formGroup: {
+    marginBottom: "15px",
+  },
+  label: {
+    fontSize: "16px",
+    color: "#555",
+    marginBottom: "5px",
+    display: "block",
+  },
+  input: {
+    width: "100%",
+    padding: "10px",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    fontSize: "16px",
+  },
+  submitButton: {
+    width: "100%",
+    background: "linear-gradient(to right, #007bff, #0056b3)",
+    color: "white",
+    padding: "12px",
+    fontSize: "18px",
+    fontWeight: "bold",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    transition: "background 0.3s ease",
+  },
+  submitButtonHover: {
+    background: "#0056b3",
+  },
+};
