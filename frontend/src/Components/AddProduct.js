@@ -4,8 +4,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 
 const AddProduct = () => {
-  const history = useNavigate();
-
+  const navigate = useNavigate(); // Corrected 'history' to 'navigate'
   const [inputs, setInputs] = useState({
     name: "",
     description: "",
@@ -24,7 +23,7 @@ const AddProduct = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (inputs.price < 0 || inputs.stockQuantity < 0) {
@@ -32,34 +31,80 @@ const AddProduct = () => {
       return;
     }
 
-    console.log(inputs);
-    sendRequest().then(() => history("success"));
-  };
-
-  const sendRequest = async () => {
-    await axios
-      .post("http://Localhost:8090/products", {
+    try {
+      await axios.post("http://localhost:8090/products", {
         name: String(inputs.name),
         description: String(inputs.description),
         price: Number(inputs.price),
         category: String(inputs.category),
         stockQuantity: Number(inputs.stockQuantity),
         imageUrl: String(inputs.imageUrl),
-        createdAt: Date(inputs.createdAt),
-        updatedAt: Date(inputs.updatedAt),
-      })
-      .then((res) => res.data);
+        createdAt: new Date(inputs.createdAt),
+        updatedAt: new Date(inputs.updatedAt),
+      });
+      alert("Product added successfully!");
+      navigate("/products");
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Failed to add product. Please try again.");
+    }
+  };
+
+  const formStyles = {
+    formContainer: {
+      width: "80%",
+      maxWidth: "500px",
+      margin: "0 auto",
+      padding: "20px",
+      border: "1px solid #ccc",
+      borderRadius: "10px",
+      backgroundColor: "#f8f9fa",
+      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+    },
+    heading: {
+      textAlign: "center",
+      marginBottom: "20px",
+      fontSize: "1.5rem",
+      color: "#333",
+    },
+    inputField: {
+      marginBottom: "15px",
+    },
+    label: {
+      display: "block",
+      fontWeight: "bold",
+      marginBottom: "5px",
+    },
+    input: {
+      width: "100%",
+      padding: "10px",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
+    },
+    submitButton: {
+      width: "100%",
+      padding: "10px",
+      backgroundColor: "#007bff",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      fontWeight: "bold",
+      cursor: "pointer",
+    },
+    submitButtonHover: {
+      backgroundColor: "#0056b3",
+    },
   };
 
   return (
     <div>
       <Nav />
-      <h1>Add New Product</h1>
-      <div className="container mt-5">
+      <div style={formStyles.formContainer}>
+        <h1 style={formStyles.heading}>Add New Product</h1>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">
-              Item Name
+          <div style={formStyles.inputField}>
+            <label htmlFor="name" style={formStyles.label}>
+              Product Name
             </label>
             <input
               type="text"
@@ -67,29 +112,29 @@ const AddProduct = () => {
               id="name"
               onChange={handleChange}
               value={inputs.name}
-              className="form-control"
+              style={formStyles.input}
               required
             />
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="description" className="form-label">
-              Item Description
+          <div style={formStyles.inputField}>
+            <label htmlFor="description" style={formStyles.label}>
+              Description
             </label>
-            <input
-              type="text"
+            <textarea
               name="description"
               id="description"
               onChange={handleChange}
               value={inputs.description}
-              className="form-control"
+              style={formStyles.input}
+              rows="3"
               required
-            />
+            ></textarea>
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="price" className="form-label">
-              Item Price
+          <div style={formStyles.inputField}>
+            <label htmlFor="price" style={formStyles.label}>
+              Price
             </label>
             <input
               type="number"
@@ -97,22 +142,22 @@ const AddProduct = () => {
               id="price"
               onChange={handleChange}
               value={inputs.price}
-              className="form-control"
-              required
+              style={formStyles.input}
               min="0"
+              required
             />
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="category" className="form-label">
-              Item Category
+          <div style={formStyles.inputField}>
+            <label htmlFor="category" style={formStyles.label}>
+              Category
             </label>
             <select
               name="category"
               id="category"
               onChange={handleChange}
               value={inputs.category}
-              className="form-select"
+              style={formStyles.input}
               required
             >
               <option value="">Select Category</option>
@@ -122,13 +167,13 @@ const AddProduct = () => {
               <option value="WOMEN SKIRTS">WOMEN SKIRTS</option>
               <option value="WOMEN PANTS">WOMEN PANTS</option>
               <option value="WOMEN TOPS">WOMEN TOPS</option>
-              <option value="WOMEN FROKS">WOMEN FROKS</option>
+              <option value="WOMEN FROCKS">WOMEN FROCKS</option>
             </select>
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="stockQuantity" className="form-label">
-              Item Quantity
+          <div style={formStyles.inputField}>
+            <label htmlFor="stockQuantity" style={formStyles.label}>
+              Stock Quantity
             </label>
             <input
               type="number"
@@ -136,15 +181,15 @@ const AddProduct = () => {
               id="stockQuantity"
               onChange={handleChange}
               value={inputs.stockQuantity}
-              className="form-control"
-              required
+              style={formStyles.input}
               min="0"
+              required
             />
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="imageUrl" className="form-label">
-              Item Image URL
+          <div style={formStyles.inputField}>
+            <label htmlFor="imageUrl" style={formStyles.label}>
+              Image URL
             </label>
             <input
               type="text"
@@ -152,13 +197,13 @@ const AddProduct = () => {
               id="imageUrl"
               onChange={handleChange}
               value={inputs.imageUrl}
-              className="form-control"
+              style={formStyles.input}
             />
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="createdAt" className="form-label">
-              Item Created Date
+          <div style={formStyles.inputField}>
+            <label htmlFor="createdAt" style={formStyles.label}>
+              Created Date
             </label>
             <input
               type="datetime-local"
@@ -166,14 +211,14 @@ const AddProduct = () => {
               id="createdAt"
               onChange={handleChange}
               value={inputs.createdAt}
-              className="form-control"
+              style={formStyles.input}
               required
             />
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="updatedAt" className="form-label">
-              Item Updated Date
+          <div style={formStyles.inputField}>
+            <label htmlFor="updatedAt" style={formStyles.label}>
+              Updated Date
             </label>
             <input
               type="datetime-local"
@@ -181,13 +226,19 @@ const AddProduct = () => {
               id="updatedAt"
               onChange={handleChange}
               value={inputs.updatedAt}
-              className="form-control"
+              style={formStyles.input}
               required
             />
           </div>
 
-          <button type="submit" className="btn btn-primary">
-            Submit
+          <button
+            type="submit"
+            style={{
+              ...formStyles.submitButton,
+              ":hover": formStyles.submitButtonHover,
+            }}
+          >
+            Add Product
           </button>
         </form>
       </div>
