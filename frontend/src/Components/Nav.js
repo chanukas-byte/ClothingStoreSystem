@@ -10,7 +10,7 @@ function Nav() {
         style={{ backgroundColor: "#1a1a1a", zIndex: "1030" }}
       >
         <div className="container">
-          <Link className="navbar-brand text-light" to="/" style={{ fontWeight: "bold", fontSize: "24px" }}>
+          <Link className="navbar-brand text-light mr-auto" to="/" style={{ fontWeight: "bold", fontSize: "24px" }}>
             Live Art Clothings
           </Link>
 
@@ -42,9 +42,11 @@ function Nav() {
               </li>
             </ul>
 
-            <ul className="navbar-nav">
+            <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/notify">Notification</Link>
+                <Link className="nav-link text-white" to="/notify" style={{ marginRight: "20px" }}>
+                  Notification
+                </Link>
               </li>
             </ul>
           </div>
