@@ -3,8 +3,19 @@ import Nav from "./Nav";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
+// Helper function to check if a date is today's date
+const isToday = (date) => {
+  const today = new Date();
+  const inputDate = new Date(date);
+  return (
+    today.getDate() === inputDate.getDate() &&
+    today.getMonth() === inputDate.getMonth() &&
+    today.getFullYear() === inputDate.getFullYear()
+  );
+};
+
 const AddProduct = () => {
-  const navigate = useNavigate(); // Corrected 'history' to 'navigate'
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     name: "",
     description: "",
@@ -26,13 +37,24 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate price and stock quantity
     if (inputs.price < 0 || inputs.stockQuantity < 0) {
       alert("Price and Stock Quantity must be non-negative values");
       return;
     }
 
+    // Check if createdAt and updatedAt are today's date
+    if (!isToday(inputs.createdAt)) {
+      alert("Created Date must be today's date.");
+      return;
+    }
+    if (!isToday(inputs.updatedAt)) {
+      alert("Updated Date must be today's date.");
+      return;
+    }
+
     try {
-      await axios.post("http://localhost:8090/products", {
+      await axios.post("http://localhost:4058/products", {
         name: String(inputs.name),
         description: String(inputs.description),
         price: Number(inputs.price),
@@ -43,7 +65,7 @@ const AddProduct = () => {
         updatedAt: new Date(inputs.updatedAt),
       });
       alert("Product added successfully!");
-      navigate("/products");
+      navigate("/stock");
     } catch (error) {
       console.error("Error adding product:", error);
       alert("Failed to add product. Please try again.");
