@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const URL = "http://localhost:8090/products";
+const URL = "http://localhost:7050/products";
 
 // Updated fetchHandler with error handling
 const fetchHandler = async () => {

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link, useNavigate } from 'react-router-dom';  // Import Link and useNavigate to handle navigation
 import axios from 'axios';
-import './ProductList.css'; // Import CSS for styling
-import AddProduct from './AddProduct';  // Import AddProduct component
+import './ProductList.css';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
-    const [checkoutProducts, setCheckoutProducts] = useState([]);
+    const [checkoutProducts, setCheckoutProducts] = useState([]); // Track products added to checkout
     const [filters, setFilters] = useState({
         name: '',
         category: '',
@@ -18,19 +17,16 @@ const ProductList = () => {
     const [activeTab, setActiveTab] = useState('home');
     const [menuOpen, setMenuOpen] = useState(false);
 
-    // To trigger product list refresh after adding new products
-    const [refresh, setRefresh] = useState(false); 
+    const navigate = useNavigate();
 
-    // Fetch products when the filter state or 'refresh' state changes
     useEffect(() => {
         fetchProducts();
-    }, [filters, refresh]);
+    }, [filters]);
 
-    // Fetch products from backend using Axios
     const fetchProducts = async () => {
         try {
             const response = await axios.get('http://localhost:7050/product/search', { params: filters });
-            setProducts(response.data); // Set products from API response
+            setProducts(response.data);
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -44,38 +40,42 @@ const ProductList = () => {
     const handleAddToCart = (product) => {
         const updatedCart = [...cart];
         const existingProduct = updatedCart.find(item => item._id === product._id);
+
         if (existingProduct) {
             existingProduct.quantity += 1;
         } else {
             updatedCart.push({ ...product, quantity: 1 });
         }
-        setCart(updatedCart); // Update cart state
+
+        setCart(updatedCart);
     };
 
+    // Add product to checkout list
     const handleAddToCheckout = (product) => {
         const updatedCheckoutProducts = [...checkoutProducts];
         const existingProduct = updatedCheckoutProducts.find(item => item._id === product._id);
+
         if (!existingProduct) {
-            updatedCheckoutProducts.push(product);
+            updatedCheckoutProducts.push(product);  // Add the product to the checkout list
         }
-        setCheckoutProducts(updatedCheckoutProducts); // Update checkout state
+
+        setCheckoutProducts(updatedCheckoutProducts); // Update the state with the new checkout list
     };
 
+    // Handle removing an item from the cart
     const handleRemoveFromCart = (productId) => {
         const updatedCart = cart.filter(item => item._id !== productId);
-        setCart(updatedCart); // Remove item from the cart
+        setCart(updatedCart);
     };
 
+    // Send all products from cart to checkout
     const handleSendAllToCheckout = () => {
-        setCheckoutProducts((prevCheckout) => [...prevCheckout, ...cart]);
-        setCart([]);
+        setCheckoutProducts((prevCheckout) => [...prevCheckout, ...cart]); // Add all items in the cart to checkout
+        setCart([]); // Clear the cart after moving items to checkout
     };
 
     return (
         <div className="main-container">
-            {/* Pass setRefresh function as a prop to AddProduct */}
-            <AddProduct setRefresh={setRefresh} />  {/* <-- Passing the prop */}
-
             <aside className={`sidebar ${menuOpen ? 'expanded' : ''}`} onMouseEnter={() => setMenuOpen(true)} onMouseLeave={() => setMenuOpen(false)}>
                 <div className="menu-icon">☰</div>
                 {menuOpen && (
@@ -86,12 +86,14 @@ const ProductList = () => {
                         </button>
 
                         <div className="filters">
-                            <input
+
+                                    <input
                                 type="text"
                                 name="name"
                                 value={filters.name}
                                 onChange={handleFilterChange}
                                 placeholder="Search products..."
+                                style={{ padding: '10px', border: '1px solid #888', borderRadius: '8px' }}
                             />
                             <select name="category" value={filters.category} onChange={handleFilterChange}>
                                 <option value="">All Categories</option>
@@ -117,7 +119,7 @@ const ProductList = () => {
                         <div className="product-grid">
                             {products.map((product) => (
                                 <div className="product-card" key={product._id}>
-                                    <img src={`http://localhost:7050/${product.imageUrl}`} alt={product.name} className="product-image" />
+                                    <img src={`http://localhost:7080/${product.imageUrl}`} alt={product.name} className="product-image" />
                                     <div className="product-info">
                                         <h3>{product.name}</h3>
                                         <p>Rs. {product.price}</p>
@@ -125,7 +127,10 @@ const ProductList = () => {
                                         <Link to={`/product/${product._id}`}>
                                             <button>View Product</button>
                                         </Link>
-                                        <button onClick={() => handleAddToCheckout(product)}>Add to Checkout</button>
+                                        {/* "Add to Checkout" Button */}
+                                        <button onClick={() => handleAddToCheckout(product)}>
+                                            Add to Checkout
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -166,7 +171,10 @@ const ProductList = () => {
                                 </tbody>
                             </table>
                         )}
-                        <button onClick={handleSendAllToCheckout}>Send All to Checkout</button>
+                        {/* Send All to Checkout Button */}
+                        <button onClick={handleSendAllToCheckout} style={{ marginTop: '10px' }}>
+                            Send All to Checkout
+                        </button>
                     </>
                 )}
             </div>

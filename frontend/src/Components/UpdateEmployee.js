@@ -10,7 +10,7 @@ function UpdateEmployee() {
   const [employee, setEmployee] = useState({});
 
   useEffect(() => {
-    axios.get(`http://localhost:8070/api/employee/${id}`).then((response) => {
+    axios.get(`http://localhost:7050/api/employee/${id}`).then((response) => {
       setEmployee(response.data);
     });
   }, [id]);
@@ -21,7 +21,7 @@ function UpdateEmployee() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:8070/api/employee/${id}`, employee);
+      await axios.put(`http://localhost:7050/api/employee/${id}`, employee);
       alert("Employee updated successfully!");
       navigate("/"); // Redirect to AllEmployees page
     } catch (error) {

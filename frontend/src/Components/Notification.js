@@ -9,7 +9,7 @@ function Notification() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:8090/products");
+        const response = await axios.get("http://localhost:7050/products");
 
         if (response.data && Array.isArray(response.data.products)) {
           const products = response.data.products;
