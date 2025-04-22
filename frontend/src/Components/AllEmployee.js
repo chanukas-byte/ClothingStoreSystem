@@ -3,7 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Modal, Button } from "react-bootstrap";
 import Header from "./Header";
-import Footer from "./Footer"; 
+import Footer from "./Footer";
 
 function AllEmployees() {
   const [employees, setEmployees] = useState([]);
@@ -15,31 +15,37 @@ function AllEmployees() {
     fetchEmployees();
   }, []);
 
-  // Enhanced function to fetch employees with error handling and improved logging
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:8090/api/employee/");
-      if (response.status === 200) {
-        setEmployees(response.data || []);
+      const response = await axios.get("http://localhost:4058/api/employee/");
+      console.log("API response:", response.data);
+
+      if (response.status === 200 && Array.isArray(response.data)) {
+        // Normalize data to ensure each employee has employeeid
+        const normalizedData = response.data.map(emp => ({
+          employeeid: emp.employeeid || emp._id || emp.id || "N/A",
+          name: emp.name || "",
+          age: emp.age || "",
+          department: emp.department || "",
+          email: emp.email || "",
+          mobile: emp.mobile || "",
+          status: emp.status || "Active"
+        }));
+        setEmployees(normalizedData);
       } else {
-        throw new Error("Unexpected response status: " + response.status);
+        throw new Error("Unexpected response format or status.");
       }
     } catch (error) {
       handleApiError(error, "Failed to fetch employee data. Please try again later.");
     }
   };
 
-  // Enhanced error handling
   const handleApiError = (error, defaultMessage) => {
     console.error("API Error:", error);
-
-    const errorMessage = error.response
-      ? error.response.data.message || defaultMessage
-      : "Network error. Please check your connection.";
+    const errorMessage = error.response?.data?.message || defaultMessage;
     Swal.fire("Error", errorMessage, "error");
   };
 
-  // Handle delete employee with confirmation and error handling
   const handleDelete = (employeeId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -52,7 +58,7 @@ function AllEmployees() {
       if (result.isConfirmed) {
         try {
           await axios.delete(`http://localhost:4058/api/employee/delete/${employeeId}`);
-          setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.employeeid !== employeeId));
+          setEmployees((prev) => prev.filter((emp) => emp.employeeid !== employeeId));
           Swal.fire("Deleted!", "The employee has been deleted.", "success");
         } catch (error) {
           handleApiError(error, "Failed to delete the employee. Please try again.");
@@ -61,7 +67,6 @@ function AllEmployees() {
     });
   };
 
-  // Handle employee update with validation
   const handleUpdate = async () => {
     if (!selectedEmployee || !selectedEmployee.name || !selectedEmployee.email || !selectedEmployee.department) {
       Swal.fire("Error!", "Please fill in all required fields.", "warning");
@@ -70,12 +75,14 @@ function AllEmployees() {
 
     try {
       const response = await axios.put(
-        `http://localhost:8090/api/employee/update/${selectedEmployee.employeeid}`,
+        `http://localhost:4058/api/employee/update/${selectedEmployee.employeeid}`,
         selectedEmployee
       );
       if (response.status === 200) {
         setEmployees((prev) =>
-          prev.map((emp) => (emp.employeeid === selectedEmployee.employeeid ? selectedEmployee : emp))
+          prev.map((emp) =>
+            emp.employeeid === selectedEmployee.employeeid ? selectedEmployee : emp
+          )
         );
         Swal.fire("Updated!", "Employee details updated successfully!", "success");
         handleCloseModal();
@@ -85,7 +92,6 @@ function AllEmployees() {
     }
   };
 
-  // View and Update Employee
   const handleViewAndUpdate = (employee) => {
     setSelectedEmployee({ ...employee });
     setShowModal(true);
@@ -98,10 +104,12 @@ function AllEmployees() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setSelectedEmployee((prev) => ({ ...prev, [name]: value }));
+    setSelectedEmployee((prev) => ({
+      ...prev,
+      [name]: name === "age" ? parseInt(value) || "" : value,
+    }));
   };
 
-  // Filter employees based on the search term
   const filteredEmployees = employees.filter((employee) =>
     [employee.name, employee.email, employee.department]
       .map((field) => (field || "").toLowerCase())
@@ -110,99 +118,143 @@ function AllEmployees() {
 
   return (
     <div>
-      <Header/>
-    <div className="container mt-5">
-      <div className="card shadow-lg rounded-lg">
-        <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
-          <h3>All Employees</h3>
-        </div>
+      <Header />
+      <div className="container mt-5">
+        <div className="card shadow-lg rounded-lg">
+          <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
+            <h3>All Employees</h3>
+          </div>
 
-        <div className="card-body p-4">
-          <input
-            type="text"
-            className="form-control mb-3"
-            placeholder="Search by name, email, or department..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div className="card-body p-4">
+            <input
+              type="text"
+              className="form-control mb-3"
+              placeholder="Search by name, email, or department..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
 
-          {filteredEmployees.length > 0 ? (
-            <table className="table table-striped table-bordered table-hover">
-              <thead className="table-dark">
-                <tr>
-                  <th>Employee ID</th>
-                  <th>Name</th>
-                  <th>Age</th>
-                  <th>Department</th>
-                  <th>Email</th>
-                  <th>Mobile</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredEmployees.map((employee) => (
-                  <tr key={employee.employeeid}>
-                    <td>{employee.employeeid}</td>
-                    <td>{employee.name}</td>
-                    <td>{employee.age}</td>
-                    <td>{employee.department}</td>
-                    <td>{employee.email}</td>
-                    <td>{employee.mobile}</td>
-                    <td>{employee.status}</td>
-                    <td>
-                      <button className="btn btn-info btn-sm mx-1" onClick={() => handleViewAndUpdate(employee)}>
-                        View / Update
-                      </button>
-                      <button className="btn btn-danger btn-sm mx-1" onClick={() => handleDelete(employee.employeeid)}>
-                        Delete
-                      </button>
-                    </td>
+            {filteredEmployees.length > 0 ? (
+              <table className="table table-striped table-bordered table-hover">
+                <thead className="table-dark">
+                  <tr>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="alert alert-info text-center">No employees found.</div>
-          )}
+                </thead>
+                <tbody>
+                  {filteredEmployees.map((employee) => (
+                    <tr key={employee.employeeid}>
+                      <td>{employee.employeeid ?? "N/A"}</td>
+                      <td>{employee.name ?? "N/A"}</td>
+                      <td>{employee.age ?? "N/A"}</td>
+                      <td>{employee.department ?? "N/A"}</td>
+                      <td>{employee.email ?? "N/A"}</td>
+                      <td>{employee.mobile ?? "N/A"}</td>
+                      <td>{employee.status ?? "N/A"}</td>
+                      <td>
+                        <button className="btn btn-info btn-sm mx-1" onClick={() => handleViewAndUpdate(employee)}>
+                          View / Update
+                        </button>
+                        <button className="btn btn-danger btn-sm mx-1" onClick={() => handleDelete(employee.employeeid)}>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="alert alert-info text-center">No employees found.</div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {selectedEmployee && (
-        <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Update Employee</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {["name", "age", "department", "email", "mobile"].map((field) => (
+        {selectedEmployee && (
+          <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Update Employee</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <label>Name</label>
               <input
-                key={field}
-                type={field === "age" ? "number" : "text"}
+                type="text"
                 className="form-control mb-2"
-                name={field}
-                value={selectedEmployee[field] || ""}
+                name="name"
+                value={selectedEmployee.name || ""}
                 onChange={handleInputChange}
               />
-            ))}
-            <select className="form-select mb-2" name="status" value={selectedEmployee.status} onChange={handleInputChange}>
-              <option>Active</option>
-              <option>On Leave</option>
-              <option>Retired</option>
-              <option>Terminated</option>
-            </select>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleUpdate}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
-    </div>
-    <Footer/>
+
+              <label>Age</label>
+              <input
+                type="number"
+                className="form-control mb-2"
+                name="age"
+                value={selectedEmployee.age || ""}
+                onChange={handleInputChange}
+              />
+
+              <label>Department</label>
+              <input
+                type="text"
+                className="form-control mb-2"
+                name="department"
+                value={selectedEmployee.department || ""}
+                onChange={handleInputChange}
+              />
+
+              <label>Email</label>
+              <input
+                type="email"
+                className="form-control mb-2"
+                name="email"
+                value={selectedEmployee.email || ""}
+                onChange={handleInputChange}
+              />
+
+              <label>Mobile</label>
+              <input
+                type="text"
+                className="form-control mb-2"
+                name="mobile"
+                value={selectedEmployee.mobile || ""}
+                onChange={handleInputChange}
+              />
+
+              <label>Status</label>
+              <select
+                className="form-select mb-2"
+                name="status"
+                value={selectedEmployee.status || "Active"}
+                onChange={handleInputChange}
+              >
+                <option>Active</option>
+                <option>On Leave</option>
+                <option>Retired</option>
+                <option>Terminated</option>
+              </select>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseModal}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleUpdate}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+
+        {/* Optional: Raw debug data */}
+        {/* <pre>{JSON.stringify(employees, null, 2)}</pre> */}
+      </div>
+      <Footer />
     </div>
   );
 }

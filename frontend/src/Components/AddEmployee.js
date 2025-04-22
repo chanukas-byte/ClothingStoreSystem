@@ -20,28 +20,76 @@ function AddEmployee({ isAdmin }) {
 
   const [errors, setErrors] = useState({});
 
+  const nameRegex = /^[A-Za-z\s]*$/;
+  const emailRegex = /\S+@\S+\.\S+/;
+  const mobileRegex = /^\d{0,10}$/;
+
+  const validateField = (name, value) => {
+    let error = "";
+
+    switch (name) {
+      case "employeeid":
+        if (!value.trim()) error = "Employee ID is required";
+        break;
+      case "name":
+        if (!value.trim()) error = "Name is required";
+        else if (!nameRegex.test(value)) error = "Only letters and spaces allowed";
+        break;
+      case "age":
+        if (!value || isNaN(value) || value < 18) error = "Must be ≥ 18";
+        break;
+      case "department":
+        if (!value) error = "Department is required";
+        break;
+      case "email":
+        if (!emailRegex.test(value)) error = "Invalid email";
+        break;
+      case "mobile":
+        if (!mobileRegex.test(value)) error = "Invalid mobile (10 digits)";
+        break;
+      case "status":
+        if (!value) error = "Status is required";
+        break;
+      case "address":
+        if (!value.trim()) error = "Address is required";
+        break;
+      case "salary":
+        if (isAdmin) {
+          if (value === "") error = "Salary required";
+          else if (isNaN(value) || Number(value) < 0) error = "Invalid salary";
+        }
+        break;
+      default:
+        break;
+    }
+
+    return error;
+  };
+
   const validateForm = () => {
     const newErrors = {};
-
-    if (!employeeData.employeeid) newErrors.employeeid = "Employee ID is required";
-    if (!employeeData.name) newErrors.name = "Name is required";
-    if (!employeeData.age || employeeData.age < 18) newErrors.age = "Age must be at least 18";
-    if (!employeeData.department) newErrors.department = "Department is required";
-    if (!employeeData.email || !/\S+@\S+\.\S+/.test(employeeData.email)) newErrors.email = "Valid email is required";
-    if (!employeeData.mobile || !/^\d{10}$/.test(employeeData.mobile)) newErrors.mobile = "Valid 10-digit mobile number is required";
-    if (!employeeData.status) newErrors.status = "Employment status is required";
-    if (!employeeData.address) newErrors.address = "Address is required";
-    if (isAdmin && (!employeeData.salary || employeeData.salary < 0)) newErrors.salary = "Valid salary is required";
-
+    Object.entries(employeeData).forEach(([key, value]) => {
+      const error = validateField(key, value);
+      if (error) newErrors[key] = error;
+    });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
-    setEmployeeData({
-      ...employeeData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    // Restrict name input
+    if (name === "name" && !nameRegex.test(value)) return;
+    // Restrict mobile to digits only and max 10
+    if (name === "mobile" && !/^\d*$/.test(value)) return;
+
+    const updatedData = { ...employeeData, [name]: value };
+    setEmployeeData(updatedData);
+
+    // Clear error as user types
+    const error = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   const handleSubmit = async (e) => {
@@ -49,19 +97,10 @@ function AddEmployee({ isAdmin }) {
     if (!validateForm()) return;
 
     try {
-
-      const response = await axios.post("http://localhost:4058/api/employee/add", employeeData);
-
-
-      if (response.status === 201) {
-        Swal.fire({
-          icon: "success",
-          title: "Employee Added Successfully!",
-          text: "Employee registration completed.",
-        });
-
+      const res = await axios.post("http://localhost:4058/api/employee/add", employeeData);
+      if (res.status === 201) {
+        Swal.fire("Success", "Employee added!", "success");
         await generatePDF(employeeData);
-
         setEmployeeData({
           employeeid: "",
           name: "",
@@ -75,43 +114,39 @@ function AddEmployee({ isAdmin }) {
         });
         setErrors({});
       }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Failed to Add Employee",
-        text: "Please try again later.",
-      });
+    } catch (err) {
+      Swal.fire("Error", "Failed to add employee", "error");
     }
   };
 
   const generatePDF = async (employee) => {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 800]);
-    const { employeeid, name, age, department, email, mobile, status, address, salary } = employee;
-
     const fontSize = 12;
+
     page.drawText("Employee Registration Receipt", { x: 200, y: 750, size: 18, color: rgb(0.2, 0.4, 0.8) });
     page.drawText(`Registration Date: ${new Date().toLocaleString()}`, { x: 150, y: 720, size: fontSize });
 
-    const text = `
-    Employee ID    : ${employeeid}
-    Name           : ${name}
-    Age            : ${age}
-    Department     : ${department}
-    Email          : ${email}
-    Mobile         : ${mobile}
-    Status         : ${status}
-    Address        : ${address}
-    Salary         : $${salary}
+    const content = `
+ID         : ${employee.employeeid}
+Name       : ${employee.name}
+Age        : ${employee.age}
+Department : ${employee.department}
+Email      : ${employee.email}
+Mobile     : ${employee.mobile}
+Status     : ${employee.status}
+Address    : ${employee.address}
+Salary     : $${employee.salary}
     `;
-    page.drawText(text, { x: 50, y: 650, size: fontSize, lineHeight: 20, color: rgb(0.1, 0.1, 0.1) });
+
+    page.drawText(content, { x: 50, y: 650, size: fontSize, color: rgb(0.1, 0.1, 0.1) });
 
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${name}_Employee_Receipt.pdf`;
+    link.download = `${employee.name}_Employee_Receipt.pdf`;
     link.click();
   };
 
@@ -123,85 +158,86 @@ function AddEmployee({ isAdmin }) {
           <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
             <h3>Employee Registration Form</h3>
           </div>
-
           <div className="card-body p-5">
             <form onSubmit={handleSubmit}>
               <div className="row g-3">
-                {/* Employee ID and Name */}
-                <div className="col-md-6">
-                  <label htmlFor="employeeId" className="form-label fw-bold">Employee ID</label>
-                  <input type="text" className="form-control shadow-sm rounded" id="employeeId" name="employeeid" value={employeeData.employeeid} onChange={handleChange} required />
-                  {errors.employeeid && <div className="text-danger">{errors.employeeid}</div>}
-                </div>
+                {[
+                  { name: "employeeid", label: "Employee ID", type: "text" },
+                  { name: "name", label: "Name", type: "text" },
+                  { name: "age", label: "Age", type: "number" },
+                  {
+                    name: "department",
+                    label: "Department",
+                    type: "select",
+                    options: ["Sales", "Inventory", "Customer Support", "Operation Management"],
+                  },
+                  { name: "email", label: "Email", type: "email" },
+                  { name: "mobile", label: "Mobile", type: "text" },
+                  {
+                    name: "status",
+                    label: "Employment Status",
+                    type: "select",
+                    options: ["Active", "On Leave", "Retired", "Terminated"],
+                  },
+                ].map((field, i) => (
+                  <div className={`col-md-${field.name === "status" ? 12 : 6}`} key={i}>
+                    <label className="form-label fw-bold">{field.label}</label>
+                    {field.type === "select" ? (
+                      <select
+                        className="form-select"
+                        name={field.name}
+                        value={employeeData[field.name]}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select {field.label}</option>
+                        {field.options.map((opt, i) => (
+                          <option value={opt} key={i}>{opt}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type={field.type}
+                        className="form-control"
+                        name={field.name}
+                        value={employeeData[field.name]}
+                        onChange={handleChange}
+                      />
+                    )}
+                    {errors[field.name] && <div className="text-danger">{errors[field.name]}</div>}
+                  </div>
+                ))}
 
-                <div className="col-md-6">
-                  <label htmlFor="name" className="form-label fw-bold">Name</label>
-                  <input type="text" className="form-control shadow-sm rounded" id="name" name="name" value={employeeData.name} onChange={handleChange} required />
-                  {errors.name && <div className="text-danger">{errors.name}</div>}
-                </div>
-
-                {/* Age and Department */}
-                <div className="col-md-6">
-                  <label htmlFor="age" className="form-label fw-bold">Age</label>
-                  <input type="number" className="form-control shadow-sm rounded" id="age" name="age" value={employeeData.age} onChange={handleChange} required min="18" />
-                  {errors.age && <div className="text-danger">{errors.age}</div>}
-                </div>
-
-                <div className="col-md-6">
-                  <label htmlFor="department" className="form-label fw-bold">Department</label>
-                  <select className="form-select shadow-sm rounded" id="department" name="department" value={employeeData.department} onChange={handleChange} required>
-                    <option value="" disabled>Select Department</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Inventory">Inventory</option>
-                    <option value="Customer Support">Customer Support</option>
-                    <option value="Operation Management">Operation Management</option>
-                  </select>
-                  {errors.department && <div className="text-danger">{errors.department}</div>}
-                </div>
-
-                {/* Email and Mobile */}
-                <div className="col-md-6">
-                  <label htmlFor="email" className="form-label fw-bold">Email Address</label>
-                  <input type="email" className="form-control shadow-sm rounded" id="email" name="email" value={employeeData.email} onChange={handleChange} required />
-                  {errors.email && <div className="text-danger">{errors.email}</div>}
-                </div>
-
-                <div className="col-md-6">
-                  <label htmlFor="mobile" className="form-label fw-bold">Mobile</label>
-                  <input type="text" className="form-control shadow-sm rounded" id="mobile" name="mobile" value={employeeData.mobile} onChange={handleChange} required />
-                  {errors.mobile && <div className="text-danger">{errors.mobile}</div>}
-                </div>
-
-                {/* Employment Status Dropdown */}
+                {/* Address */}
                 <div className="col-md-12">
-                  <label htmlFor="status" className="form-label fw-bold">Employment Status</label>
-                  <select className="form-select shadow-sm rounded" id="status" name="status" value={employeeData.status} onChange={handleChange} required>
-                    <option value="" disabled>Select Employment Status</option>
-                    <option value="Active">Active</option>
-                    <option value="On Leave">On Leave</option>
-                    <option value="Retired">Retired</option>
-                    <option value="Terminated">Terminated</option>
-                  </select>
-                  {errors.status && <div className="text-danger">{errors.status}</div>}
-                </div>
-
-                <div className="col-md-12">
-                  <label htmlFor="address" className="form-label fw-bold">Address</label>
-                  <textarea className="form-control shadow-sm rounded" id="address" name="address" value={employeeData.address} onChange={handleChange} required rows="3"></textarea>
+                  <label className="form-label fw-bold">Address</label>
+                  <textarea
+                    className="form-control"
+                    name="address"
+                    rows="3"
+                    value={employeeData.address}
+                    onChange={handleChange}
+                  ></textarea>
                   {errors.address && <div className="text-danger">{errors.address}</div>}
                 </div>
 
+                {/* Salary (only Admin) */}
                 {isAdmin && (
                   <div className="col-md-6">
-                    <label htmlFor="salary" className="form-label fw-bold">Salary ($)</label>
-                    <input type="number" className="form-control shadow-sm rounded" id="salary" name="salary" value={employeeData.salary} onChange={handleChange} required />
+                    <label className="form-label fw-bold">Salary ($)</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="salary"
+                      value={employeeData.salary}
+                      onChange={handleChange}
+                    />
                     {errors.salary && <div className="text-danger">{errors.salary}</div>}
                   </div>
                 )}
               </div>
 
               <div className="text-center mt-4">
-                <button type="submit" className="btn btn-primary btn-lg rounded-pill shadow-sm px-4">
+                <button type="submit" className="btn btn-primary btn-lg rounded-pill">
                   Register Employee
                 </button>
               </div>
