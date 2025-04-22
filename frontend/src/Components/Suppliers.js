@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Nav from "./Nav";
 import axios from "axios";
 
-
 const URL = "http://localhost:4058/suppliers";
 
 const fetchHandler = async () => {

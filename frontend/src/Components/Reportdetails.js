@@ -21,7 +21,6 @@ function ReportDetails() {
       setError("");
       try {
         const response = await axios.get(`http://localhost:4058/api/finance/${id}`);
-
         if (response.data) {
           console.log("Fetched report data:", response.data);
           setReport(response.data);
