@@ -12,6 +12,7 @@ function SupplierRegi() {
   const onSubmit = async (data) => {
     try {
       await axios.post("http://localhost:4058/suppliers", data);
+
       setMessage("Supplier added successfully!");
       reset();
     } catch (error) {

@@ -12,8 +12,12 @@
     "@testing-library/user-event": "^13.2.1",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.1",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "pdf-lib": "^1.17.1",
     "react": "18.2.0",
     "react-bootstrap": "^2.10.9",
@@ -23,7 +27,9 @@
     "react-router-dom": "6.1.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.10.1",
+    "stream-browserify": "^3.0.0",
     "sweetalert2": "^11.17.2",
+    "util": "^0.12.5",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
