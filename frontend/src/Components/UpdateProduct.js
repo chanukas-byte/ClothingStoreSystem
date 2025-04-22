@@ -22,7 +22,8 @@ function UpdateProduct() {
   useEffect(() => {
     const fetchHandler = async () => {
       try {
-        const res = await axios.get(`http://localhost:7050/products/${id}`);
+        const res = await axios.get(`http://localhost:4058/products/${id}`);
+
         console.log("API Response:", res.data); // Debugging the API response
         
         // Ensure the createdAt and updatedAt are in the correct format for datetime-local
@@ -46,7 +47,9 @@ function UpdateProduct() {
   // Send the updated request to the backend
   const sendRequest = async () => {
     await axios
-      .put(`http://localhost:7050/products/${id}`, {
+
+      .put(`http://localhost:4058/products/${id}`, {
+
         name: inputs.name,
         description: inputs.description,
         price: Number(inputs.price),
@@ -79,102 +82,190 @@ function UpdateProduct() {
     sendRequest(); // Call the function to send the update request
   };
 
+  const formStyles = {
+    formContainer: {
+      width: "80%",
+      maxWidth: "500px",
+      margin: "0 auto",
+      padding: "20px",
+      border: "1px solid #ccc",
+      borderRadius: "10px",
+      backgroundColor: "#f8f9fa",
+      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+    },
+    heading: {
+      textAlign: "center",
+      marginBottom: "20px",
+      fontSize: "1.5rem",
+      color: "#333",
+    },
+    inputField: {
+      marginBottom: "15px",
+    },
+    label: {
+      display: "block",
+      fontWeight: "bold",
+      marginBottom: "5px",
+    },
+    input: {
+      width: "100%",
+      padding: "10px",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
+    },
+    submitButton: {
+      width: "100%",
+      padding: "10px",
+      backgroundColor: "#007bff",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      fontWeight: "bold",
+      cursor: "pointer",
+    },
+    submitButtonHover: {
+      backgroundColor: "#0056b3",
+    },
+  };
+
   return (
     <div>
-      <Nav/>
-      <h1>Update Product</h1>
-      <form onSubmit={handleSubmit}>
-        <label>Item Name</label>
-        <br />
-        <input
-          type="text"
-          name="name"
-          value={inputs.name}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <br />
-        <label>Item Description</label>
-        <br />
-        <input
-          type="text"
-          name="description"
-          value={inputs.description}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <br />
-        <label>Item Price</label>
-        <br />
-        <input
-          type="number"
-          name="price"
-          value={inputs.price}
-          onChange={handleChange}
-          required
-          min="0"
-        />
-        <br />
-        <br />
-        <label>Item Category</label>
-        <br />
-        <input
-          type="text"
-          name="category"
-          value={inputs.category}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <br />
-        <label>Item Quantity</label>
-        <br />
-        <input
-          type="number"
-          name="stockQuantity"
-          value={inputs.stockQuantity}
-          onChange={handleChange}
-          required
-          min="0"
-        />
-        <br />
-        <br />
-        <label>Item Image URL</label>
-        <br />
-        <input
-          type="text"
-          name="imageUrl"
-          value={inputs.imageUrl}
-          onChange={handleChange}
-        />
-        <br />
-        <br />
-        <label>Item Created Date</label>
-        <br />
-        <input
-          type="datetime-local"
-          name="createdAt"
-          value={inputs.createdAt}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <br />
-        <label>Item Updated Date</label>
-        <br />
-        <input
-          type="datetime-local"
-          name="updatedAt"
-          value={inputs.updatedAt}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <br />
-        <button type="submit">Update Product</button>
-      </form>
+      <Nav />
+      <div style={formStyles.formContainer}>
+        <h1 style={formStyles.heading}>Update Product</h1>
+        <form onSubmit={handleSubmit}>
+          <div style={formStyles.inputField}>
+            <label htmlFor="name" style={formStyles.label}>
+              Product Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              onChange={handleChange}
+              value={inputs.name}
+              style={formStyles.input}
+              required
+            />
+          </div>
+
+          <div style={formStyles.inputField}>
+            <label htmlFor="description" style={formStyles.label}>
+              Description
+            </label>
+            <textarea
+              name="description"
+              id="description"
+              onChange={handleChange}
+              value={inputs.description}
+              style={formStyles.input}
+              rows="3"
+              required
+            ></textarea>
+          </div>
+
+          <div style={formStyles.inputField}>
+            <label htmlFor="price" style={formStyles.label}>
+              Price
+            </label>
+            <input
+              type="number"
+              name="price"
+              id="price"
+              onChange={handleChange}
+              value={inputs.price}
+              style={formStyles.input}
+              min="0"
+              required
+            />
+          </div>
+
+          <div style={formStyles.inputField}>
+            <label htmlFor="category" style={formStyles.label}>
+              Category
+            </label>
+            <input
+              type="text"
+              name="category"
+              id="category"
+              onChange={handleChange}
+              value={inputs.category}
+              style={formStyles.input}
+              required
+            />
+          </div>
+
+          <div style={formStyles.inputField}>
+            <label htmlFor="stockQuantity" style={formStyles.label}>
+              Stock Quantity
+            </label>
+            <input
+              type="number"
+              name="stockQuantity"
+              id="stockQuantity"
+              onChange={handleChange}
+              value={inputs.stockQuantity}
+              style={formStyles.input}
+              min="0"
+              required
+            />
+          </div>
+
+          <div style={formStyles.inputField}>
+            <label htmlFor="imageUrl" style={formStyles.label}>
+              Image URL
+            </label>
+            <input
+              type="text"
+              name="imageUrl"
+              id="imageUrl"
+              onChange={handleChange}
+              value={inputs.imageUrl}
+              style={formStyles.input}
+            />
+          </div>
+
+          <div style={formStyles.inputField}>
+            <label htmlFor="createdAt" style={formStyles.label}>
+              Created Date
+            </label>
+            <input
+              type="datetime-local"
+              name="createdAt"
+              id="createdAt"
+              onChange={handleChange}
+              value={inputs.createdAt}
+              style={formStyles.input}
+              required
+            />
+          </div>
+
+          <div style={formStyles.inputField}>
+            <label htmlFor="updatedAt" style={formStyles.label}>
+              Updated Date
+            </label>
+            <input
+              type="datetime-local"
+              name="updatedAt"
+              id="updatedAt"
+              onChange={handleChange}
+              value={inputs.updatedAt}
+              style={formStyles.input}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            style={{
+              ...formStyles.submitButton,
+              ":hover": formStyles.submitButtonHover,
+            }}
+          >
+            Update Product
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

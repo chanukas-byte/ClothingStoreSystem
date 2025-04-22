@@ -51,7 +51,8 @@ function AllEmployees() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:7050/api/employee/delete/${employeeId}`);
+          await axios.delete(`http://localhost:4058/api/employee/delete/${employeeId}`);
+
           setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.employeeid !== employeeId));
           Swal.fire("Deleted!", "The employee has been deleted.", "success");
         } catch (error) {

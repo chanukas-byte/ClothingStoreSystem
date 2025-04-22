@@ -37,7 +37,8 @@ function AllReport() {
     setLoading(true);
     setError("");
     axios
-      .get("http://localhost:7050/api/finance/")
+      .get("http://localhost:4058/api/finance/")
+
       .then((response) => {
         setReports(response.data || []);
         setLoading(false);

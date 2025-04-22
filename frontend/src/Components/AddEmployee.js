@@ -49,7 +49,9 @@ function AddEmployee({ isAdmin }) {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post("http://localhost:7050/api/employee/add", employeeData);
+
+      const response = await axios.post("http://localhost:4058/api/employee/add", employeeData);
+
 
       if (response.status === 201) {
         Swal.fire({

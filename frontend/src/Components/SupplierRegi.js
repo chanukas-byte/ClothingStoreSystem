@@ -5,13 +5,14 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 function SupplierRegi() {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      await axios.post("http://localhost:7050/suppliers", data);
+      await axios.post("http://localhost:4058/suppliers", data);
+
       setMessage("Supplier added successfully!");
       reset();
     } catch (error) {
@@ -45,7 +46,21 @@ function SupplierRegi() {
 
           <div style={styles.formGroup}>
             <label style={styles.label}>Contact Number</label>
-            <input type="text" {...register("contactNumber", { required: true })} placeholder="Enter contact number" style={styles.input} />
+            <input
+              type="text"
+              {...register("contactNumber", {
+                required: "Contact number is required",
+                pattern: {
+                  value: /^[0-9]{10}$/,
+                  message: "Contact number must be exactly 10 digits",
+                },
+              })}
+              placeholder="Enter contact number"
+              style={styles.input}
+            />
+            {errors.contactNumber && (
+              <p style={styles.errorMessage}>{errors.contactNumber.message}</p>
+            )}
           </div>
 
           <div style={styles.formGroup}>
@@ -141,5 +156,10 @@ const styles = {
   },
   submitButtonHover: {
     background: "#0056b3",
+  },
+  errorMessage: {
+    color: "#721c24",
+    fontSize: "12px",
+    marginTop: "5px",
   },
 };

@@ -20,7 +20,8 @@ function ReportDetails() {
       setLoading(true);
       setError("");
       try {
-        const response = await axios.get(`http://localhost:7050/api/finance/${id}`);
+        const response = await axios.get(`http://localhost:4058/api/finance/${id}`);
+
         if (response.data) {
           console.log("Fetched report data:", response.data);
           setReport(response.data);

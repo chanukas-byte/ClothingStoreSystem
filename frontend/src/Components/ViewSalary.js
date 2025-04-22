@@ -20,7 +20,8 @@ function AllEmployees() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:7050/api/employee/");
+      const response = await axios.get("http://localhost:4058/api/employee/");
+
       if (response && response.data) {
         setEmployees(response.data);
       }
