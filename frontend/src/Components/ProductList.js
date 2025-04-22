@@ -25,7 +25,7 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:7050/product/search', { params: filters });
+            const response = await axios.get('http://localhost:4058/product/search', { params: filters });
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -119,7 +119,7 @@ const ProductList = () => {
                         <div className="product-grid">
                             {products.map((product) => (
                                 <div className="product-card" key={product._id}>
-                                    <img src={`http://localhost:7080/${product.imageUrl}`} alt={product.name} className="product-image" />
+                                    <img src={`http://localhost:4058/${product.imageUrl}`} alt={product.name} className="product-image" />
                                     <div className="product-info">
                                         <h3>{product.name}</h3>
                                         <p>Rs. {product.price}</p>
