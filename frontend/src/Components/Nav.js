@@ -9,7 +9,7 @@ function Nav() {
         className="navbar navbar-expand-lg navbar-dark fixed-top"
         style={{ backgroundColor: "#1a1a1a", zIndex: "1030" }}
       >
-        <div className="container">
+        <div className="container-fluid">
           <Link className="navbar-brand text-light mr-auto" to="/" style={{ fontWeight: "bold", fontSize: "24px" }}>
             Live Art Clothings
           </Link>
