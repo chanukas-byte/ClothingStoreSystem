@@ -22,31 +22,7 @@ const addProduct = async (req, res, next) => {
 
 }
 
-// serch
-// Search Products with Filters
-const searchProducts = async (req, res, next) => {
-    const { category, price, stockQuantity } = req.query;
 
-    const filter = {};
-    if (category) filter.category = category;
-    if (price) filter.price = { $lte: price };
-    if (stockQuantity) filter.stockQuantity = { $gte: stockQuantity };
-
-    let products;
-
-    try {
-        products = await Product.find(filter);
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({ message: "Error fetching filtered products", error: err });
-    }
-
-    if (!products || products.length === 0) {
-        return res.status(404).json({ message: "No products found with the given filters" });
-    }
-
-    return res.status(200).json({ products });
-};
 
 
 //Display Product
@@ -140,4 +116,4 @@ exports.getAllProduct =getAllProduct;
 exports.getById = getById;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
-exports.searchProducts = searchProducts;
+
