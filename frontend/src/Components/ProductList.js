@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';  // Import Link and useNavigate to handle navigation
 import axios from 'axios';
 import './ProductList.css';
+import NavB from './NavBar';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
@@ -25,8 +26,17 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:4058/product/search', { params: filters });
-            setProducts(response.data);
+            const response = await axios.get('http://localhost:4058/products', { params: filters });
+
+            // Debug print to understand the structure
+            console.log("Fetched response:", response.data);
+
+            // Ensure we're accessing the correct array
+            const fetchedProducts = Array.isArray(response.data)
+                ? response.data
+                : response.data.products || [];
+
+            setProducts(fetchedProducts);
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -75,7 +85,15 @@ const ProductList = () => {
     };
 
     return (
+        <div>
+            <NavB />
+
+
+
         <div className="main-container">
+
+        
+            
             <aside className={`sidebar ${menuOpen ? 'expanded' : ''}`} onMouseEnter={() => setMenuOpen(true)} onMouseLeave={() => setMenuOpen(false)}>
                 <div className="menu-icon">☰</div>
                 {menuOpen && (
@@ -84,6 +102,7 @@ const ProductList = () => {
                         <button className={`tab-btn ${activeTab === 'cart' ? 'active' : ''}`} onClick={() => setActiveTab('cart')}>
                             Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
                         </button>
+                        <button onClick={() => navigate("/Home")}> Admin</button>
 
                         <div className="filters">
 
@@ -175,9 +194,11 @@ const ProductList = () => {
                         <button onClick={handleSendAllToCheckout} style={{ marginTop: '10px' }}>
                             Send All to Checkout
                         </button>
+                       
                     </>
                 )}
             </div>
+        </div>
         </div>
     );
 };
