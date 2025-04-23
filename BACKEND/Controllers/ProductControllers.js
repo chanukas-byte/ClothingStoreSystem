@@ -22,6 +22,9 @@ const addProduct = async (req, res, next) => {
 
 }
 
+
+
+
 //Display Product
 const getAllProduct = async (req, res, next) => {
 
@@ -113,3 +116,4 @@ exports.getAllProduct =getAllProduct;
 exports.getById = getById;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
+

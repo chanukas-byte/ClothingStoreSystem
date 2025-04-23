@@ -62,7 +62,9 @@ function AddReport() {
 
     try {
       setLoading(true);
+
       const response = await axios.post("http://localhost:4058/api/finance/add", reportData, {
+
         headers: { "Content-Type": "application/json" },
       });
 

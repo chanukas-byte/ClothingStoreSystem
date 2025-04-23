@@ -18,7 +18,7 @@ function AllEmployees() {
   // Enhanced function to fetch employees with error handling and improved logging
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:8090/api/employee/");
+      const response = await axios.get("http://localhost:7050/api/employee/");
       if (response.status === 200) {
         setEmployees(response.data || []);
       } else {
@@ -52,6 +52,7 @@ function AllEmployees() {
       if (result.isConfirmed) {
         try {
           await axios.delete(`http://localhost:4058/api/employee/delete/${employeeId}`);
+
           setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.employeeid !== employeeId));
           Swal.fire("Deleted!", "The employee has been deleted.", "success");
         } catch (error) {
@@ -70,7 +71,7 @@ function AllEmployees() {
 
     try {
       const response = await axios.put(
-        `http://localhost:8090/api/employee/update/${selectedEmployee.employeeid}`,
+        `http://localhost:7050/api/employee/update/${selectedEmployee.employeeid}`,
         selectedEmployee
       );
       if (response.status === 200) {
