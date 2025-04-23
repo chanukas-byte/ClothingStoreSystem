@@ -79,7 +79,7 @@ function App() {
       <div className="container mt-4">
         <Routes>
 
-          {/* Product Catalogue */}
+          {/* Product Catalogue Routes*/}
           <Route path="/" element={<ProductList />} />
           <Route path="/product/:productId" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
           <Route path="/checkout" element={<Checkout checkoutProducts={checkoutProducts} handleRemoveFromCart={handleRemoveFromCart} />} />
@@ -87,23 +87,23 @@ function App() {
           <Route path="/aboutus" element={<Aboutus />} />
 
 
-          {/* Employee Management */}
+          {/* Employee Management Routes*/}
           <Route path="/add-employee" element={<AddEmployee />} />
           <Route path="/Home" element={<Home />} />
           <Route path="/all-employees" element={<AllEmployees />} />
           <Route path="/update-employee/:id" element={<UpdateEmployee />} />
           <Route path="/view-employee/:id" element={<ViewEmployee />} />
 
-          {/* Report Management */}
+          {/* Report Management Routes*/}
           <Route path="/add-report" element={<AddReport />} />
           <Route path="/all-reports" element={<AllReport />} />
           <Route path="/view-report/:id" element={<ReportDetails />} />
 
-          {/* Salary Management */}
+          {/* Salary Management Routes*/}
           <Route path="/assign-salary" element={<AssignSalary />} />
           <Route path="/view-salary" element={<ViewSalary />} />
 
-          {/* Inventory Management */}
+          {/* Inventory Management Routes*/}
           <Route path="/inventory-management-Home" element={<HomeS />} />
           <Route path="/stock" element={<Stock />} />
           <Route path="/supplier" element={<Supplier />} />
