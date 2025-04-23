@@ -108,7 +108,9 @@ function AllReport() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
+
           .delete(`http://localhost:4058/api/finance/delete/${reportId}`)
+
           .then(() => {
             fetchReports();
             Swal.fire("Deleted!", "The report has been deleted.", "success");

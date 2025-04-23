@@ -17,6 +17,7 @@ function AllEmployees() {
 
   const fetchEmployees = async () => {
     try {
+
       const response = await axios.get("http://localhost:4058/api/employee/");
       console.log("API response:", response.data);
 
@@ -32,6 +33,7 @@ function AllEmployees() {
           status: emp.status || "Active"
         }));
         setEmployees(normalizedData);
+
       } else {
         throw new Error("Unexpected response format or status.");
       }
@@ -58,7 +60,10 @@ function AllEmployees() {
       if (result.isConfirmed) {
         try {
           await axios.delete(`http://localhost:4058/api/employee/delete/${employeeId}`);
-          setEmployees((prev) => prev.filter((emp) => emp.employeeid !== employeeId));
+
+
+          setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.employeeid !== employeeId));
+
           Swal.fire("Deleted!", "The employee has been deleted.", "success");
         } catch (error) {
           handleApiError(error, "Failed to delete the employee. Please try again.");
@@ -75,6 +80,7 @@ function AllEmployees() {
 
     try {
       const response = await axios.put(
+
         `http://localhost:4058/api/employee/update/${selectedEmployee.employeeid}`,
         selectedEmployee
       );
