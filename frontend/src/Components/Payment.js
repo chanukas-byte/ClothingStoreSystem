@@ -44,13 +44,13 @@ const Payment = () => {
     const date = new Date();
     const formattedDate = date.toLocaleString();
     doc.setFontSize(12);
-    doc.text(Date: ${formattedDate}, 20, 50);
+    doc.text(`Date: ${formattedDate}`, 20, 50); // Corrected this line with backticks
 
     // Add Payment Details
-    doc.text(Total Amount: Rs. ${totalAmount}, 20, 70);
-    doc.text(Payment Method: ${paymentMethod}, 20, 80);
+    doc.text(`Total Amount: Rs. ${totalAmount}`, 20, 70); // Corrected this line with backticks
+    doc.text(`Payment Method: ${paymentMethod}`, 20, 80); // Corrected this line with backticks
     if (paymentMethod === 'Online Slip') {
-      doc.text(Slip Uploaded: ${slipUpload ? slipUpload.name : 'No Slip Uploaded'}, 20, 90);
+      doc.text(`Slip Uploaded: ${slipUpload ? slipUpload.name : 'No Slip Uploaded'}`, 20, 90); // Corrected this line with backticks
     }
 
     // Add Signature
