@@ -23,7 +23,6 @@ function UpdateProduct() {
     const fetchHandler = async () => {
       try {
         const res = await axios.get(`http://localhost:4058/products/${id}`);
-
         console.log("API Response:", res.data); // Debugging the API response
         
         // Ensure the createdAt and updatedAt are in the correct format for datetime-local
@@ -47,9 +46,7 @@ function UpdateProduct() {
   // Send the updated request to the backend
   const sendRequest = async () => {
     await axios
-
       .put(`http://localhost:4058/products/${id}`, {
-
         name: inputs.name,
         description: inputs.description,
         price: Number(inputs.price),
