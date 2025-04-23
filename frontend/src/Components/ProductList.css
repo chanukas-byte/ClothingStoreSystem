@@ -220,19 +220,19 @@ td button:hover {
   }
 
   .main-container {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   .menu-icon {
-      display: none;
+    display: none;
   }
 
   .menu-content {
-      display: block;
+    display: block;
   }
 
   .content-container {
-      padding-left: 20px;
-      padding-right: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
