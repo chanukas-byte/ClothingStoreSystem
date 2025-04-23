@@ -4,9 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 const URL = "http://localhost:4058/products";
-
 
 const fetchHandler = async () => {
   try {
