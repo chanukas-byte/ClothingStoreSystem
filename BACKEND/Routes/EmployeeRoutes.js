@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Employee = require("../Models/Employee"); // Import Employee model
+const mongoose = require("mongoose");
+const Employee = require("../Models/Employee");
 const { body, validationResult } = require("express-validator");
 
 // Validation rules for creating employees (without salary)
@@ -21,21 +22,17 @@ const validateSalaryInput = [
   body("salary").isNumeric({ min: 0 }).withMessage("Salary must be a non-negative number"),
 ];
 
-// ✅ Create Employee Route (Salary set later by admin)
+// ✅ Create Employee
 router.post("/add", validateEmployeeInput, async (req, res) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   try {
     const { employeeid, name, age, department, email, mobile, address } = req.body;
 
-    // Check if employee already exists by employee ID or email
     const existingEmployee = await Employee.findOne({ $or: [{ employeeid }, { email }] });
-    if (existingEmployee) {
+    if (existingEmployee)
       return res.status(400).json({ message: "Employee with this ID or email already exists" });
-    }
 
     const newEmployee = new Employee({
       employeeid,
@@ -45,7 +42,7 @@ router.post("/add", validateEmployeeInput, async (req, res) => {
       email,
       mobile,
       address,
-      salary: 0, // Default salary is 0, assigned by admin later
+      salary: 0,
     });
 
     const savedEmployee = await newEmployee.save();
@@ -56,26 +53,21 @@ router.post("/add", validateEmployeeInput, async (req, res) => {
   }
 });
 
-// ✅ Assign Salary to Employee (Admin)
+// ✅ Assign Salary to Employee
 router.put("/assign-salary/:id", validateSalaryInput, async (req, res) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   try {
     const { salary } = req.body;
 
-    // Find and update employee's salary
     const updatedEmployee = await Employee.findByIdAndUpdate(
       req.params.id,
       { salary },
       { new: true, runValidators: true }
     );
 
-    if (!updatedEmployee) {
-      return res.status(404).json({ message: "Employee not found" });
-    }
+    if (!updatedEmployee) return res.status(404).json({ message: "Employee not found" });
 
     res.status(200).json({
       message: "Salary assigned successfully!",
@@ -87,13 +79,11 @@ router.put("/assign-salary/:id", validateSalaryInput, async (req, res) => {
   }
 });
 
-// ✅ View Employee Salary (Restricted for the specific employee)
+// ✅ View Employee Salary
 router.get("/view-salary/:id", async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id, { salary: 1, name: 1 }); // Fetch salary and name only
-    if (!employee) {
-      return res.status(404).json({ message: "Employee not found" });
-    }
+    const employee = await Employee.findById(req.params.id, { salary: 1, name: 1 });
+    if (!employee) return res.status(404).json({ message: "Employee not found" });
 
     res.status(200).json({
       message: `Salary details for ${employee.name}`,
@@ -105,14 +95,14 @@ router.get("/view-salary/:id", async (req, res) => {
   }
 });
 
-// ✅ Update Employee Route (Partial updates allowed, including salary)
+// ✅ Update Employee
 router.put("/update/:id", async (req, res) => {
   try {
-    const { salary, ...otherDetails } = req.body; // Separate salary from other details
+    const { salary, ...otherDetails } = req.body;
     const updateData = { ...otherDetails };
 
     if (salary !== undefined && typeof salary === "number" && salary >= 0) {
-      updateData.salary = salary; // Allow salary update
+      updateData.salary = salary;
     }
 
     const updatedEmployee = await Employee.findByIdAndUpdate(req.params.id, updateData, {
@@ -120,9 +110,7 @@ router.put("/update/:id", async (req, res) => {
       runValidators: true,
     });
 
-    if (!updatedEmployee) {
-      return res.status(404).json({ message: "Employee not found" });
-    }
+    if (!updatedEmployee) return res.status(404).json({ message: "Employee not found" });
 
     res.status(200).json({ message: "Employee updated successfully!", employee: updatedEmployee });
   } catch (error) {
@@ -142,13 +130,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ Delete Employee by ID
+// ✅ Delete Employee by ID (WITH ObjectId check!)
 router.delete("/delete/:id", async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: "Invalid employee ID format" });
+  }
+
   try {
     const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
-    if (!deletedEmployee) {
-      return res.status(404).json({ message: "Employee not found" });
-    }
+    if (!deletedEmployee) return res.status(404).json({ message: "Employee not found" });
+
     res.status(200).json({ message: "Employee deleted successfully!" });
   } catch (error) {
     console.error("Error deleting employee:", error);
@@ -156,26 +147,17 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
+// ✅ Get Employee by ID
 router.get("/:id", async (req, res) => {
-    try {
-      const employee = await Employee.findById(req.params.id);
-      if (!employee) {
-        return res.status(404).json({ message: "Employee not found" });
-      }
-  
-      res.status(200).json(employee);
-    } catch (error) {
-      console.error("Error fetching employee by ID:", error);
-      res.status(500).json({ message: "Internal Server Error", error: error.message });
-    }
-  });
+  try {
+    const employee = await Employee.findById(req.params.id);
+    if (!employee) return res.status(404).json({ message: "Employee not found" });
 
-
-
-
-
-
-
-
+    res.status(200).json(employee);
+  } catch (error) {
+    console.error("Error fetching employee by ID:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
 
 module.exports = router;
