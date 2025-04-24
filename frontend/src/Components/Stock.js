@@ -10,25 +10,22 @@ const fetchHandler = async () => {
   try {
     const response = await axios.get(URL);
     if (response.data && response.data.products) {
-      return response.data.products;  
+      return response.data.products;
     }
-    return []; 
+    return [];
   } catch (error) {
     console.error("Error fetching products:", error);
-    return [];  
+    return [];
   }
 };
 
-// Updated deleteHandler
 const deleteHandler = async (id) => {
   try {
-    await axios.delete(`${URL}/${id}`); 
-    alert("Product deleted successfully");
-    return true;
+    const res = await axios.delete(`${URL}/${id}`);
+    return res.data;
   } catch (error) {
     console.error("Error deleting product:", error);
-    alert("Failed to delete product");
-    return false;
+    throw error;
   }
 };
 
@@ -38,9 +35,8 @@ function Stock() {
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  // Fetch products from backend and update the state
   useEffect(() => {
-    fetchHandler().then((data) => setProducts(data)); 
+    fetchHandler().then((data) => setProducts(data));
   }, []);
 
   const handleSearchChange = (event) => {
@@ -81,20 +77,21 @@ function Stock() {
     }
   };
 
-  const handleDelete = async (id) => {
-    const success = await deleteHandler(id);
-    if (success) {
-      // After deleting, re-fetch the updated list of products from the server
-      fetchHandler().then((data) => setProducts(data));
-    }
+  const handleDelete = (id) => {
+    deleteHandler(id)
+      .then(() => {
+        // Filter out the deleted product from the state
+        setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
+      })
+      .catch((error) => {
+        console.error("Error deleting product:", error);
+      });
   };
 
-  // Count the total number of available items
   const getTotalAvailableItems = () => {
     return products.length;
   };
 
-  // Count the total stock quantity
   const getTotalStockQuantity = () => {
     return products.reduce((total, product) => total + product.stockQuantity, 0);
   };
@@ -103,60 +100,20 @@ function Stock() {
     <div>
       <Nav />
       <h1 className="text-center mt-4 mb-3">Product Stock</h1>
-      
+
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
-        
-        {/* Section 1 */}
-        <div
-          className="section"
-          style={{
-            padding: "20px",
-            backgroundColor: "#F5F5F5",
-            margin: "0 10px",
-            flex: 1,
-            borderRadius: "10px",        
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",  
-            transition: "all 0.3s ease", 
-          }}
-        >
+        <div className="section" style={{ padding: "20px", backgroundColor: "#F5F5F5", margin: "0 10px", flex: 1, borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", transition: "all 0.3s ease" }}>
           <h3>No of Available <br></br>Variations</h3>
           <p>Total - {getTotalAvailableItems()} Items Available</p>
         </div>
-
-        {/* Section 2 */}
-        <div
-          className="section"
-          style={{
-            padding: "20px",
-            backgroundColor: "#F5F5F5",
-            margin: "0 10px",
-            flex: 1,
-            borderRadius: "10px",        
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",  
-            transition: "all 0.3s ease", 
-          }}
-        >
+        <div className="section" style={{ padding: "20px", backgroundColor: "#F5F5F5", margin: "0 10px", flex: 1, borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", transition: "all 0.3s ease" }}>
           <h3>in House <br></br>Item Quantity</h3>
           <p>Total Qty - {getTotalStockQuantity()}</p>
         </div>
-
-        {/* Section 3 */}
-        <div
-          className="section"
-          style={{
-            padding: "20px",
-            backgroundColor: "#F5F5F5",
-            margin: "0 10px",
-            flex: 1,
-            borderRadius: "10px",        
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",  
-            transition: "all 0.3s ease", 
-          }}
-        >
+        <div className="section" style={{ padding: "20px", backgroundColor: "#F5F5F5", margin: "0 10px", flex: 1, borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", transition: "all 0.3s ease" }}>
           <h3>Low Stock <br></br>Item Quantity</h3>
           <p>Content for Section 3.</p>
         </div>
-
       </div>
 
       <div className="d-flex justify-content-center mb-4">
