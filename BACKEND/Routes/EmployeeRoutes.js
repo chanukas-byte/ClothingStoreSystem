@@ -17,9 +17,9 @@ const validateEmployeeInput = [
   body("address").notEmpty().withMessage("Address is required"),
 ];
 
-// Validation for assigning salary (must be a positive number)
+// Validation for assigning salary
 const validateSalaryInput = [
-  body("salary").isNumeric({ min: 0 }).withMessage("Salary must be a non-negative number"),
+  body("salary").isNumeric().custom((value) => value >= 0).withMessage("Salary must be a non-negative number"),
 ];
 
 // ✅ Create Employee
@@ -82,7 +82,7 @@ router.put("/assign-salary/:id", validateSalaryInput, async (req, res) => {
 // ✅ View Employee Salary
 router.get("/view-salary/:id", async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id, { salary: 1, name: 1 });
+    const employee = await Employee.findById(req.params.id, { salary: 1, name: 1 }).lean();
     if (!employee) return res.status(404).json({ message: "Employee not found" });
 
     res.status(200).json({
@@ -95,13 +95,16 @@ router.get("/view-salary/:id", async (req, res) => {
   }
 });
 
-// ✅ Update Employee
+// ✅ Update Employee (includes optional salary update)
 router.put("/update/:id", async (req, res) => {
   try {
     const { salary, ...otherDetails } = req.body;
     const updateData = { ...otherDetails };
 
-    if (salary !== undefined && typeof salary === "number" && salary >= 0) {
+    if (salary !== undefined) {
+      if (typeof salary !== "number" || salary < 0) {
+        return res.status(400).json({ message: "Invalid salary value" });
+      }
       updateData.salary = salary;
     }
 
@@ -122,7 +125,7 @@ router.put("/update/:id", async (req, res) => {
 // ✅ Get All Employees
 router.get("/", async (req, res) => {
   try {
-    const employees = await Employee.find();
+    const employees = await Employee.find().lean();
     res.status(200).json(employees);
   } catch (error) {
     console.error("Error fetching employees:", error);
@@ -130,7 +133,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ Delete Employee by ID (WITH ObjectId check!)
+// ✅ Delete Employee
 router.delete("/delete/:id", async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ message: "Invalid employee ID format" });
@@ -150,7 +153,7 @@ router.delete("/delete/:id", async (req, res) => {
 // ✅ Get Employee by ID
 router.get("/:id", async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id);
+    const employee = await Employee.findById(req.params.id).lean();
     if (!employee) return res.status(404).json({ message: "Employee not found" });
 
     res.status(200).json(employee);
