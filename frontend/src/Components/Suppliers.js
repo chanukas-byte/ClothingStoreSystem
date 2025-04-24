@@ -107,7 +107,7 @@ function Suppliers() {
         .title {
           text-align: center;
           font-size: 2rem;
-          color: #333;
+          color: #000;  /* Changed color to black */
           margin-bottom: 20px;
         }
 
@@ -137,6 +137,7 @@ function Suppliers() {
           padding: 15px;
           text-align: center;
           border-bottom: 1px solid #ddd;
+          color: #000;  /* Changed color to black for text in table rows */
         }
 
         .supplier-table tbody tr:hover {

@@ -96,6 +96,7 @@ const AddProduct = () => {
       display: "block",
       fontWeight: "bold",
       marginBottom: "5px",
+      color: "black",
     },
     input: {
       width: "100%",
