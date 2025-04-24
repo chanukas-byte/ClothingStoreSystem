@@ -16,7 +16,7 @@ const validateEmployeeInput = [
     .withMessage("Mobile number must be exactly 10 digits"),
   body("address").notEmpty().withMessage("Address is required"),
 ];
-yield
+
 // Validation for assigning salary (must be a positive number)
 const validateSalaryInput = [
   body("salary").isNumeric({ min: 0 }).withMessage("Salary must be a non-negative number"),
