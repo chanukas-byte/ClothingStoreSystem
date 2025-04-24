@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jsPDF } from "jspdf"; // Import jsPDF
+import NavB from './NavBar';
 
 const Payment = () => {
   const [totalAmount, setTotalAmount] = useState('');
@@ -67,6 +68,8 @@ const Payment = () => {
 
   return (
     <div>
+      <NavB />
+    <div>
       <h2>Payment</h2>
 
       <div>
@@ -119,6 +122,8 @@ const Payment = () => {
 
       <button onClick={handleConfirm}>Confirm</button>
       <button onClick={handleCancel}>Cancel</button>
+    </div>
+
     </div>
   );
 };
