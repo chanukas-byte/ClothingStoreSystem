@@ -151,21 +151,8 @@ function Stock() {
                 <th onClick={() => handleSortChange("name")} style={{ cursor: "pointer" }}>
                   Item Name {sortField === "name" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
-                <th>Description</th>
                 <th onClick={() => handleSortChange("price")} style={{ cursor: "pointer" }}>
                   Price {sortField === "price" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
-
-                <th
-                  onClick={() => handleSortChange("price")}
-                  className="cursor-pointer text-center"
-                >
-                  Price{" "}
-                  {sortField === "price"
-                    ? sortOrder === "asc"
-                      ? "↑"
-                      : "↓"
-                    : ""}
-
                 </th>
                 <th>Category</th>
                 <th onClick={() => handleSortChange("stockQuantity")} style={{ cursor: "pointer" }}>
@@ -181,49 +168,22 @@ function Stock() {
               {sortedProducts.length > 0 ? (
                 sortedProducts.map((product) => (
                   <tr key={product._id}>
-
                     <td>{product.name}</td>
-                    <td>{product.description}</td>
                     <td>${(product.price || 0).toFixed(2)}</td>
                     <td>{product.category}</td>
                     <td>{product.stockQuantity}</td>
                     <td>
                       <img
-                        src={
-                          product.imageUrl ||
-                          "https://via.placeholder.com/50x50.png?text=No+Image"
-                        }
+                        src={product.imageUrl || "https://via.placeholder.com/50x50.png?text=No+Image"}
                         alt={product.name}
                         width="50"
                         className="rounded"
                       />
-
-                    <td className="text-center">{product.name}</td>
-                    <td className="text-center">LKR. {product.price}.00</td>
-                    <td className="text-center">{product.category}</td>
-                    <td className="text-center">{product.stockQuantity}</td>
-                    <td className="text-center">
-                      {product.imageUrl ? (
-                        <img
-                          src={product.imageUrl}
-                          alt={product.name}
-                          width="50"
-                        />
-                      ) : (
-                        <p>No image</p>
-                      )}
-                    </td>
-                    <td className="text-center">
-                      {new Date(product.createdAt).toLocaleString()}
-
                     </td>
                     <td>{new Date(product.createdAt).toLocaleString()}</td>
                     <td>{new Date(product.updatedAt).toLocaleString()}</td>
                     <td>
-                      <Link
-                        to={`/stock/update/${product._id}`}
-                        className="btn btn-sm btn-outline-secondary me-2"
-                      >
+                      <Link to={`/stock/update/${product._id}`} className="btn btn-sm btn-outline-secondary me-2">
                         Update
                       </Link>
                       <button
