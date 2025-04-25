@@ -21,6 +21,7 @@ import ProductList from './Components/ProductList';
 import ProductDetail from './Components/ProductDetail';
 import Aboutus from './Components/Aboutus';
 
+
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
 import Stock from "./Components/Stock";
@@ -30,10 +31,13 @@ import SupplierRegi from "./Components/SupplierRegi";
 import AddProduct from "./Components/AddProduct";
 import Success from "./Components/Success";
 import UpdateProduct from "./Components/UpdateProduct";
+import AddCategory from "./Components/AddCategory";
+import Category from "./Components/Category";
 
 // Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import HomeLiveArt from "./Components/HomeLiveArt";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -80,12 +84,12 @@ function App() {
         <Routes>
 
           {/* Product Catalogue Routes*/}
-          <Route path="/" element={<ProductList />} />
+          <Route path="/" element={<HomeLiveArt />} />
+          <Route path="/productlist" element={<ProductList />} />
           <Route path="/product/:productId" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
           <Route path="/checkout" element={<Checkout checkoutProducts={checkoutProducts} handleRemoveFromCart={handleRemoveFromCart} />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/aboutus" element={<Aboutus />} />
-
 
           {/* Employee Management Routes*/}
           <Route path="/add-employee" element={<AddEmployee />} />
@@ -112,6 +116,8 @@ function App() {
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/success" element={<Success />} />
           <Route path="/stock/update/:id" element={<UpdateProduct />} />
+          <Route path="/addcategory" element={<AddCategory />} />
+          <Route path="/category" element={<Category />} />
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}

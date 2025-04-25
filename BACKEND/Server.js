@@ -33,12 +33,14 @@ const EmployeeRouter = require("./Routes/EmployeeRoutes");
 const FinanceRouter = require("./Routes/financeRoutes");
 const supplierRoutes = require("./Routes/SupplierRegiRoutes");
 const productRoutes = require("./Routes/ProductRoutes");
+const categoryRoutes = require("./Routes/CategoryRoutes");
 
 // Use Routers (correct path and usage)
 app.use("/api/employee", EmployeeRouter); // Employee routes
 app.use("/api/finance", FinanceRouter);   // Finance routes
 app.use("/suppliers", supplierRoutes); //suppliers Route
 app.use("/products", productRoutes); //product Routes
+app.use("/category", categoryRoutes); //category Routes
 
 // Test Route
 app.get("/", (req, res) => {
