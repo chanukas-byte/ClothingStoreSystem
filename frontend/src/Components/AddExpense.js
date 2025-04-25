@@ -18,6 +18,7 @@ const AddExpense = () => {
 
     try {
       const expenseData = {
+        
         category,
         amount,
         note,
