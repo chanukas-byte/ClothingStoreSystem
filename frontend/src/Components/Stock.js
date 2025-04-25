@@ -9,10 +9,7 @@ const URL = "http://localhost:4058/products";
 const fetchHandler = async () => {
   try {
     const response = await axios.get(URL);
-    if (response.data && response.data.products) {
-      return response.data.products;
-    }
-    return [];
+    return response.data?.products || [];
   } catch (error) {
     console.error("Error fetching products:", error);
     return [];
@@ -34,9 +31,13 @@ function Stock() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
-    fetchHandler().then((data) => setProducts(data));
+    fetchHandler()
+      .then((data) => setProducts(data))
+      .finally(() => setLoading(false));
   }, []);
 
   const handleSearchChange = (event) => {
@@ -45,252 +46,176 @@ function Stock() {
 
   const filteredProducts = products.filter(
     (product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.toLowerCase())
+      product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const sortedProducts = filteredProducts.sort((a, b) => {
+    const aVal = a[sortField] || "";
+    const bVal = b[sortField] || "";
     if (sortField === "price" || sortField === "stockQuantity") {
-      const aValue = a[sortField];
-      const bValue = b[sortField];
-      if (sortOrder === "asc") {
-        return aValue - bValue;
-      } else {
-        return bValue - aValue;
-      }
-    } else {
-      const aValue = a[sortField].toLowerCase();
-      const bValue = b[sortField].toLowerCase();
-      if (sortOrder === "asc") {
-        return aValue.localeCompare(bValue);
-      } else {
-        return bValue.localeCompare(aValue);
-      }
+      return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
     }
+    return sortOrder === "asc"
+      ? aVal.toString().toLowerCase().localeCompare(bVal.toString().toLowerCase())
+      : bVal.toString().toLowerCase().localeCompare(aVal.toString().toLowerCase());
   });
 
   const handleSortChange = (field) => {
-    if (sortField === field) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortField(field);
-      setSortOrder("asc");
-    }
+    setSortOrder(sortField === field && sortOrder === "asc" ? "desc" : "asc");
+    setSortField(field);
   };
 
   const handleDelete = (id) => {
+    setDeletingId(id);
     deleteHandler(id)
       .then(() => {
-        // Filter out the deleted product from the state
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product._id !== id)
-        );
+        setProducts((prev) => prev.filter((product) => product._id !== id));
       })
-      .catch((error) => {
-        console.error("Error deleting product:", error);
+      .catch(() => {
+        alert("Failed to delete the product. Try again.");
+      })
+      .finally(() => {
+        setDeletingId(null);
       });
   };
 
-  const getTotalAvailableItems = () => {
-    return products.length;
-  };
-
-  const getTotalStockQuantity = () => {
-    return products.reduce(
-      (total, product) => total + product.stockQuantity,
-      0
-    );
-  };
-
-  // Function to count low stock items (stock quantity <= 2)
-  const getLowStockItemsCount = () => {
-    return products.filter((product) => product.stockQuantity <= 2).length;
-  };
+  const getTotalAvailableItems = () => products.length;
+  const getTotalStockQuantity = () =>
+    products.reduce((total, product) => total + (product.stockQuantity || 0), 0);
+  const getLowStockItemsCount = () =>
+    products.filter((product) => (product.stockQuantity || 0) <= 2).length;
 
   return (
-    <div>
+    <div className="container-fluid px-5 py-4" style={{ backgroundColor: "#f4f7fa", minHeight: "100vh" }}>
       <Nav />
-      <h1 className="text-center mt-4 mb-3" style={{ color: "black" }}>
-        Product Stock
+      <h1 className="text-center mb-4 display-5 fw-bold text-primary">
+        Product Stock Dashboard
       </h1>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "20px",
-        }}
-      >
-        <div
-          className="section"
-          style={{
-            padding: "20px",
-            backgroundColor: "#D3D3D3",
-            margin: "0 10px",
-            flex: 1,
-            borderRadius: "10px",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            transition: "all 0.3s ease",
-          }}
-        >
-          <h3 style={{ color: "black" }}>
-            No of Available <br></br>Variations
-          </h3>
-          <p style={{ color: "black" }}>
-            Total - {getTotalAvailableItems()} Items Available
-          </p>
+      <div className="row mb-5 text-white">
+        <div className="col-md-4 mb-3">
+          <div
+            className="card shadow-lg border-0"
+            style={{ backgroundColor: "#e2e2e2", boxShadow: "0 8px 15px rgba(0, 0, 0, 0.2)" }}
+          >
+            <div className="card-body text-center">
+              <h5 className="card-title fw-bold">Available Variations</h5>
+              <p className="card-text fs-5">{getTotalAvailableItems()} Items</p>
+            </div>
+          </div>
         </div>
-        <div
-          className="section"
-          style={{
-            padding: "20px",
-            backgroundColor: "#D3D3D3",
-            margin: "0 10px",
-            flex: 1,
-            borderRadius: "10px",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            transition: "all 0.3s ease",
-          }}
-        >
-          <h3 style={{ color: "black" }}>
-            in House <br></br>Item Quantity
-          </h3>
-          <p style={{ color: "black" }}>
-            Total Qty - {getTotalStockQuantity()}
-          </p>
+        <div className="col-md-4 mb-3">
+          <div
+            className="card shadow-lg border-0"
+            style={{ backgroundColor: "#e2e2e2", boxShadow: "0 8px 15px rgba(0, 0, 0, 0.2)" }}
+          >
+            <div className="card-body text-center">
+              <h5 className="card-title fw-bold">Total Stock Quantity</h5>
+              <p className="card-text fs-5">{getTotalStockQuantity()}</p>
+            </div>
+          </div>
         </div>
-        <div
-          className="section"
-          style={{
-            padding: "20px",
-            backgroundColor: "#D3D3D3",
-            margin: "0 10px",
-            flex: 1,
-            borderRadius: "10px",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            transition: "all 0.3s ease",
-          }}
-        >
-          <h3 style={{ color: "black" }}>
-            Low Stock <br></br>Item Quantity
-          </h3>
-          <p style={{ color: "black" }}>
-            {getLowStockItemsCount()} Items with Low Stock
-          </p>
+        <div className="col-md-4 mb-3">
+          <div
+            className="card shadow-lg border-0"
+            style={{ backgroundColor: "#e2e2e2", boxShadow: "0 8px 15px rgba(0, 0, 0, 0.2)" }}
+          >
+            <div className="card-body text-center">
+              <h5 className="card-title fw-bold">Low Stock Alert</h5>
+              <p className="card-text fs-5">{getLowStockItemsCount()} Items</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="d-flex justify-content-center mb-4">
+      <div className="mb-4 d-flex justify-content-center">
         <input
           type="text"
-          className="form-control w-50"
-          placeholder="Search products..."
+          className="form-control w-50 shadow-sm border-primary"
+          placeholder="🔍 Search products..."
           value={searchQuery}
           onChange={handleSearchChange}
         />
       </div>
 
-      <div className="container-fluid">
-        <div className="table-responsive">
-          <table
-            className="table table-striped table-bordered table-hover"
-            style={{ width: "100%" }}
-          >
-            <thead className="bg-dark text-white">
+      <div className="table-responsive shadow-sm">
+        {loading ? (
+          <div className="text-center text-secondary py-5">
+            Loading products...
+          </div>
+        ) : (
+          <table className="table table-bordered table-hover table-striped align-middle">
+            <thead className="table-dark text-center" style={{ backgroundColor: "#e2e2e2" }}>
               <tr>
-                <th
-                  onClick={() => handleSortChange("name")}
-                  className="cursor-pointer text-center"
-                >
-                  Item Name{" "}
-                  {sortField === "name"
-                    ? sortOrder === "asc"
-                      ? "↑"
-                      : "↓"
-                    : ""}
+                <th onClick={() => handleSortChange("name")} style={{ cursor: "pointer" }}>
+                  Item Name {sortField === "name" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
-                <th className="text-center">Description</th>
-                <th
-                  onClick={() => handleSortChange("price")}
-                  className="cursor-pointer text-center"
-                >
-                  Price{" "}
-                  {sortField === "price"
-                    ? sortOrder === "asc"
-                      ? "↑"
-                      : "↓"
-                    : ""}
+                <th>Description</th>
+                <th onClick={() => handleSortChange("price")} style={{ cursor: "pointer" }}>
+                  Price {sortField === "price" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
-                <th className="text-center">Category</th>
-                <th
-                  onClick={() => handleSortChange("stockQuantity")}
-                  className="cursor-pointer text-center"
-                >
-                  Stock Quantity{" "}
-                  {sortField === "stockQuantity"
-                    ? sortOrder === "asc"
-                      ? "↑"
-                      : "↓"
-                    : ""}
+                <th>Category</th>
+                <th onClick={() => handleSortChange("stockQuantity")} style={{ cursor: "pointer" }}>
+                  Stock Quantity {sortField === "stockQuantity" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
-                <th className="text-center">Image</th>
-                <th className="text-center">Created At</th>
-                <th className="text-center">Updated At</th>
-                <th className="text-center">Action</th>
+                <th>Image</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th>Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="text-center">
               {sortedProducts.length > 0 ? (
                 sortedProducts.map((product) => (
                   <tr key={product._id}>
-                    <td className="text-center">{product.name}</td>
-                    <td className="text-center">{product.description}</td>
-                    <td className="text-center">${product.price}</td>
-                    <td className="text-center">{product.category}</td>
-                    <td className="text-center">{product.stockQuantity}</td>
-                    <td className="text-center">
-                      {product.imageUrl ? (
-                        <img
-                          src={product.imageUrl}
-                          alt={product.name}
-                          width="50"
-                        />
-                      ) : (
-                        <p>No image</p>
-                      )}
+                    <td>{product.name}</td>
+                    <td>{product.description}</td>
+                    <td>${(product.price || 0).toFixed(2)}</td>
+                    <td>{product.category}</td>
+                    <td>{product.stockQuantity}</td>
+                    <td>
+                      <img
+                        src={
+                          product.imageUrl ||
+                          "https://via.placeholder.com/50x50.png?text=No+Image"
+                        }
+                        alt={product.name}
+                        width="50"
+                        className="rounded"
+                      />
                     </td>
-                    <td className="text-center">
-                      {new Date(product.createdAt).toLocaleString()}
-                    </td>
-                    <td className="text-center">
-                      {new Date(product.updatedAt).toLocaleString()}
-                    </td>
-                    <td className="text-center">
+                    <td>{new Date(product.createdAt).toLocaleString()}</td>
+                    <td>{new Date(product.updatedAt).toLocaleString()}</td>
+                    <td>
                       <Link
                         to={`/stock/update/${product._id}`}
-                        className="btn btn-secondary btn-sm mx-2"
+                        className="btn btn-sm btn-outline-secondary me-2"
                       >
                         Update
                       </Link>
                       <button
-                        className="btn btn-danger btn-sm"
+                        className="btn btn-sm btn-outline-danger"
                         onClick={() => handleDelete(product._id)}
+                        disabled={deletingId === product._id}
                       >
-                        Delete
+                        {deletingId === product._id ? "Deleting..." : "Delete"}
                       </button>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9" className="text-center">
-                    No products available
+                  <td colSpan="9">
+                    <div className="text-muted text-center py-3">
+                      No products available 💤
+                    </div>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-        </div>
+        )}
       </div>
     </div>
   );
