@@ -29,7 +29,7 @@ const AddCategory = () => {
       alert("New category added successfully!");
       navigate("/Category");
     } catch (error) {
-      console.error("Error adding new category:", error.response || error);  // Log the exact error response
+      console.error("Error adding new category:", error.response ? error.response.data : error.message); // Log the exact error response
       alert("Failed to add new Category. Please try again.");
     }
   };
@@ -100,18 +100,19 @@ const AddCategory = () => {
               value={inputs.name}
               style={formStyles.input}
               required
+              aria-label="Category Name"
             />
-            <label htmlFor="name" style={formStyles.label}>
+            <label htmlFor="types" style={formStyles.label}>
               Category Type
             </label>
             <select
-              type="text"
               name="types"
               id="types"
               onChange={handleChange}
               value={inputs.types}
               style={formStyles.input}
               required
+              aria-label="Category Type"
             >
               <option value="">Select Type</option>
               <option value="MEN">MEN</option>
