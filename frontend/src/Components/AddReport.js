@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer"; 
+import "./AddReport.css";
 
 import {
   Box,
@@ -153,85 +154,100 @@ function AddReport() {
   };
 
   return (
-    <div>
+    <div className="report-container">
       <Header/>
-    <Container maxWidth="sm" sx={{ py: 10 }}>
-      <Card sx={{ background: "linear-gradient(135deg, #e3f2fd, #bbdefb)", boxShadow: 8, borderRadius: 3, padding: 4 }}>
-        <CardContent>
-          <Typography variant="h4" sx={{ textAlign: "center", mb: 4, fontWeight: "bold", color: "#0d47a1" }}>
-            Finance Report - Live Art Clothing Pvt Ltd
-          </Typography>
+      <Container maxWidth="sm" sx={{ py: 10 }}>
+        <Card className="report-card">
+          <div className="report-card-header">
+            <Typography variant="h4" className="report-card-title">
+              Finance Report
+            </Typography>
+            <Typography variant="subtitle1" className="report-card-subtitle">
+              Live Art Clothing Pvt Ltd
+            </Typography>
+          </div>
+          <CardContent className="report-card-content">
+            {error && <div className="report-alert report-alert-error">{error}</div>}
+            {success && <div className="report-alert report-alert-success">{success}</div>}
 
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+            <Box component="form" onSubmit={handleSubmit} className="form-section">
+              <Typography variant="h6" className="form-section-title">
+                Report Details
+              </Typography>
+              
+              <div className="report-form-group">
+                <label className="report-label">
+                  <span className="report-icon">📅</span> Month
+                </label>
+                <div className="month-input-container">
+                  <input
+                    className="report-input"
+                    placeholder="Enter month (e.g., January 2025)"
+                    value={month}
+                    onChange={(e) => setMonth(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
 
-          <Box component="form" onSubmit={handleSubmit} sx={{ padding: 3, borderRadius: 2 }}>
-            <TextField
-              fullWidth
-              label="Month"
-              placeholder="Enter month (e.g., January 2025)"
-              variant="outlined"
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              required
-              sx={{ mb: 3, backgroundColor: "#f3f6f9" }}
-            />
+              <div className="report-form-group">
+                <label className="report-label">
+                  <span className="report-icon revenue-icon"><FaMoneyBillWave /></span> Revenue (in LKR)
+                </label>
+                <div className="currency-input-container">
+                  <input
+                    className="report-input currency-input"
+                    type="number"
+                    value={revenue}
+                    onChange={(e) => setRevenue(e.target.value)}
+                    required
+                    min="0"
+                  />
+                </div>
+              </div>
 
-            <Tooltip title="Enter total revenue for the selected month">
-              <TextField
-                fullWidth
-                type="number"
-                label={<Typography><FaMoneyBillWave color="green" /> Revenue (in LKR)</Typography>}
-                value={revenue}
-                onChange={(e) => setRevenue(e.target.value)}
-                required
-                inputProps={{ min: "0" }}
-                sx={{ mb: 3, backgroundColor: "#f3f6f9" }}
-              />
-            </Tooltip>
+              <div className="report-form-group">
+                <label className="report-label">
+                  <span className="report-icon expense-icon"><FaCoins /></span> Expenses (in LKR)
+                </label>
+                <div className="currency-input-container">
+                  <input
+                    className="report-input currency-input"
+                    type="number"
+                    value={expenses}
+                    onChange={(e) => setExpenses(e.target.value)}
+                    required
+                    min="0"
+                  />
+                </div>
+              </div>
 
-            <Tooltip title="Enter total expenses for the selected month">
-              <TextField
-                fullWidth
-                type="number"
-                label={<Typography><FaCoins color="red" /> Expenses (in LKR)</Typography>}
-                value={expenses}
-                onChange={(e) => setExpenses(e.target.value)}
-                required
-                inputProps={{ min: "0" }}
-                sx={{ mb: 3, backgroundColor: "#f3f6f9" }}
-              />
-            </Tooltip>
+              <div className="profit-loss-display">
+                <div className="profit-loss-label">Profit or Loss (Auto-Calculated)</div>
+                <div className={`profit-loss-value ${profitOrLoss >= 0 ? 'profit' : 'loss'}`}>
+                  LKR {profitOrLoss.toFixed(2)}
+                </div>
+              </div>
 
-            <TextField
-              fullWidth
-              label="Profit or Loss (Auto-Calculated)"
-              value={`LKR ${profitOrLoss}`}
-              InputProps={{ readOnly: true }}
-              sx={{ mb: 4, color: profitOrLoss >= 0 ? "success.main" : "error.main", fontWeight: "bold" }}
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              disabled={loading}
-              sx={{
-                py: 1.8,
-                background: "linear-gradient(to right, #1976d2, #42a5f5)",
-                color: "#fff",
-                fontWeight: "bold",
-                borderRadius: 2,
-                boxShadow: "0 6px 12px rgba(0,0,0,0.3)",
-              }}
-            >
-              {loading ? <CircularProgress size={24} color="inherit" /> : "Submit and Download PDF"}
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
-    </Container>
-    <Footer/>
+              <Button
+                type="submit"
+                className="report-button submit-button"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <div className="report-spinner"></div>
+                    Processing...
+                  </>
+                ) : (
+                  "Submit and Download PDF"
+                )}
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+      </Container>
+      <Footer/>
     </div>
   );
 }
