@@ -7,6 +7,7 @@ const AddCategory = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     name: "",
+    types: "",
   });
 
   const handleChange = (e) => {
@@ -22,6 +23,7 @@ const AddCategory = () => {
     try {
       const response = await axios.post("http://localhost:4058/category", {
         name: String(inputs.name),
+        types: String(inputs.types),
       });
       console.log(response);  // Check the server response here
       alert("New category added successfully!");
@@ -84,10 +86,11 @@ const AddCategory = () => {
       <Nav />
       <div style={formStyles.formContainer}>
         <h1 style={formStyles.heading}>Add New Product Category</h1>
+        
         <form onSubmit={handleSubmit}>
           <div style={formStyles.inputField}>
             <label htmlFor="name" style={formStyles.label}>
-              New Category Name
+              Category Name
             </label>
             <input
               type="text"
@@ -98,6 +101,23 @@ const AddCategory = () => {
               style={formStyles.input}
               required
             />
+            <label htmlFor="name" style={formStyles.label}>
+              Category Type
+            </label>
+            <select
+              type="text"
+              name="types"
+              id="types"
+              onChange={handleChange}
+              value={inputs.types}
+              style={formStyles.input}
+              required
+            >
+              <option value="">Select Type</option>
+              <option value="MEN">MEN</option>
+              <option value="WOMEN">WOMEN</option>
+              <option value="KIDS">KIDS</option>
+            </select>
           </div>
           <button type="submit" style={formStyles.submitButton}>
             Add Category

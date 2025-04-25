@@ -8,6 +8,12 @@ const categorySchema = new Schema({
         required: true,
         trim: true,
         unique: true
+    },
+    types: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true
     }
 }, {
     timestamps: true // Optional: adds createdAt and updatedAt timestamps

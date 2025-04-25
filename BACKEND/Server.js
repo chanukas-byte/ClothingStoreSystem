@@ -40,7 +40,7 @@ app.use("/api/employee", EmployeeRouter); // Employee routes
 app.use("/api/finance", FinanceRouter);   // Finance routes
 app.use("/suppliers", supplierRoutes); //suppliers Route
 app.use("/products", productRoutes); //product Routes
-app.use("/category", categoryRoutes);
+app.use("/category", categoryRoutes); //category Routes
 
 // Test Route
 app.get("/", (req, res) => {

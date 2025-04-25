@@ -20,12 +20,12 @@ const getAllCategories = async (req, res, next) => {
 
 // Add New Category
 const addCategory = async (req, res, next) => {
-    const { name } = req.body;
+    const { name, types } = req.body;
 
     let category;
 
     try {
-        category = new Category({ name });
+        category = new Category({ name, types });
         await category.save();
     } catch (err) {
         console.log(err);
