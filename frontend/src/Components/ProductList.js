@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ProductList.css';
 import NavB from './NavBar';
+import Checkout from './Checkout';  // Import Checkout component
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
@@ -69,8 +70,9 @@ const ProductList = () => {
     };
 
     const handleSendAllToCheckout = () => {
+        // Add all cart items to checkout
         setCheckoutProducts((prevCheckout) => [...prevCheckout, ...cart]);
-        setCart([]);
+        setCart([]);  // Clear the cart after sending all to checkout
     };
 
     return (
@@ -179,6 +181,15 @@ const ProductList = () => {
                     )}
                 </div>
             </div>
+            
+
+            {/* Pass checkoutProducts to Checkout component */}
+            <Checkout 
+                checkoutProducts={checkoutProducts} 
+                handleRemoveFromCart={handleRemoveFromCart} 
+                setCheckoutProducts={setCheckoutProducts} 
+                setFilters={setFilters} 
+            />
         </div>
     );
 };
