@@ -79,15 +79,12 @@ function AddEmployee({ isAdmin }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Restrict name input
     if (name === "name" && !nameRegex.test(value)) return;
-    // Restrict mobile to digits only and max 10
     if (name === "mobile" && !/^\d*$/.test(value)) return;
 
     const updatedData = { ...employeeData, [name]: value };
     setEmployeeData(updatedData);
 
-    // Clear error as user types
     const error = validateField(name, value);
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
@@ -158,7 +155,7 @@ Salary     : $${employee.salary}
           <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
             <h3>Employee Registration Form</h3>
           </div>
-          <div className="card-body p-5">
+          <div className="card-body p-5" style={{ backgroundColor: "#f8f9fa" }}>
             <form onSubmit={handleSubmit}>
               <div className="row g-3">
                 {[
