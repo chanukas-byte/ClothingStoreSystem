@@ -19,14 +19,14 @@ function AllEmployees() {
     try {
       const response = await axios.get("http://localhost:4058/api/employee/");
       if (response.status === 200 && Array.isArray(response.data)) {
-        const normalizedData = response.data.map(emp => ({
+        const normalizedData = response.data.map((emp) => ({
           employeeid: emp.employeeid || emp._id || emp.id || "N/A",
           name: emp.name || "",
           age: emp.age || "",
           department: emp.department || "",
           email: emp.email || "",
           mobile: emp.mobile || "",
-          status: emp.status || "Active"
+          status: emp.status || "Active",
         }));
         setEmployees(normalizedData);
       } else {
@@ -56,8 +56,10 @@ function AllEmployees() {
         try {
           const response = await axios.delete(`http://localhost:4058/api/employee/delete/${employeeId}`);
           if (response.status === 200) {
-            setEmployees(prev => prev.filter(emp => emp._id !== employeeId));
+            setEmployees((prev) => prev.filter((emp) => emp.employeeid !== employeeId));
             Swal.fire("Deleted!", "The employee has been deleted.", "success");
+          } else {
+            throw new Error("Unexpected response status.");
           }
         } catch (error) {
           handleApiError(error, "Failed to delete the employee. Please try again.");
@@ -78,9 +80,9 @@ function AllEmployees() {
         selectedEmployee
       );
       if (response.status === 200) {
-        setEmployees(prev =>
-          prev.map(emp =>
-            emp.employeeid === selectedEmployee.employeeid ? selectedEmployee : emp
+        setEmployees((prev) =>
+          prev.map((emp) =>
+            emp.employeeid === selectedEmployee.employeeid ? { ...selectedEmployee } : emp
           )
         );
         Swal.fire("Updated!", "Employee details updated successfully!", "success");
@@ -111,7 +113,7 @@ function AllEmployees() {
 
   const filteredEmployees = employees.filter((employee) =>
     [employee.name, employee.email, employee.department]
-      .map((field) => (field || "").toLowerCase())
+      .map((field) => field.toLowerCase())
       .some((field) => field.includes(searchTerm.toLowerCase()))
   );
 
@@ -203,7 +205,6 @@ function AllEmployees() {
                   />
                 </div>
               ))}
-
               <label className="form-label">Status</label>
               <select
                 className="form-select mb-3"

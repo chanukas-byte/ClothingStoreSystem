@@ -59,13 +59,16 @@ router.put("/assign-salary/:id", validateSalaryInput, async (req, res) => {
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   try {
+    const { id } = req.params;
     const { salary } = req.body;
 
-    const updatedEmployee = await Employee.findByIdAndUpdate(
-      req.params.id,
-      { salary },
-      { new: true, runValidators: true }
-    );
+    let updatedEmployee;
+
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      updatedEmployee = await Employee.findByIdAndUpdate(id, { salary }, { new: true, runValidators: true });
+    } else {
+      updatedEmployee = await Employee.findOneAndUpdate({ employeeid: id }, { salary }, { new: true, runValidators: true });
+    }
 
     if (!updatedEmployee) return res.status(404).json({ message: "Employee not found" });
 
@@ -82,7 +85,16 @@ router.put("/assign-salary/:id", validateSalaryInput, async (req, res) => {
 // ✅ View Employee Salary
 router.get("/view-salary/:id", async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id, { salary: 1, name: 1 }).lean();
+    const { id } = req.params;
+
+    let employee;
+
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      employee = await Employee.findById(id, { salary: 1, name: 1 }).lean();
+    } else {
+      employee = await Employee.findOne({ employeeid: id }, { salary: 1, name: 1 }).lean();
+    }
+
     if (!employee) return res.status(404).json({ message: "Employee not found" });
 
     res.status(200).json({
@@ -95,9 +107,10 @@ router.get("/view-salary/:id", async (req, res) => {
   }
 });
 
-// ✅ Update Employee (includes optional salary update)
+// ✅ Update Employee (supports Mongo _id or employeeid)
 router.put("/update/:id", async (req, res) => {
   try {
+    const { id } = req.params;
     const { salary, ...otherDetails } = req.body;
     const updateData = { ...otherDetails };
 
@@ -108,10 +121,19 @@ router.put("/update/:id", async (req, res) => {
       updateData.salary = salary;
     }
 
-    const updatedEmployee = await Employee.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-      runValidators: true,
-    });
+    let updatedEmployee;
+
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      updatedEmployee = await Employee.findByIdAndUpdate(id, updateData, {
+        new: true,
+        runValidators: true,
+      });
+    } else {
+      updatedEmployee = await Employee.findOneAndUpdate({ employeeid: id }, updateData, {
+        new: true,
+        runValidators: true,
+      });
+    }
 
     if (!updatedEmployee) return res.status(404).json({ message: "Employee not found" });
 
@@ -133,14 +155,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ Delete Employee
+// ✅ Delete Employee (by _id or employeeid)
 router.delete("/delete/:id", async (req, res) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(400).json({ message: "Invalid employee ID format" });
-  }
+  const { id } = req.params;
 
   try {
-    const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
+    let deletedEmployee;
+
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      deletedEmployee = await Employee.findByIdAndDelete(id);
+    } else {
+      deletedEmployee = await Employee.findOneAndDelete({ employeeid: id });
+    }
+
     if (!deletedEmployee) return res.status(404).json({ message: "Employee not found" });
 
     res.status(200).json({ message: "Employee deleted successfully!" });
@@ -150,10 +177,19 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
-// ✅ Get Employee by ID
+// ✅ Get Employee by ID (supports Mongo _id or employeeid)
 router.get("/:id", async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id).lean();
+    const { id } = req.params;
+
+    let employee;
+
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      employee = await Employee.findById(id).lean();
+    } else {
+      employee = await Employee.findOne({ employeeid: id }).lean();
+    }
+
     if (!employee) return res.status(404).json({ message: "Employee not found" });
 
     res.status(200).json(employee);
