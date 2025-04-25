@@ -209,7 +209,6 @@ function Stock() {
                       : "↓"
                     : ""}
                 </th>
-                <th className="text-center">Description</th>
                 <th
                   onClick={() => handleSortChange("price")}
                   className="cursor-pointer text-center"
@@ -244,8 +243,7 @@ function Stock() {
                 sortedProducts.map((product) => (
                   <tr key={product._id}>
                     <td className="text-center">{product.name}</td>
-                    <td className="text-center">{product.description}</td>
-                    <td className="text-center">${product.price}</td>
+                    <td className="text-center">LKR. {product.price}.00</td>
                     <td className="text-center">{product.category}</td>
                     <td className="text-center">{product.stockQuantity}</td>
                     <td className="text-center">

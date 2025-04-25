@@ -101,7 +101,7 @@ function Notification() {
   return (
     <div style={styles.container}>
       <Nav />
-      <h1 style={styles.title}>🚨 Low Stock Alerts 🚨</h1>
+      <h1 style={styles.title}>Notification</h1>
 
       <div>
         {lowStockProducts.length > 0 ? (
