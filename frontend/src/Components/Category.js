@@ -126,7 +126,7 @@ function Category() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="2" className="text-center">
+                  <td colSpan="3" className="text-center">
                     No categories available
                   </td>
                 </tr>
