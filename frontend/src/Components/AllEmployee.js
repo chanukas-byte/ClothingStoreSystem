@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Modal, Button } from "react-bootstrap";
 import Header from "./Header";
 import Footer from "./Footer";
 
-function AllEmployees() {
+const AllEmployees = () => {
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
-
-  const fetchEmployees = async () => {
+  const fetchEmployees = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:4058/api/employee/");
-      if (response.status === 200 && Array.isArray(response.data)) {
-        const normalizedData = response.data.map((emp) => ({
+      const { data, status } = await axios.get("http://localhost:4058/api/employee/");
+      if (status === 200 && Array.isArray(data)) {
+        const normalized = data.map((emp) => ({
           employeeid: emp.employeeid || emp._id || emp.id || "N/A",
           name: emp.name || "",
           age: emp.age || "",
@@ -28,18 +24,22 @@ function AllEmployees() {
           mobile: emp.mobile || "",
           status: emp.status || "Active",
         }));
-        setEmployees(normalizedData);
+        setEmployees(normalized);
       } else {
         throw new Error("Unexpected response format or status.");
       }
     } catch (error) {
       handleApiError(error, "Failed to fetch employee data. Please try again later.");
     }
-  };
+  }, []);
 
-  const handleApiError = (error, defaultMessage) => {
-    const errorMessage = error.response?.data?.message || defaultMessage;
-    Swal.fire("Error", errorMessage, "error");
+  useEffect(() => {
+    fetchEmployees();
+  }, [fetchEmployees]);
+
+  const handleApiError = (error, defaultMsg) => {
+    const message = error?.response?.data?.message || defaultMsg;
+    Swal.fire("Error", message, "error");
   };
 
   const handleDelete = (employeeId) => {
@@ -51,11 +51,11 @@ function AllEmployees() {
       confirmButtonColor: "#dc3545",
       cancelButtonColor: "#6c757d",
       confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
+    }).then(async ({ isConfirmed }) => {
+      if (isConfirmed) {
         try {
-          const response = await axios.delete(`http://localhost:4058/api/employee/delete/${employeeId}`);
-          if (response.status === 200) {
+          const { status } = await axios.delete(`http://localhost:4058/api/employee/delete/${employeeId}`);
+          if (status === 200) {
             setEmployees((prev) => prev.filter((emp) => emp.employeeid !== employeeId));
             Swal.fire("Deleted!", "The employee has been deleted.", "success");
           } else {
@@ -69,21 +69,20 @@ function AllEmployees() {
   };
 
   const handleUpdate = async () => {
-    if (!selectedEmployee?.name || !selectedEmployee?.email || !selectedEmployee?.department) {
+    const { name, email, department, employeeid } = selectedEmployee || {};
+    if (!name || !email || !department) {
       Swal.fire("Error!", "Please fill in all required fields.", "warning");
       return;
     }
 
     try {
-      const response = await axios.put(
-        `http://localhost:4058/api/employee/update/${selectedEmployee.employeeid}`,
+      const { status } = await axios.put(
+        `http://localhost:4058/api/employee/update/${employeeid}`,
         selectedEmployee
       );
-      if (response.status === 200) {
+      if (status === 200) {
         setEmployees((prev) =>
-          prev.map((emp) =>
-            emp.employeeid === selectedEmployee.employeeid ? { ...selectedEmployee } : emp
-          )
+          prev.map((emp) => (emp.employeeid === employeeid ? { ...selectedEmployee } : emp))
         );
         Swal.fire("Updated!", "Employee details updated successfully!", "success");
         handleCloseModal();
@@ -103,22 +102,21 @@ function AllEmployees() {
     setSelectedEmployee(null);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = ({ target: { name, value } }) => {
     setSelectedEmployee((prev) => ({
       ...prev,
       [name]: name === "age" ? parseInt(value) || "" : value,
     }));
   };
 
-  const filteredEmployees = employees.filter((employee) =>
-    [employee.name, employee.email, employee.department]
-      .map((field) => field.toLowerCase())
+  const filteredEmployees = employees.filter(({ name, email, department }) =>
+    [name, email, department]
+      .map((val) => val.toLowerCase())
       .some((field) => field.includes(searchTerm.toLowerCase()))
   );
 
   return (
-    <div>
+    <>
       <Header />
       <div className="container mt-5">
         <div className="card shadow-lg rounded-4">
@@ -151,25 +149,25 @@ function AllEmployees() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredEmployees.map((employee) => (
-                      <tr key={employee.employeeid}>
-                        <td>{employee.employeeid}</td>
-                        <td>{employee.name}</td>
-                        <td>{employee.age}</td>
-                        <td>{employee.department}</td>
-                        <td>{employee.email}</td>
-                        <td>{employee.mobile}</td>
-                        <td>{employee.status}</td>
+                    {filteredEmployees.map((emp) => (
+                      <tr key={emp.employeeid}>
+                        <td>{emp.employeeid}</td>
+                        <td>{emp.name}</td>
+                        <td>{emp.age}</td>
+                        <td>{emp.department}</td>
+                        <td>{emp.email}</td>
+                        <td>{emp.mobile}</td>
+                        <td>{emp.status}</td>
                         <td>
                           <button
                             className="btn btn-outline-info btn-sm me-2"
-                            onClick={() => handleViewAndUpdate(employee)}
+                            onClick={() => handleViewAndUpdate(emp)}
                           >
                             View / Update
                           </button>
                           <button
                             className="btn btn-outline-danger btn-sm"
-                            onClick={() => handleDelete(employee.employeeid)}
+                            onClick={() => handleDelete(emp.employeeid)}
                           >
                             Delete
                           </button>
@@ -180,13 +178,12 @@ function AllEmployees() {
                 </table>
               </div>
             ) : (
-              <div className="alert alert-warning text-center">
-                No employees found.
-              </div>
+              <div className="alert alert-warning text-center">No employees found.</div>
             )}
           </div>
         </div>
 
+        {/* Modal */}
         {selectedEmployee && (
           <Modal show={showModal} onHide={handleCloseModal} centered>
             <Modal.Header closeButton className="bg-primary text-white">
@@ -195,21 +192,25 @@ function AllEmployees() {
             <Modal.Body>
               {["name", "age", "department", "email", "mobile"].map((field) => (
                 <div className="mb-3" key={field}>
-                  <label className="form-label text-capitalize">{field}</label>
+                  <label htmlFor={field} className="form-label text-capitalize">
+                    {field}
+                  </label>
                   <input
+                    id={field}
                     type={field === "age" ? "number" : "text"}
                     className="form-control"
                     name={field}
-                    value={selectedEmployee[field] || ""}
+                    value={selectedEmployee?.[field] || ""}
                     onChange={handleInputChange}
                   />
                 </div>
               ))}
-              <label className="form-label">Status</label>
+              <label htmlFor="status" className="form-label">Status</label>
               <select
+                id="status"
                 className="form-select mb-3"
                 name="status"
-                value={selectedEmployee.status || "Active"}
+                value={selectedEmployee?.status || "Active"}
                 onChange={handleInputChange}
               >
                 <option>Active</option>
@@ -219,19 +220,15 @@ function AllEmployees() {
               </select>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseModal}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleUpdate}>
-                Save Changes
-              </Button>
+              <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
+              <Button variant="primary" onClick={handleUpdate}>Save Changes</Button>
             </Modal.Footer>
           </Modal>
         )}
       </div>
       <Footer />
-    </div>
+    </>
   );
-}
+};
 
 export default AllEmployees;
