@@ -7,6 +7,7 @@ const AddCategory = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     name: "",
+    types: "",
   });
 
   const handleChange = (e) => {
@@ -22,12 +23,13 @@ const AddCategory = () => {
     try {
       const response = await axios.post("http://localhost:4058/category", {
         name: String(inputs.name),
+        types: String(inputs.types),
       });
       console.log(response);  // Check the server response here
       alert("New category added successfully!");
       navigate("/Category");
     } catch (error) {
-      console.error("Error adding new category:", error.response || error);  // Log the exact error response
+      console.error("Error adding new category:", error.response ? error.response.data : error.message); // Log the exact error response
       alert("Failed to add new Category. Please try again.");
     }
   };
@@ -84,10 +86,11 @@ const AddCategory = () => {
       <Nav />
       <div style={formStyles.formContainer}>
         <h1 style={formStyles.heading}>Add New Product Category</h1>
+        
         <form onSubmit={handleSubmit}>
           <div style={formStyles.inputField}>
             <label htmlFor="name" style={formStyles.label}>
-              New Category Name
+              Category Name
             </label>
             <input
               type="text"
@@ -97,7 +100,25 @@ const AddCategory = () => {
               value={inputs.name}
               style={formStyles.input}
               required
+              aria-label="Category Name"
             />
+            <label htmlFor="types" style={formStyles.label}>
+              Category Type
+            </label>
+            <select
+              name="types"
+              id="types"
+              onChange={handleChange}
+              value={inputs.types}
+              style={formStyles.input}
+              required
+              aria-label="Category Type"
+            >
+              <option value="">Select Type</option>
+              <option value="MEN">MEN</option>
+              <option value="WOMEN">WOMEN</option>
+              <option value="KIDS">KIDS</option>
+            </select>
           </div>
           <button type="submit" style={formStyles.submitButton}>
             Add Category

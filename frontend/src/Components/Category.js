@@ -104,6 +104,7 @@ function Category() {
                   Category Name{" "}
                   {sortField === "name" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
                 </th>
+                <th className="text-center">Type</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -112,6 +113,7 @@ function Category() {
                 filteredCategories.map((category) => (
                   <tr key={category._id}>
                     <td className="text-center">{category.name}</td>
+                    <td className="text-center">{category.types}</td>
                     <td className="text-center">
                       <button
                         className="btn btn-danger btn-sm"
