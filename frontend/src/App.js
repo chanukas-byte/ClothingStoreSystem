@@ -30,6 +30,8 @@ import SupplierRegi from "./Components/SupplierRegi";
 import AddProduct from "./Components/AddProduct";
 import Success from "./Components/Success";
 import UpdateProduct from "./Components/UpdateProduct";
+import AddCategory from "./Components/AddCategory";
+import Category from "./Components/Category";
 
 // Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -86,7 +88,6 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/aboutus" element={<Aboutus />} />
 
-
           {/* Employee Management Routes*/}
           <Route path="/add-employee" element={<AddEmployee />} />
           <Route path="/Home" element={<Home />} />
@@ -112,6 +113,8 @@ function App() {
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/success" element={<Success />} />
           <Route path="/stock/update/:id" element={<UpdateProduct />} />
+          <Route path="/addcategory" element={<AddCategory />} />
+          <Route path="/category" element={<Category />} />
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}

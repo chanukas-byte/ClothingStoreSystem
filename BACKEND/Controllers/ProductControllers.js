@@ -22,11 +22,6 @@ const addProduct = async (req, res, next) => {
 
 }
 
-
-
-
-
-
 //Get By ID
 const getById = async (req, res, next) => {
 

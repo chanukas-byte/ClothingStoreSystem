@@ -25,6 +25,13 @@ function HomeS() {
           >
             Add New Product
           </button>
+          <button
+            onClick={() => navigate("/addcategory")}
+            style={{ ...styles.button, ...styles.purpleButton }}
+            className="animated-button"
+          >
+            Add New Category
+          </button>
         </div>
       </div>
     </div>
@@ -63,7 +70,9 @@ const styles = {
   },
   buttonContainer: {
     display: "flex",
+    flexDirection: "column", // Change to column to stack buttons
     gap: "20px",
+    alignItems: "center", // Center align buttons
   },
   button: {
     padding: "15px 25px",
@@ -83,6 +92,10 @@ const styles = {
   },
   greenButton: {
     background: "linear-gradient(to right, #11998e, #38ef7d)",
+    color: "white",
+  },
+  purpleButton: {
+    background: "linear-gradient(to right, #9c27b0, #e040fb)", // New purple button style
     color: "white",
   },
 };
