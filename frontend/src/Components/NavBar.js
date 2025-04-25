@@ -33,8 +33,17 @@ function NavBar() {
 
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+
+             
+             
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/productlist">Products</Link>
+              </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/checkout">Checkout</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="">Users</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="">feedback</Link>{/* add this feedback link*/}
@@ -45,6 +54,7 @@ function NavBar() {
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/aboutus">About us</Link>{/* add this feedback link*/}
               </li>
+              
 
             </ul>
 

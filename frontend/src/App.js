@@ -21,6 +21,7 @@ import ProductList from './Components/ProductList';
 import ProductDetail from './Components/ProductDetail';
 import Aboutus from './Components/Aboutus';
 
+
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
 import Stock from "./Components/Stock";
@@ -36,6 +37,7 @@ import Category from "./Components/Category";
 // Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import HomeLiveArt from "./Components/HomeLiveArt";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -82,7 +84,8 @@ function App() {
         <Routes>
 
           {/* Product Catalogue Routes*/}
-          <Route path="/" element={<ProductList />} />
+          <Route path="/" element={<HomeLiveArt />} />
+          <Route path="/productlist" element={<ProductList />} />
           <Route path="/product/:productId" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
           <Route path="/checkout" element={<Checkout checkoutProducts={checkoutProducts} handleRemoveFromCart={handleRemoveFromCart} />} />
           <Route path="/payment" element={<Payment />} />
