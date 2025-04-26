@@ -2,131 +2,200 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './ProductDetail.css';
-import NavB from './NavBar';
+import NavBar from './NavBar';
 
-
-const ProductDetail = ({ handleAddToCart }) => {
-  const { productId } = useParams(); // Extract productId from the URL
-  const [product, setProduct] = useState(null); // To store the product data
+const ProductDetail = () => {
+  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
 
-  // Static colors and sizes
-  const colors = ['#FF5733', '#33FF57', '#3357FF', '#008000', '#808080', '#FFD700']; // Static colors (black, white, blue, green, gray, gold)
-  const sizes = ['S', 'M', 'L', 'XL']; // Static sizes
-
   useEffect(() => {
-    // Fetch product details from the backend
-    const fetchProductDetail = async () => {
+    const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:4058/products/${productId}`); // Backend call to get product details
-        setProduct(response.data.products); // Update state with the fetched product details
-      } catch (error) {
-        console.error('Error fetching product details:', error);
+        setLoading(true);
+        const response = await axios.get(`http://localhost:4058/products/${productId}`);
+        setProduct(response.data.product);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load product details. Please try again later.');
+        setLoading(false);
       }
     };
 
-    fetchProductDetail(); // Fetch product details when the component mounts or productId changes
-  }, [productId]); // Re-run this effect whenever the productId changes
+    fetchProduct();
+  }, [productId]);
 
-  // If product data is not available yet, show loading
+  const handleColorSelect = (color) => {
+    setSelectedColor(color);
+  };
+
+  const handleSizeSelect = (e) => {
+    setSelectedSize(e.target.value);
+  };
+
+  const handleAddToCart = () => {
+    if (!selectedColor || !selectedSize) {
+      alert('Please select both color and size before adding to cart');
+      return;
+    }
+    
+    // Get existing cart from localStorage or initialize empty array
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // Check if product already exists in cart
+    const existingProductIndex = existingCart.findIndex(item => item._id === product._id);
+    
+    if (existingProductIndex >= 0) {
+      // Update quantity if product exists
+      existingCart[existingProductIndex].quantity += 1;
+    } else {
+      // Add new product to cart
+      existingCart.push({
+        ...product,
+        quantity: 1,
+        selectedColor,
+        selectedSize
+      });
+    }
+    
+    // Save updated cart to localStorage
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+    
+    // Show success message
+    alert('Product added to cart!');
+  };
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <NavBar />
+        <div className="loading-message">Loading product details...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <NavBar />
+        <div className="error-message">{error}</div>
+      </div>
+    );
+  }
+
   if (!product) {
-    return <div>Loading...</div>;
+    return (
+      <div className="not-found-container">
+        <NavBar />
+        <div className="not-found-message">Product not found</div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <NavB />
-
+    <div className="page-container">
+      <NavBar />
       <div className="product-detail-container">
-        {/* Product Image Section */}
         <div className="product-image-section">
           <img 
             src={`http://localhost:4058/${product.imageUrl}`} 
             alt={product.name} 
-            className="product-image" 
+            className="product-image"
           />
         </div>
-
-        {/* Product Details Section */}
+        
         <div className="product-details-section">
           <h2>{product.name}</h2>
-          <p><strong>Price:</strong> Rs. {product.price}</p>
-          <p><strong>Description:</strong> {product.description}</p>
-
-          {/* Color Selection */}
-          <div>
-            <h3>Select Color:</h3>
+          <p className="product-price">Rs. {product.price}</p>
+          <p className="product-description">{product.description}</p>
+          <p className="product-category">Category: {product.category}</p>
+          <p className="product-stock">In Stock: {product.stockQuantity}</p>
+          <p className="product-sku">SKU: {product._id}</p>
+          
+          <div className="color-selection">
+            <h3>Select Color</h3>
             <div className="color-options">
-              {colors.map((color, index) => (
-                <div
-                  key={index}
-                  className="color-option"
-                  style={{ backgroundColor: color }}
-                  onClick={() => setSelectedColor(color)}
-                />
-              ))}
+              {product.colors ? (
+                product.colors.map((color) => (
+                  <div
+                    key={color}
+                    className={`color-option ${selectedColor === color ? 'selected' : ''}`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => handleColorSelect(color)}
+                    title={color}
+                  />
+                ))
+              ) : (
+                <p>No color options available</p>
+              )}
             </div>
-            {selectedColor && <p>Selected Color: {selectedColor}</p>}
+            {selectedColor && (
+              <p className="selected-color">Selected: {selectedColor}</p>
+            )}
           </div>
-
-          {/* Size Selection */}
-          <div>
-            <h3>Select Size:</h3>
-            <select onChange={(e) => setSelectedSize(e.target.value)} value={selectedSize}>
-              <option value="">Select Size</option>
-              {sizes.map((size, index) => (
-                <option key={index} value={size}>{size}</option>
-              ))}
+          
+          <div className="size-selection">
+            <h3>Select Size</h3>
+            <select 
+              className="size-select"
+              value={selectedSize}
+              onChange={handleSizeSelect}
+            >
+              <option value="">Choose a size</option>
+              {product.sizes ? (
+                product.sizes.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))
+              ) : (
+                <>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                </>
+              )}
             </select>
           </div>
-
-          {/* Add to Cart Button */}
-          <div>
-            <button
-              onClick={() => {
-                if (!selectedColor || !selectedSize) {
-                  alert('Please select a color and size.');
-                } else {
-                  handleAddToCart({ ...product, color: selectedColor, size: selectedSize });
-                  alert('Product added to cart!');
-                }
-              }}
-            >
-              Add to Cart
-            </button>
-          </div>
-
-          {/* Size Chart */}
-          <div>
-            <h4>Size Chart</h4>
+          
+          <button 
+            className="add-to-cart-btn"
+            onClick={handleAddToCart}
+          >
+            Add to Cart
+          </button>
+          
+          <div className="size-chart">
+            <h3>Size Chart</h3>
             <table>
               <thead>
                 <tr>
                   <th>Size</th>
                   <th>Chest (inches)</th>
                   <th>Waist (inches)</th>
+                  <th>Hip (inches)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>S</td>
-                  <td>34-36</td>
+                  <td>36-38</td>
                   <td>28-30</td>
+                  <td>36-38</td>
                 </tr>
                 <tr>
                   <td>M</td>
                   <td>38-40</td>
-                  <td>32-34</td>
+                  <td>30-32</td>
+                  <td>38-40</td>
                 </tr>
                 <tr>
                   <td>L</td>
-                  <td>42-44</td>
-                  <td>36-38</td>
-                </tr>
-                <tr>
-                  <td>XL</td>
-                  <td>46-48</td>
+                  <td>40-42</td>
+                  <td>32-34</td>
                   <td>40-42</td>
                 </tr>
               </tbody>
