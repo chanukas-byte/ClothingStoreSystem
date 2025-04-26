@@ -1,0 +1,144 @@
+.navbar {
+  background: rgba(26, 26, 26, 0.95) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: white !important;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: translateY(-2px);
+}
+
+.navbar-brand img {
+  height: 40px;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover img {
+  transform: scale(1.05);
+}
+
+.nav-link {
+  position: relative;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  background-color: var(--primary-color);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover {
+  color: white !important;
+  transform: translateY(-2px);
+}
+
+.nav-link:hover::after {
+  width: 80%;
+}
+
+.navbar-toggler {
+  border: none;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  background-image: none;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before {
+  top: 6px;
+}
+
+.navbar-toggler-icon::after {
+  bottom: 6px;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Login button styling */
+.login-link {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.login-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.login-link svg {
+  margin-right: 6px;
+  font-size: 1.2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    padding: 1rem 0;
+  }
+  
+  .nav-link {
+    padding: 0.75rem 1rem !important;
+  }
+  
+  .nav-link::after {
+    display: none;
+  }
+  
+  .login-link {
+    margin-top: 1rem;
+  }
+} 
