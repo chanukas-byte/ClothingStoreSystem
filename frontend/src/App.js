@@ -20,7 +20,7 @@ import Payment from './Components/Payment';
 import ProductList from './Components/ProductList';
 import ProductDetail from './Components/ProductDetail';
 import Aboutus from './Components/Aboutus';
-
+import OrderStatus from './Components/OrderStatus';
 
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
@@ -90,6 +90,7 @@ function App() {
           <Route path="/product/:productId" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
           <Route path="/checkout" element={<Checkout checkoutProducts={checkoutProducts} handleRemoveFromCart={handleRemoveFromCart} />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/order-status" element={<OrderStatus />} />
           <Route path="/aboutus" element={<Aboutus />} />
 
           {/* Employee Management Routes*/}

@@ -1,0 +1,86 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import NavB from './NavBar';
+import './OrderStatus.css';
+
+const OrderStatus = () => {
+  const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // In a real application, you would fetch orders from an API
+    // For now, we'll use localStorage to store and retrieve orders
+    const storedOrders = localStorage.getItem('orders');
+    if (storedOrders) {
+      setOrders(JSON.parse(storedOrders));
+    }
+  }, []);
+
+  // Calculate remaining time for delivery
+  const calculateRemainingTime = (orderDate) => {
+    const orderTime = new Date(orderDate).getTime();
+    const currentTime = new Date().getTime();
+    const elapsedHours = (currentTime - orderTime) / (1000 * 60 * 60);
+    const remainingHours = 24 - elapsedHours;
+    
+    if (remainingHours <= 0) {
+      return 'Delivered';
+    }
+    
+    return `${Math.floor(remainingHours)} hours remaining`;
+  };
+
+  return (
+    <div className="order-status-page">
+      <NavB />
+      <div className="order-status-container">
+        <h2 className="order-status-title">Order Status</h2>
+        
+        {orders.length === 0 ? (
+          <div className="no-orders-message">
+            <p>No orders found. Your orders will appear here once confirmed.</p>
+            <button 
+              className="back-to-home-btn"
+              onClick={() => navigate('/')}
+            >
+              Back to Home
+            </button>
+          </div>
+        ) : (
+          <div className="orders-table-container">
+            <table className="orders-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer Name</th>
+                  <th>Location</th>
+                  <th>Total Amount</th>
+                  <th>Status</th>
+                  <th>Delivery Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order, index) => (
+                  <tr key={index}>
+                    <td>{order.id}</td>
+                    <td>{order.customerName}</td>
+                    <td>{order.location}</td>
+                    <td>Rs. {order.totalAmount}</td>
+                    <td>
+                      <span className={`status-badge ${order.status === 'Active' ? 'active' : 'inactive'}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td>{calculateRemainingTime(order.orderDate)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default OrderStatus; 

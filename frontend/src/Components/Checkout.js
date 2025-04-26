@@ -10,8 +10,8 @@ const Checkout = ({ checkoutProducts, handleRemoveFromCart, setCheckoutProducts,
 
   // Handle "Process to Payment" button click
   const handleProcessPayment = () => {
-    // Navigate to the payment page
-    navigate('/payment');
+    // Navigate to the payment page with the total amount
+    navigate('/payment', { state: { totalAmount: calculateTotal() } });
   };
 
   // Clear checkout and reset filters
