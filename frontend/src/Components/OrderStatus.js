@@ -77,7 +77,7 @@ const OrderStatus = () => {
   return (
     <div className="order-status-page">
       <NavB />
-      <div className="order-status-container order-status-modern">
+      <div className="order-status-container">
         <h2 className="order-status-title">Order Status</h2>
         
         {orders.length === 0 ? (

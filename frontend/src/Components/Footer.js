@@ -5,7 +5,7 @@ import Header from "./Header";
 
 function Footer() {
   return (
-    <footer className="text-center text-white footer-modern">
+    <footer className="text-center text-white" style={{ backgroundColor: "#1e2125", paddingTop: "2rem" }}>
       <div className="container" style={{ maxWidth: "1000px" }}>
         <div className="row">
           {/* About Section */}
@@ -61,20 +61,20 @@ function Footer() {
           </div>
         </div>
 
-        <hr />
+        <hr style={{ borderTop: "1px solid rgba(255, 255, 255, 0.3)" }} />
 
         {/* Social Media Section with Animation */}
         <div className="d-flex justify-content-center mb-3">
-          <a href="#" className="animated-icon me-3">
+          <a href="#" className="animated-icon me-3" style={{ fontSize: "1.6rem" }}>
             <FaFacebook />
           </a>
-          <a href="#" className="animated-icon me-3">
+          <a href="#" className="animated-icon me-3" style={{ fontSize: "1.6rem" }}>
             <FaTwitter />
           </a>
-          <a href="#" className="animated-icon me-3">
+          <a href="#" className="animated-icon me-3" style={{ fontSize: "1.6rem" }}>
             <FaInstagram />
           </a>
-          <a href="#" className="animated-icon">
+          <a href="#" className="animated-icon" style={{ fontSize: "1.6rem" }}>
             <FaLinkedin />
           </a>
         </div>

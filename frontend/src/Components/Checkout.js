@@ -21,7 +21,7 @@ const Checkout = ({ checkoutProducts, handleRemoveFromCart, setCheckoutProducts,
   };
 
   return (
-    <div className="checkout-modern">
+    <div className="checkout-container">
       <h2>CHECKOUT</h2>
       <h3>Products:</h3>
       {checkoutProducts.length === 0 ? (

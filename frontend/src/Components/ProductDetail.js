@@ -98,7 +98,7 @@ const ProductDetail = () => {
   return (
     <div className="page-container">
       <NavBar />
-      <div className="product-detail-container product-detail-modern">
+      <div className="product-detail-container">
         <div className="product-image-section">
           <img 
             src={`http://localhost:4058/${product.imageUrl}`} 
