@@ -13,6 +13,7 @@ import ReportDetails from "./Components/Reportdetails";
 import AssignSalary from "./Components/AssignSalary";
 import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
+import FinanceDashboard from "./Components/FinanceDashboard";
 
 // Product Manager Components
 import Checkout from './Components/Checkout';
@@ -108,6 +109,7 @@ function App() {
           <Route path="/add-report" element={<AddReport />} />
           <Route path="/all-reports" element={<AllReport />} />
           <Route path="/view-report/:id" element={<ReportDetails />} />
+          <Route path="/finance-dashboard" element={<FinanceDashboard />} />
 
           {/* Salary Management Routes*/}
           <Route path="/assign-salary" element={<AssignSalary />} />
