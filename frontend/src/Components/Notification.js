@@ -1,8 +1,52 @@
 import React, { useState, useEffect } from "react";
 import Nav from "./Nav";
 import axios from "axios";
+import { FaCheckCircle, FaExclamationCircle, FaInfoCircle, FaExclamationTriangle, FaTimes } from 'react-icons/fa';
 
-function Notification() {
+const Notification = ({ message, type = 'info', duration = 3000, onClose }) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    if (duration) {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+        if (onClose) onClose();
+      }, duration);
+      return () => clearTimeout(timer);
+    }
+  }, [duration, onClose]);
+
+  if (!isVisible) return null;
+
+  const getIcon = () => {
+    switch (type) {
+      case 'success':
+        return <FaCheckCircle className="notification-icon" />;
+      case 'error':
+        return <FaExclamationCircle className="notification-icon" />;
+      case 'warning':
+        return <FaExclamationTriangle className="notification-icon" />;
+      case 'info':
+      default:
+        return <FaInfoCircle className="notification-icon" />;
+    }
+  };
+
+  return (
+    <div className={`notification notification-${type}`}>
+      {getIcon()}
+      <span>{message}</span>
+      <button className="notification-close" onClick={() => {
+        setIsVisible(false);
+        if (onClose) onClose();
+      }}>
+        <FaTimes />
+      </button>
+    </div>
+  );
+};
+
+function NotificationComponent() {
   const [lowStockProducts, setLowStockProducts] = useState([]);
   const [hoverIndex, setHoverIndex] = useState(null); // For managing hover dynamically
 
@@ -138,4 +182,4 @@ function Notification() {
   );
 }
 
-export default Notification;
+export default NotificationComponent;
