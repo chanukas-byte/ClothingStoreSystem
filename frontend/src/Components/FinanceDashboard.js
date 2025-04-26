@@ -86,11 +86,11 @@ const FinanceDashboard = () => {
       setLoading(true);
       try {
         // Fetch reports
-        const reportsResponse = await axios.get("http://localhost:4058/api/finance/");
+        const reportsResponse = await axios.get("http://localhost:5005/api/finance/");
         setReports(reportsResponse.data || []);
         
         // Fetch expenses
-        const expensesResponse = await axios.get("http://localhost:4058/api/expenses");
+        const expensesResponse = await axios.get("http://localhost:5005/api/expenses");
         setExpenses(expensesResponse.data || []);
         
         // Process data

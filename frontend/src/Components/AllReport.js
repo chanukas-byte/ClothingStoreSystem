@@ -43,7 +43,7 @@ function AllReport() {
     setLoading(true);
     setError("");
     axios
-      .get("http://localhost:4058/api/finance/")
+      .get("http://localhost:5005/api/finance/")
       .then((response) => {
         setReports(response.data || []);
         setLoading(false);
@@ -110,7 +110,7 @@ function AllReport() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:4058/api/finance/delete/${reportId}`)
+          .delete(`http://localhost:5005/api/finance/delete/${reportId}`)
           .then(() => {
             fetchReports();
             Swal.fire("Deleted!", "The report has been deleted.", "success");
