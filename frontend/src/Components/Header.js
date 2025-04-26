@@ -62,20 +62,9 @@ function Header() {
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/add-report">
-
                   Report Analyze
                 </Link>
-
-                
               </li>
-
-              <li className="nav-item">
-                <Link className="nav-link text-white" to="/finance-dashboard">
-
-                  Dashboard
-            
-                </Link>
-                </li>
               <li className="nav-item">
                 <Link
                   className="nav-link text-white"

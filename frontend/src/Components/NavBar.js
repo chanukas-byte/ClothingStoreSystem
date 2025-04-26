@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // ✅ Import Link
-import { FaUserCircle, FaChartLine } from 'react-icons/fa'; // Font Awesome User Icon
+import { FaUserCircle } from 'react-icons/fa'; // Font Awesome User Icon
 import logo from '../assets/logo.png';
 
 function NavBar() {
@@ -46,12 +46,6 @@ function NavBar() {
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/locations">Locations</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-white" to="/finance-dashboard">
-                  <FaChartLine className="me-1" />
-                  Finance
-                </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="">Users</Link>
