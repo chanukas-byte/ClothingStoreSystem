@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from 'axios';
-// Remove react-toastify import
-// import { Toaster } from 'react-hot-toast';
-
-// Import our custom notification provider
-import { NotificationProvider } from './context/NotificationContext';
 
 // Finance Manager Components
 import AddEmployee from "./Components/AddEmployee";
@@ -43,16 +38,10 @@ import Item from "./Components/Item";
 import AddCategory from "./Components/AddCategory";
 import Category from "./Components/Category";
 
-// Notification Example
-import NotificationExample from "./Components/NotificationExample";
-
 // Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import HomeLiveArt from "./Components/HomeLiveArt";
-
-// Import custom styles
-import './index.css';
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -94,60 +83,58 @@ function App() {
   };
 
   return (
-    <NotificationProvider>
-      <Router>
-        <div className="app-container">
-          {/* Remove Toaster component */}
-          <Routes>
-            {/* Product Catalogue Routes*/}
-            <Route path="/" element={<HomeLiveArt />} />
-            <Route path="/productlist" element={<ProductList />} />
-            <Route path="/product/:productId" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
-            <Route path="/checkout" element={<Checkout checkoutProducts={checkoutProducts} handleRemoveFromCart={handleRemoveFromCart} />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/order-status" element={<OrderStatus />} />
-            <Route path="/locations" element={<Locations />} />
-            <Route path="/aboutus" element={<Aboutus />} />
-            <Route path="/contact" element={<Contact />} />
+    <Router>
+      <div className="container mt-4">
+        <Routes>
 
-            {/* Employee Management Routes*/}
-            <Route path="/add-employee" element={<AddEmployee />} />
-            <Route path="/Home" element={<Home />} />
-            <Route path="/all-employees" element={<AllEmployees />} />
-            <Route path="/update-employee/:id" element={<UpdateEmployee />} />
-            <Route path="/view-employee/:id" element={<ViewEmployee />} />
+         
 
-            {/* Report Management Routes*/}
-            <Route path="/add-report" element={<AddReport />} />
-            <Route path="/all-reports" element={<AllReport />} />
-            <Route path="/view-report/:id" element={<ReportDetails />} />
+          {/* Product Catalogue Routes*/}
+          <Route path="/" element={<HomeLiveArt />} />
+          <Route path="/productlist" element={<ProductList />} />
+          <Route path="/product/:productId" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
+          <Route path="/checkout" element={<Checkout checkoutProducts={checkoutProducts} handleRemoveFromCart={handleRemoveFromCart} />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/order-status" element={<OrderStatus />} />
+          <Route path="/locations" element={<Locations />} />
+          <Route path="/aboutus" element={<Aboutus />} />
+          <Route path="/contact" element={<Contact />} />
 
-            {/* Salary Management Routes*/}
-            <Route path="/assign-salary" element={<AssignSalary />} />
-            <Route path="/view-salary" element={<ViewSalary />} />
+          {/* Employee Management Routes*/}
+          <Route path="/add-employee" element={<AddEmployee />} />
+          <Route path="/Home" element={<Home />} />
+          <Route path="/all-employees" element={<AllEmployees />} />
+          <Route path="/update-employee/:id" element={<UpdateEmployee />} />
+          <Route path="/view-employee/:id" element={<ViewEmployee />} />
 
-            {/* Inventory Management Routes*/}
-            <Route path="/inventory-management-Home" element={<HomeS />} />
-            <Route path="/stock" element={<Stock />} />
-            <Route path="/supplier" element={<Supplier />} />
-            <Route path="/notify" element={<Notify />} />
-            <Route path="/supplier-register" element={<SupplierRegi />} />
-            <Route path="/addproduct" element={<AddProduct />} />
-            <Route path="/success" element={<Success />} />
-            <Route path="/stock/update/:id" element={<UpdateProduct />} />
-            <Route path="/stock/item/:id" element={<Item />} />
-            <Route path="/addcategory" element={<AddCategory />} />
-            <Route path="/category" element={<Category />} />
+          {/* Report Management Routes*/}
+          <Route path="/add-report" element={<AddReport />} />
+          <Route path="/all-reports" element={<AllReport />} />
+          <Route path="/view-report/:id" element={<ReportDetails />} />
 
-            {/* Notification Example Route */}
-            <Route path="/notification-example" element={<NotificationExample />} />
+          {/* Salary Management Routes*/}
+          <Route path="/assign-salary" element={<AssignSalary />} />
+          <Route path="/view-salary" element={<ViewSalary />} />
 
-            {/* 404 - Page Not Found (Optional) */}
-            {/* <Route path="*" element={<NotFound />} /> */}
-          </Routes>
-        </div>
-      </Router>
-    </NotificationProvider>
+          {/* Inventory Management Routes*/}
+          <Route path="/inventory-management-Home" element={<HomeS />} />
+          <Route path="/stock" element={<Stock />} />
+          <Route path="/supplier" element={<Supplier />} />
+          <Route path="/notify" element={<Notify />} />
+          <Route path="/supplier-register" element={<SupplierRegi />} />
+          <Route path="/addproduct" element={<AddProduct />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/stock/update/:id" element={<UpdateProduct />} />
+          <Route path="/stock/item/:id" element={<Item />} />
+          <Route path="/addcategory" element={<AddCategory />} />
+          <Route path="/category" element={<Category />} />
+
+          {/* 404 - Page Not Found (Optional) */}
+          {/* <Route path="*" element={<NotFound />} /> */}
+
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
