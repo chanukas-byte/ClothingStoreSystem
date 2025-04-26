@@ -42,13 +42,19 @@ function NavBar() {
                 <Link className="nav-link text-white" to="/productlist">Products</Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link text-white" to="/order-status">Orders</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/locations">Locations</Link>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link text-white" to="">Users</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="">feedback</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="">contact us</Link>
+                <Link className="nav-link text-white" to="/contact">Contact Us</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/aboutus">About us</Link>
