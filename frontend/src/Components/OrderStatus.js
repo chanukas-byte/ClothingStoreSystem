@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavB from './NavBar';
 import './OrderStatus.css';
+import Swal from 'sweetalert2';
 
 const OrderStatus = () => {
   const [orders, setOrders] = useState([]);
@@ -28,6 +29,49 @@ const OrderStatus = () => {
     }
     
     return `${Math.floor(remainingHours)} hours remaining`;
+  };
+
+  // Handle order removal
+  const handleRemoveOrder = (orderId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Remove order from state and localStorage
+        const updatedOrders = orders.filter(order => order.id !== orderId);
+        setOrders(updatedOrders);
+        localStorage.setItem('orders', JSON.stringify(updatedOrders));
+        
+        Swal.fire(
+          'Removed!',
+          'Your order has been removed.',
+          'success'
+        );
+      }
+    });
+  };
+
+  // Handle order update
+  const handleUpdateOrder = (order) => {
+    // Navigate to payment page with order details
+    navigate('/payment', {
+      state: {
+        totalAmount: order.totalAmount,
+        customerName: order.customerName,
+        customerEmail: order.customerEmail,
+        customerMobile: order.customerMobile,
+        customerAddress: order.location,
+        deliveryMethod: order.deliveryMethod,
+        isUpdate: true,
+        orderId: order.id
+      }
+    });
   };
 
   return (
@@ -57,6 +101,7 @@ const OrderStatus = () => {
                   <th>Total Amount</th>
                   <th>Status</th>
                   <th>Delivery Time</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -72,6 +117,20 @@ const OrderStatus = () => {
                       </span>
                     </td>
                     <td>{calculateRemainingTime(order.orderDate)}</td>
+                    <td className="actions-column">
+                      <button 
+                        className="action-btn update-btn"
+                        onClick={() => handleUpdateOrder(order)}
+                      >
+                        Update
+                      </button>
+                      <button 
+                        className="action-btn remove-btn"
+                        onClick={() => handleRemoveOrder(order.id)}
+                      >
+                        Remove
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -332,13 +332,10 @@ const Payment = () => {
     doc.setLineWidth(0.5);
     doc.rect(10, 10, 190, 277);
     
-    // Add company logo and header
-    doc.addImage(logo, 'PNG', 20, 15, 30, 15);
-    
     // Add company name
     doc.setFontSize(20);
     doc.setTextColor(0, 0, 0);
-    doc.text("LIVE ART PVT LTD", 60, 25);
+    doc.text("LIVE ART PVT LTD", 20, 25);
     
     // Add invoice title
     doc.setFontSize(16);
@@ -454,13 +451,10 @@ const Payment = () => {
     doc.setLineWidth(0.5);
     doc.rect(10, 10, 190, 277);
     
-    // Add company logo and header
-    doc.addImage(logo, 'PNG', 20, 15, 30, 15);
-    
-    // Add company name
+    // Add company name and header
     doc.setFontSize(20);
     doc.setTextColor(0, 0, 0);
-    doc.text("LIVE ART PVT LTD", 60, 25);
+    doc.text("LIVE ART PVT LTD", 105, 25, { align: 'center' });
     
     // Add invoice title
     doc.setFontSize(16);
@@ -723,13 +717,10 @@ const Payment = () => {
     doc.setLineWidth(0.5);
     doc.rect(10, 10, 190, 277);
     
-    // Add company logo and header
-    doc.addImage(logo, 'PNG', 20, 15, 30, 15);
-    
     // Add company name
     doc.setFontSize(20);
     doc.setTextColor(0, 0, 0);
-    doc.text("LIVE ART PVT LTD", 60, 25);
+    doc.text("LIVE ART PVT LTD", 20, 25);
     
     // Add invoice title
     doc.setFontSize(16);
@@ -826,19 +817,11 @@ const Payment = () => {
     setMobileError('');
   };
 
+  // Generate payment confirmation PDF
   const generatePDF = async () => {
     try {
       const doc = new jsPDF();
       
-      // Add logo with error handling
-      try {
-        // Add logo with fixed dimensions
-        doc.addImage(logo, 'PNG', 10, 10, 40, 20);
-      } catch (logoError) {
-        console.warn('Could not load logo:', logoError);
-        // Continue without logo if there's an error
-      }
-
       // Add header
       doc.setFontSize(20);
       doc.text('Payment Confirmation', 105, 20, { align: 'center' });
