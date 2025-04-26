@@ -7,14 +7,13 @@ function NavBar() {
   return (
     <div>
       <nav
-        className="navbar navbar-expand-lg navbar-dark fixed-top"
-        style={{ backgroundColor: "#1a1a1a", zIndex: "1030" }}
+        className="navbar navbar-expand-lg navbar-dark fixed-top navbar-modern"
+        style={{ backgroundColor: "#18191a", width: "100%", zIndex: "1030" }}
       >
         <div className="container-fluid">
           <Link
             className="navbar-brand text-light mr-auto d-flex align-items-center"
             to="/"
-            style={{ fontWeight: "bold", fontSize: "24px" }}
           >
             <img 
               src={logo} 
@@ -63,7 +62,7 @@ function NavBar() {
 
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link text-white d-flex align-items-center" to="/login" style={{ marginRight: "20px" }}>
+                <Link className="nav-link text-white d-flex align-items-center" to="/login">
                   <FaUserCircle style={{ marginRight: '6px' }} />
                   Login
                 </Link>

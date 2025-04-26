@@ -157,7 +157,7 @@ const ProductList = () => {
     };
 
     return (
-        <div className="app-container">
+        <div className="app-container product-list-modern">
             <NavB />
             
             <div className="main-layout">
