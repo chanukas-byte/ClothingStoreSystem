@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom"; // For navigation between routes
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaChartLine } from 'react-icons/fa'; // Import chart icon
 
 function Header() {
   return (
@@ -77,20 +76,6 @@ function Header() {
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/all-employees">
                   View All Employees
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link 
-                  className="nav-link text-white d-flex align-items-center" 
-                  to="/finance-dashboard"
-                  style={{ 
-                    backgroundColor: "#2c3e50", 
-                    borderRadius: "5px",
-                    padding: "5px 10px",
-                    margin: "0 5px"
-                  }}
-                >
-                  <FaChartLine className="me-1" /> Dashboard
                 </Link>
               </li>
             </ul>
