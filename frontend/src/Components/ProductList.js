@@ -16,11 +16,14 @@ const ProductList = () => {
         category: '',
         minPrice: '',
         maxPrice: '',
+        isActive: true
     });
 
     const [activeTab, setActiveTab] = useState('home');
     const [activeCategory, setActiveCategory] = useState('all');
     const [noProductsMessage, setNoProductsMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
@@ -31,6 +34,9 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         try {
+            setLoading(true);
+            setError(null);
+            
             // Create filter parameters
             const filterParams = {};
             
@@ -52,37 +58,14 @@ const ProductList = () => {
                 filterParams.maxPrice = parseFloat(filters.maxPrice);
             }
 
+            // Add isActive filter
+            filterParams.isActive = filters.isActive;
+
             const response = await axios.get('http://localhost:4058/products', { 
                 params: filterParams
             });
             
-            console.log("Fetched response:", response.data);
-            let fetchedProducts = Array.isArray(response.data) 
-                ? response.data 
-                : response.data.products || [];
-
-            // Apply client-side filtering
-            if (filters.name) {
-                const searchTerm = filters.name.toLowerCase();
-                fetchedProducts = fetchedProducts.filter(product => 
-                    product.name.toLowerCase().includes(searchTerm)
-                );
-            }
-
-            if (filters.category) {
-                fetchedProducts = fetchedProducts.filter(product => 
-                    product.category === filters.category
-                );
-            }
-
-            if (filters.minPrice || filters.maxPrice) {
-                fetchedProducts = fetchedProducts.filter(product => {
-                    const price = parseFloat(product.price);
-                    const minPrice = filters.minPrice ? parseFloat(filters.minPrice) : 0;
-                    const maxPrice = filters.maxPrice ? parseFloat(filters.maxPrice) : Infinity;
-                    return price >= minPrice && price <= maxPrice;
-                });
-            }
+            let fetchedProducts = response.data.products || [];
 
             setProducts(fetchedProducts);
 
@@ -113,7 +96,10 @@ const ProductList = () => {
 
         } catch (error) {
             console.error('Error fetching products:', error);
+            setError('Error loading products. Please try again later.');
             setNoProductsMessage('Error loading products. Please try again later.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -290,7 +276,11 @@ const ProductList = () => {
                     ) : (
                         <div className="products-section">
                             <h2 className="section-title">OUR PRODUCTS</h2>
-                            {noProductsMessage ? (
+                            {loading ? (
+                                <div className="loading-message">Loading products...</div>
+                            ) : error ? (
+                                <div className="error-message">{error}</div>
+                            ) : noProductsMessage ? (
                                 <div className="no-products-message">
                                     {noProductsMessage}
                                 </div>
@@ -300,9 +290,13 @@ const ProductList = () => {
                                         <div className="product-card" key={product._id}>
                                             <div className="product-image-container">
                                                 <img 
-                                                    src={`http://localhost:4058/${product.imageUrl}`} 
+                                                    src={`http://localhost:4058/${product.imageUrl}`}
                                                     alt={product.name} 
-                                                    className="product-image" 
+                                                    className="product-image"
+                                                    onError={(e) => {
+                                                        e.target.src = '/placeholder-image.jpg';
+                                                        e.target.onerror = null;
+                                                    }}
                                                 />
                                                 <div className="product-overlay">
                                                     <Link to={`/product/${product._id}`} className="view-product-btn">
@@ -313,11 +307,13 @@ const ProductList = () => {
                                             <div className="product-info">
                                                 <h3 className="product-name">{product.name}</h3>
                                                 <p className="product-price">Rs. {product.price}</p>
+                                                <p className="product-stock">In Stock: {product.stockQuantity}</p>
                                                 <button 
                                                     className="add-to-cart-btn"
                                                     onClick={() => handleAddToCart(product)}
+                                                    disabled={product.stockQuantity <= 0}
                                                 >
-                                                    Add to Cart
+                                                    {product.stockQuantity > 0 ? 'Add to Cart' : 'Out of Stock'}
                                                 </button>
                                             </div>
                                         </div>
