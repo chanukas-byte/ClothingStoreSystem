@@ -13,6 +13,7 @@ import ReportDetails from "./Components/Reportdetails";
 import AssignSalary from "./Components/AssignSalary";
 import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
+import FinanceDashboard from "./Components/FinanceDashboard";
 
 // Product Manager Components
 import Checkout from './Components/Checkout';
@@ -85,6 +86,9 @@ function App() {
     <Router>
       <div className="container mt-4">
         <Routes>
+
+          {/* Finance Dashboard Route */}
+          <Route path="/finance-dashboard" element={<FinanceDashboard />} />
 
           {/* Product Catalogue Routes*/}
           <Route path="/" element={<HomeLiveArt />} />
