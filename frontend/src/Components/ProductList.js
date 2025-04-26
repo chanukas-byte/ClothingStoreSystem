@@ -152,6 +152,10 @@ const ProductList = () => {
         setCart([]);  // Clear the cart after sending all to checkout
     };
 
+    const handleViewDetails = (productId) => {
+        navigate(`/product/${productId}`);
+    };
+
     return (
         <div className="app-container">
             <NavB />
