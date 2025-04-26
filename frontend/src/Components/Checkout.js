@@ -22,8 +22,8 @@ const Checkout = ({ checkoutProducts, handleRemoveFromCart, setCheckoutProducts,
 
   return (
     <div className="checkout-container">
-      <h2>Checkout</h2>
-      <h3>Products Added to Checkout:</h3>
+      <h2>CHECKOUT</h2>
+      <h3>Products:</h3>
       {checkoutProducts.length === 0 ? (
         <p>No items in your checkout.</p>
       ) : (
@@ -53,18 +53,18 @@ const Checkout = ({ checkoutProducts, handleRemoveFromCart, setCheckoutProducts,
       <style jsx>{`
         .checkout-container {
           font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
+          background-color: white;
           padding: 20px;
           color: #333;
           width: 80%;
           margin: 0 auto;
           border-radius: 8px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
         }
 
         h2 {
           text-align: center;
-          color: #000;
+          color: #333;
         }
 
         h3 {
@@ -77,15 +77,16 @@ const Checkout = ({ checkoutProducts, handleRemoveFromCart, setCheckoutProducts,
         }
 
         .checkout-product-item {
-          background-color: #fff;
+          background-color: #f8f8f8;
           padding: 15px;
           margin-bottom: 15px;
           border-radius: 8px;
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+          border: 1px solid #e0e0e0;
         }
 
         .checkout-product-item h4 {
-          color: #000;
+          color: #333;
           font-size: 18px;
         }
 
@@ -95,7 +96,7 @@ const Checkout = ({ checkoutProducts, handleRemoveFromCart, setCheckoutProducts,
         }
 
         .remove-button {
-          background-color: #ff4d4d;
+          background-color: #dc3545;
           color: #fff;
           border: none;
           padding: 8px 15px;
@@ -105,11 +106,11 @@ const Checkout = ({ checkoutProducts, handleRemoveFromCart, setCheckoutProducts,
         }
 
         .remove-button:hover {
-          background-color: #ff1a1a;
+          background-color: #c82333;
         }
 
         .process-payment-button, .clear-checkout-button {
-          background-color: #4CAF50;
+          background-color: #333;
           color: #fff;
           border: none;
           padding: 10px 20px;
@@ -120,23 +121,24 @@ const Checkout = ({ checkoutProducts, handleRemoveFromCart, setCheckoutProducts,
           display: block;
           width: 100%;
           text-align: center;
+          transition: background-color 0.3s;
         }
 
         .process-payment-button:hover {
-          background-color: #45a049;
+          background-color: #555;
         }
 
         .clear-checkout-button {
-          background-color: #f44336;
+          background-color: #6c757d;
           margin-top: 10px;
         }
 
         .clear-checkout-button:hover {
-          background-color: #e02f1c;
+          background-color: #5a6268;
         }
 
         .checkout-container p {
-          color: #999;
+          color: #666;
           font-size: 14px;
           text-align: center;
         }
