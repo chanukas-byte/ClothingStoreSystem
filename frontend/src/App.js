@@ -34,6 +34,7 @@ import SupplierRegi from "./Components/SupplierRegi";
 import AddProduct from "./Components/AddProduct";
 import Success from "./Components/Success";
 import UpdateProduct from "./Components/UpdateProduct";
+import PlaceOrder from "./Components/PlaceOrder";
 import Item from "./Components/Item";
 import AddCategory from "./Components/AddCategory";
 import Category from "./Components/Category";
@@ -125,6 +126,7 @@ function App() {
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/success" element={<Success />} />
           <Route path="/stock/update/:id" element={<UpdateProduct />} />
+          <Route path="/notify/placeorder/:id" element={<PlaceOrder />} />
           <Route path="/stock/item/:id" element={<Item />} />
           <Route path="/addcategory" element={<AddCategory />} />
           <Route path="/category" element={<Category />} />

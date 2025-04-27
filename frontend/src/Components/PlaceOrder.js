@@ -9,13 +9,14 @@ function UpdateProduct() {
     description: "",
     price: "",
     category: "",
-    stockQuantity: "",
+    stockQuantity: 0,
     imageUrl: "",
     createdAt: "",
     updatedAt: "",
+    reorderQuantity: 0, // New state for re-order quantity
   });
-  
-  const history = useNavigate();
+
+  const navigate = useNavigate();
   const { id } = useParams(); // Get product id from URL params
 
   // Fetch the product data when the component mounts
@@ -24,7 +25,7 @@ function UpdateProduct() {
       try {
         const res = await axios.get(`http://localhost:4058/products/${id}`);
         console.log("API Response:", res.data); // Debugging the API response
-        
+
         // Ensure the createdAt and updatedAt are in the correct format for datetime-local
         setInputs({
           name: res.data.product.name,
@@ -35,6 +36,7 @@ function UpdateProduct() {
           imageUrl: res.data.product.imageUrl,
           createdAt: res.data.product.createdAt.slice(0, 16), // Convert to 'YYYY-MM-DDTHH:mm'
           updatedAt: res.data.product.updatedAt.slice(0, 16), // Convert to 'YYYY-MM-DDTHH:mm'
+          reorderQuantity: 0, // Initially set reorder quantity to 0
         });
       } catch (error) {
         console.error("Error fetching product data:", error);
@@ -43,21 +45,29 @@ function UpdateProduct() {
     fetchHandler();
   }, [id]); // Fetch data when the id changes
 
+  // Calculate the new stock quantity (current stock + re-order quantity)
+  const calculateNewStock = () => {
+    return inputs.stockQuantity + Number(inputs.reorderQuantity);
+  };
+
   // Send the updated request to the backend
   const sendRequest = async () => {
+    const newStock = calculateNewStock(); // Calculate new stock
+
     await axios
       .put(`http://localhost:4058/products/${id}`, {
         name: inputs.name,
         description: inputs.description,
         price: Number(inputs.price),
         category: inputs.category,
-        stockQuantity: Number(inputs.stockQuantity),
+        stockQuantity: newStock, // Send the new stock quantity
         imageUrl: inputs.imageUrl,
         createdAt: new Date(inputs.createdAt).toISOString(), // Ensure correct date format
         updatedAt: new Date(inputs.updatedAt).toISOString(), // Ensure correct date format
       })
       .then(() => {
-        history("/stock"); // Navigate back to the stock page after successful update
+        // Pass the message to ReStock page
+        navigate("/restock", { state: { message: "Product order has been successfully updated!" } });
       })
       .catch((err) => {
         console.error("Error updating product:", err);
@@ -133,93 +143,30 @@ function UpdateProduct() {
         <h1 style={formStyles.heading}>Update Product</h1>
         <form onSubmit={handleSubmit}>
           <div style={formStyles.inputField}>
-            <label htmlFor="name" style={formStyles.label}>
-              Product Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              onChange={handleChange}
-              value={inputs.name}
-              style={formStyles.input}
-              required
-            />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="description" style={formStyles.label}>
-              Description
-            </label>
-            <textarea
-              name="description"
-              id="description"
-              onChange={handleChange}
-              value={inputs.description}
-              style={formStyles.input}
-              rows="3"
-              required
-            ></textarea>
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="price" style={formStyles.label}>
-              Price
-            </label>
-            <input
-              type="number"
-              name="price"
-              id="price"
-              onChange={handleChange}
-              value={inputs.price}
-              style={formStyles.input}
-              min="0"
-              required
-            />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="category" style={formStyles.label}>
-              Category
-            </label>
-            <input
-              type="text"
-              name="category"
-              id="category"
-              onChange={handleChange}
-              value={inputs.category}
-              style={formStyles.input}
-              required
-            />
+            <label style={formStyles.label}>Product Name</label>
+            <p>{inputs.name}</p> {/* Show product name here */}
           </div>
 
           <div style={formStyles.inputField}>
             <label htmlFor="stockQuantity" style={formStyles.label}>
-              Stock Quantity
+              Current Stock Quantity
             </label>
-            <input
-              type="number"
-              name="stockQuantity"
-              id="stockQuantity"
-              onChange={handleChange}
-              value={inputs.stockQuantity}
-              style={formStyles.input}
-              min="0"
-              required
-            />
+            <p>{inputs.stockQuantity}</p> {/* Display current stock quantity */}
           </div>
 
           <div style={formStyles.inputField}>
-            <label htmlFor="imageUrl" style={formStyles.label}>
-              Image URL
+            <label htmlFor="reorderQuantity" style={formStyles.label}>
+              Re-Order Quantity
             </label>
             <input
-              type="text"
-              name="imageUrl"
-              id="imageUrl"
+              type="number"
+              name="reorderQuantity"
+              id="reorderQuantity"
               onChange={handleChange}
-              value={inputs.imageUrl}
+              value={inputs.reorderQuantity}
               style={formStyles.input}
+              min="0"
+              required
             />
           </div>
 
@@ -230,7 +177,7 @@ function UpdateProduct() {
               ":hover": formStyles.submitButtonHover,
             }}
           >
-            Update Product
+            Place Order
           </button>
         </form>
       </div>
