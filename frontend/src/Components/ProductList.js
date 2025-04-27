@@ -6,6 +6,7 @@ import NavB from './NavBar';
 import Checkout from './Checkout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FaShoppingCart } from 'react-icons/fa';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
@@ -194,6 +195,12 @@ const ProductList = () => {
                             placeholder="Search products..."
                             className="search-input"
                         />
+                        <div className="cart-icon-container" onClick={() => setActiveTab('cart')}>
+                            <FaShoppingCart className="cart-icon" />
+                            {cart.length > 0 && (
+                                <span className="cart-counter">{cart.length}</span>
+                            )}
+                        </div>
                         <select 
                             name="category" 
                             value={filters.category} 
