@@ -9,7 +9,7 @@ const MonthlyTotal = () => {
     const fetchMonthlyTotal = async () => {
       try {
         const month = new Date().getMonth(); // Get current month (0-11)
-        const response = await axios.get(`http://localhost:4058/api/expenses/monthly-total/${month}`);
+        const response = await axios.get(`http://localhost:5005/api/expenses/monthly-total/${month}`);
         setTotal(response.data.total);
       } catch (err) {
         console.error('Error fetching monthly total:', err);

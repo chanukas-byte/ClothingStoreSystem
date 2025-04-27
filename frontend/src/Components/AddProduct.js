@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Nav from "./Nav";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import Swal from 'sweetalert2';
 
 // Helper function to check if a date is today's date
 const isToday = (date) => {
@@ -22,10 +23,11 @@ const AddProduct = () => {
     price: "",
     category: "",
     stockQuantity: "",
-    imageUrl: "",
-    createdAt: "",
-    updatedAt: "",
   });
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setInputs((prevState) => ({
@@ -34,41 +36,78 @@ const AddProduct = () => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     // Validate price and stock quantity
     if (inputs.price < 0 || inputs.stockQuantity < 0) {
-      alert("Price and Stock Quantity must be non-negative values");
+      setError("Price and Stock Quantity must be non-negative values");
+      setLoading(false);
       return;
     }
 
-    // Check if createdAt and updatedAt are today's date
-    if (!isToday(inputs.createdAt)) {
-      alert("Created Date must be today's date.");
-      return;
-    }
-    if (!isToday(inputs.updatedAt)) {
-      alert("Updated Date must be today's date.");
+    if (!selectedImage) {
+      setError("Please select an image");
+      setLoading(false);
       return;
     }
 
     try {
-      await axios.post("http://localhost:4058/products", {
-        name: String(inputs.name),
-        description: String(inputs.description),
-        price: Number(inputs.price),
-        category: String(inputs.category),
-        stockQuantity: Number(inputs.stockQuantity),
-        imageUrl: String(inputs.imageUrl),
-        createdAt: new Date(inputs.createdAt),
-        updatedAt: new Date(inputs.updatedAt),
+      // Create FormData object
+      const formData = new FormData();
+      formData.append('name', inputs.name);
+      formData.append('description', inputs.description);
+      formData.append('price', inputs.price);
+      formData.append('category', inputs.category);
+      formData.append('stockQuantity', inputs.stockQuantity);
+      formData.append('image', selectedImage);
+
+      // Send request with FormData
+      const response = await axios.post("http://localhost:4058/products", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-      alert("Product added successfully!");
-      navigate("/stock");
+
+      // Show success message
+      Swal.fire({
+        title: 'Success!',
+        text: 'Product added successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/stock");
+        }
+      });
     } catch (error) {
       console.error("Error adding product:", error);
-      alert("Failed to add product. Please try again.");
+      setError(error.response?.data?.message || "Failed to add product. Please try again.");
+      
+      // Show error message
+      Swal.fire({
+        title: 'Error!',
+        text: error.response?.data?.message || "Failed to add product. Please try again.",
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,9 +152,31 @@ const AddProduct = () => {
       borderRadius: "5px",
       fontWeight: "bold",
       cursor: "pointer",
+      opacity: loading ? 0.7 : 1,
     },
-    submitButtonHover: {
-      backgroundColor: "#0056b3",
+    errorMessage: {
+      color: "red",
+      marginBottom: "10px",
+      textAlign: "center",
+    },
+    imagePreview: {
+      width: "100%",
+      maxHeight: "200px",
+      objectFit: "contain",
+      marginTop: "10px",
+      marginBottom: "10px",
+    },
+    fileInput: {
+      display: "none",
+    },
+    fileInputLabel: {
+      display: "inline-block",
+      padding: "10px 20px",
+      backgroundColor: "#6c757d",
+      color: "white",
+      borderRadius: "5px",
+      cursor: "pointer",
+      marginTop: "5px",
     },
   };
 
@@ -124,6 +185,7 @@ const AddProduct = () => {
       <Nav />
       <div style={formStyles.formContainer}>
         <h1 style={formStyles.heading}>Add New Product</h1>
+        {error && <div style={formStyles.errorMessage}>{error}</div>}
         <form onSubmit={handleSubmit}>
           <div style={formStyles.inputField}>
             <label htmlFor="name" style={formStyles.label}>
@@ -184,13 +246,13 @@ const AddProduct = () => {
               required
             >
               <option value="">Select Category</option>
-              <option value="GENTS T-SHIRT">GENTS T-SHIRT</option>
-              <option value="GENTS SHIRT">GENTS SHIRT</option>
-              <option value="GENTS PANTS">GENTS PANTS</option>
-              <option value="WOMEN SKIRTS">WOMEN SKIRTS</option>
-              <option value="WOMEN PANTS">WOMEN PANTS</option>
-              <option value="WOMEN TOPS">WOMEN TOPS</option>
-              <option value="WOMEN FROCKS">WOMEN FROCKS</option>
+              <option value="GENTS-SHIRTS">Men's Shirts</option>
+              <option value="GENTS-T-SHIRTS">Men's T-Shirts</option>
+              <option value="GENTS-PANTS">Men's Pants</option>
+              <option value="WOMENS-FROCKS">Women's Frocks</option>
+              <option value="WOMENS-TOPS">Women's Tops</option>
+              <option value="WOMENS-PANTS">Women's Pants</option>
+              <option value="WOMENS-SKIRTS">Women's Skirts</option>
             </select>
           </div>
 
@@ -211,57 +273,36 @@ const AddProduct = () => {
           </div>
 
           <div style={formStyles.inputField}>
-            <label htmlFor="imageUrl" style={formStyles.label}>
-              Image URL
+            <label htmlFor="image" style={formStyles.label}>
+              Product Image
             </label>
             <input
-              type="text"
-              name="imageUrl"
-              id="imageUrl"
-              onChange={handleChange}
-              value={inputs.imageUrl}
-              style={formStyles.input}
-            />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="createdAt" style={formStyles.label}>
-              Created Date
-            </label>
-            <input
-              type="datetime-local"
-              name="createdAt"
-              id="createdAt"
-              onChange={handleChange}
-              value={inputs.createdAt}
-              style={formStyles.input}
+              type="file"
+              name="image"
+              id="image"
+              onChange={handleImageChange}
+              style={formStyles.fileInput}
+              accept="image/*"
               required
             />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="updatedAt" style={formStyles.label}>
-              Updated Date
+            <label htmlFor="image" style={formStyles.fileInputLabel}>
+              Choose Image
             </label>
-            <input
-              type="datetime-local"
-              name="updatedAt"
-              id="updatedAt"
-              onChange={handleChange}
-              value={inputs.updatedAt}
-              style={formStyles.input}
-              required
-            />
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                style={formStyles.imagePreview}
+              />
+            )}
           </div>
 
           <button
             type="submit"
-            style={{
-              ...formStyles.submitButton,
-              ":hover": formStyles.submitButtonHover,
-            }}
+            style={formStyles.submitButton}
+            disabled={loading}
           >
-            Add Product
+            {loading ? "Adding Product..." : "Add Product"}
           </button>
         </form>
       </div>
