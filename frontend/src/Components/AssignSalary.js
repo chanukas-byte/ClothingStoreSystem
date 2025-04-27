@@ -6,6 +6,7 @@ import { FaSearch, FaSortAlphaDown, FaSortAlphaUpAlt } from "react-icons/fa";
 import Select from "react-select";
 import Header from "./Header";
 import Footer from "./Footer"; 
+import "./AssignSalary.css";
 
 function AllEmployees() {
   const [employees, setEmployees] = useState([]);
@@ -102,8 +103,7 @@ function AllEmployees() {
     <div className="container mt-5">
       <div className="card shadow-lg rounded-lg border-0 bg-light">
         <div
-          className="card-header text-white fw-bold text-center py-3"
-          style={{ backgroundColor: "#673ab7" }}
+          className="card-header salary-header-black text-white fw-bold text-center py-3"
         >
           <h3>Salaries of Employees</h3>
         </div>
@@ -193,14 +193,14 @@ function AllEmployees() {
                       </td>
                       <td>
                         <Button
-                          className={`btn-sm ${employee.salary ? "btn-secondary" : "btn-outline-primary"} me-2`}
+                          className={`btn-sm salary-action-btn me-2`}
                           onClick={() => assignSalary(employee)}
                           disabled={!!employee.salary}
                         >
                           {employee.salary ? "Salary Assigned" : "Assign Salary"}
                         </Button>
                         <Button
-                          className="btn-sm btn-outline-info"
+                          className="btn-sm salary-action-btn"
                           onClick={() => handleView(employee)}
                         >
                           View Details
