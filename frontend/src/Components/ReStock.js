@@ -104,7 +104,7 @@ function ReStock() {
         Re-stock Status
       </h1>
 
-      {restockList.length === 0 && <p>No items to restock.</p>}
+      {restockList.length === 0 && <p>No Restock Orders.</p>}
 
       {restockList.map((item) => (
         <div
@@ -149,7 +149,7 @@ function ReStock() {
         </div>
       ))}
 
-      {stockUpdated && <p>Stock quantity has been updated!</p>}
+      {stockUpdated && <p>Stock quantity has been updated</p>}
     </div>
   );
 }
