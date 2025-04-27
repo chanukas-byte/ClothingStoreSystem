@@ -183,16 +183,9 @@ function Stock() {
                     <td>{new Date(product.createdAt).toLocaleString()}</td>
                     <td>{new Date(product.updatedAt).toLocaleString()}</td>
                     <td>
-                      <Link to={`/stock/update/${product._id}`} className="btn btn-sm btn-outline-secondary me-2">
-                        Update
+                      <Link to={`/stock/item/${product._id}`} className="btn btn-sm btn-primary">
+                        View
                       </Link>
-                      <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => handleDelete(product._id)}
-                        disabled={deletingId === product._id}
-                      >
-                        {deletingId === product._id ? "Deleting..." : "Delete"}
-                      </button>
                     </td>
                   </tr>
                 ))

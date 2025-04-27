@@ -41,7 +41,7 @@ function Nav() {
                 <Link className="nav-link text-white" to="/supplier">Suppliers</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/report">Re-stock</Link>
+                <Link className="nav-link text-white" to="/restock">Re-stock</Link>
               </li>
               
             </ul>
