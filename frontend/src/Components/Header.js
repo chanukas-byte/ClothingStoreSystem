@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom"; // For navigation between routes
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaComments } from "react-icons/fa";
 
 function Header() {
   return (
@@ -86,12 +85,25 @@ function Header() {
                 </Link>
               </li>
 
-              <Link className="nav-link text-white" to="/budget-planner">Budget Planner</Link>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/finance-spirit">
-                  AI Spirit
-                </Link>
-              </li>
+  <Link className="nav-link text-white" to="/finance-management">
+    Financial Management
+  </Link>
+</li>
+
+              <li className="nav-item">
+     c<Link className="nav-link text-white" to="/finance-chatbot">
+    Finance Chatbot
+  </Link>
+</li> 
+
+<li className="nav-item">
+  <Link className="nav-link text-white" to="/finance-spirit">
+    AI Spirit
+  </Link>
+</li>
+
+              <Link className="nav-link text-white" to="/budget-planner">Budget Planner</Link>
 
             </ul>
 

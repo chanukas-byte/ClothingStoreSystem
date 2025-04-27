@@ -19,6 +19,7 @@ const getAllCategories = async (req, res, next) => {
 };
 
 // Add New Category
+
 const addCategory = async (req, res, next) => {
     const { name, types } = req.body;
 

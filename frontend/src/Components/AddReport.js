@@ -356,7 +356,7 @@ function AddReport() {
     <div className="report-container">
       <Header/>
       <Container maxWidth="sm" sx={{ py: 10 }}>
-        <Card className="report-card" elevation={3}>
+        <Card className="report-card finance-header-black" elevation={3}>
           <div className="report-card-header">
             <Typography variant="h4" className="report-card-title">
               Finance Report
@@ -456,7 +456,7 @@ function AddReport() {
               <Button
                 type="submit"
                 variant="contained"
-                className="modern-submit-button"
+                className="modern-submit-button finance-action-btn"
                 disabled={loading}
                 startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <FaFilePdf />}
               >

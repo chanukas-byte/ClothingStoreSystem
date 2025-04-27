@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 import { FaRobot, FaFileUpload } from "react-icons/fa";
 import * as pdfjsLib from "pdfjs-dist";
-import * as XLSX from "xlsx";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from "recharts";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
 
 function analyzeData(data) {
-  // Example: expects [{category, budget, actual}, ...]
   if (!data || !data.length) return "No data found.";
   let totalBudget = 0, totalActual = 0, overBudget = [];
   data.forEach(row => {
@@ -38,9 +37,8 @@ export default function FinanceSpirit() {
     if (!file) return;
     setFileName(file.name);
     setLoading(true);
-    const ext = file.name.split('.').pop().toLowerCase();
 
-    if (ext === "csv") {
+    if (file.name.endsWith(".csv")) {
       Papa.parse(file, {
         header: true,
         complete: (results) => {
@@ -50,10 +48,11 @@ export default function FinanceSpirit() {
         },
         error: () => {
           setLoading(false);
-          setInsights("Error reading CSV file.");
+          setInsights("Error reading file.");
         }
       });
-    } else if (ext === "pdf") {
+    } else if (file.name.endsWith(".pdf")) {
+      // PDF parsing
       const reader = new FileReader();
       reader.onload = async function() {
         const typedarray = new Uint8Array(this.result);
@@ -64,10 +63,13 @@ export default function FinanceSpirit() {
           const content = await page.getTextContent();
           text += content.items.map(item => item.str).join(" ") + "\n";
         }
+        // Try to extract table-like data: category, budget, actual
+        // This is a simple regex-based approach; for real-world PDFs, use a more robust parser!
         const rows = text.split("\n").filter(line => /[0-9]/.test(line));
         const parsed = [];
         for (let row of rows) {
-          const match = row.match(/([A-Za-z ]+)\s+(\d+)\s+(\d+)/);
+          // Example: "Marketing 12000 9000"
+          const match = row.match(/([A-Za-z ]+)\\s+(\\d+)\\s+(\\d+)/);
           if (match) {
             parsed.push({
               category: match[1].trim(),
@@ -81,49 +83,9 @@ export default function FinanceSpirit() {
         setInsights(analyzeData(parsed));
       };
       reader.readAsArrayBuffer(file);
-    } else if (ext === "json") {
-      const reader = new FileReader();
-      reader.onload = function() {
-        try {
-          const json = JSON.parse(reader.result);
-          setLoading(false);
-          setData(json);
-          setInsights(analyzeData(json));
-        } catch {
-          setLoading(false);
-          setInsights("Error reading JSON file.");
-        }
-      };
-      reader.readAsText(file);
-    } else if (ext === "txt") {
-      const reader = new FileReader();
-      reader.onload = function() {
-        const lines = reader.result.split('\n');
-        const parsed = lines.map(line => {
-          const [category, budget, actual] = line.split(',');
-          return { category, budget, actual };
-        });
-        setLoading(false);
-        setData(parsed);
-        setInsights(analyzeData(parsed));
-      };
-      reader.readAsText(file);
-    } else if (ext === "xls" || ext === "xlsx") {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const dataArr = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(dataArr, { type: "array" });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const json = XLSX.utils.sheet_to_json(worksheet);
-        setLoading(false);
-        setData(json);
-        setInsights(analyzeData(json));
-      };
-      reader.readAsArrayBuffer(file);
     } else {
       setLoading(false);
-      setInsights("Unsupported file type. Please upload CSV, PDF, JSON, TXT, XLS, or XLSX.");
+      setInsights("Unsupported file type. Please upload a CSV or PDF.");
     }
   };
 
@@ -136,14 +98,14 @@ export default function FinanceSpirit() {
         <FaRobot />
       </div>
       <h2>AI Spirit: Financial Insights</h2>
-      <p style={{ color: "#666" }}>Upload your budget/report file (CSV, PDF, JSON, TXT, XLS, XLSX) and let the AI Spirit analyze your finances!</p>
+      <p style={{ color: "#666" }}>Upload your budget/report file (CSV or PDF) and let the AI Spirit analyze your finances!</p>
       <label style={{
         display: "inline-block", background: "#f8fafc", borderRadius: 8, padding: "16px 32px",
         cursor: "pointer", margin: "24px 0", border: "2px dashed #a020f0"
       }}>
         <FaFileUpload style={{ marginRight: 8 }} />
-        {fileName ? fileName : "Choose Any File"}
-        <input type="file" style={{ display: "none" }} onChange={handleFile} />
+        {fileName ? fileName : "Choose CSV or PDF File"}
+        <input type="file" accept=".csv,.pdf" style={{ display: "none" }} onChange={handleFile} />
       </label>
       {loading && <div style={{ margin: 16 }}>Analyzing...</div>}
       {insights && (

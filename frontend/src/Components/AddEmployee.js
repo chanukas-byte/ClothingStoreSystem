@@ -154,7 +154,7 @@ Salary     : $${employee.salary}
       <Header />
       <div className="container mt-5">
         <div className="card shadow-lg rounded-lg">
-          <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#007bff" }}>
+          <div className="card-header text-white fw-bold text-center py-3">
             <h3>Employee Registration Form</h3>
           </div>
           <div className="card-body p-5" style={{ backgroundColor: "#f8f9fa" }}>
