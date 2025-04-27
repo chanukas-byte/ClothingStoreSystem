@@ -3,82 +3,67 @@
 /* Main Container */
 .report-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
-  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: #fff;
 }
 
 /* Card Styling */
 .report-card {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  overflow: hidden;
-  border: none;
-  margin-bottom: 2rem;
+  background: #000000 !important;
+  border: 2px solid #ffd700 !important;
+  box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2) !important;
+  transition: all 0.3s ease;
+  margin: 2rem auto;
+  max-width: 800px;
+  border-radius: 15px !important;
 }
 
 .report-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.3) !important;
 }
 
 /* Card Header */
 .report-card-header {
-  background: linear-gradient(135deg, #DAA520 0%, #FFD700 100%);
+  background: linear-gradient(45deg, #000000, #1a1a1a);
   padding: 2rem;
-  border-radius: 15px 15px 0 0;
+  border-bottom: 2px solid #ffd700;
   text-align: center;
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-.report-card-header::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-  z-index: 1;
+  border-radius: 13px 13px 0 0;
 }
 
 .report-card-title {
+  color: #ffd700 !important;
   font-weight: 700 !important;
   margin-bottom: 0.5rem !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .report-card-subtitle {
+  color: #ffd700 !important;
   opacity: 0.9;
   font-size: 1.1rem !important;
-  position: relative;
-  z-index: 2;
 }
 
 /* Card Content */
 .report-card-content {
   padding: 2rem !important;
-  background-color: #f8f9fa;
+  background: #000000;
 }
 
 /* Form Elements */
 .report-form-group {
   margin-bottom: 1.5rem;
-  position: relative;
 }
 
 .report-label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #ffd700;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .report-input {
@@ -104,8 +89,8 @@
 
 /* Icon Styling */
 .report-icon {
-  color: #DAA520;
-  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  color: #ffd700;
 }
 
 .revenue-icon {
@@ -118,29 +103,24 @@
 
 /* Profit/Loss Display */
 .profit-loss-display {
-  background: #f8f8f8;
+  background: #1a1a1a !important;
   padding: 1.5rem;
   border-radius: 10px;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
+  border: 1px solid #ffd700;
   text-align: center;
-  border: 1px solid #e0e0e0;
-  transition: all 0.2s ease-in-out;
-}
-
-.profit-loss-display:hover {
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
-  transform: translateY(-2px);
 }
 
 .profit-loss-label {
-  color: #666;
-  font-size: 0.9rem;
+  color: #ffd700;
+  font-size: 1.1rem;
   margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 .profit-loss-value {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.5rem;
   border-radius: 5px;
 }
@@ -207,38 +187,8 @@
 
 /* Alert Styling */
 .report-alert {
-  margin-bottom: 1rem !important;
-  border-radius: 8px !important;
-  position: relative;
-  overflow: hidden;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.report-alert::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 5px;
-  height: 100%;
-}
-
-.report-alert-success {
-  background-color: #d1e7dd;
-  color: #0f5132;
-}
-
-.report-alert-success::before {
-  background-color: #198754;
-}
-
-.report-alert-error {
-  background-color: #f8d7da;
-  color: #842029;
-}
-
-.report-alert-error::before {
-  background-color: #dc3545;
+  margin-bottom: 1rem;
+  border-radius: 8px;
 }
 
 /* Loading Spinner */
@@ -393,35 +343,19 @@
 
 /* Form Section Styling */
 .form-section {
-  background: white;
+  background: #000000;
   padding: 2rem;
   border-radius: 10px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  transition: all 0.2s ease-in-out;
-}
-
-.form-section:hover {
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  border: 1px solid #ffd700;
 }
 
 .form-section-title {
-  color: #333;
+  color: #ffd700 !important;
   margin-bottom: 1.5rem !important;
   font-weight: 600 !important;
-  position: relative;
+  text-align: center;
+  border-bottom: 2px solid #ffd700;
   padding-bottom: 0.5rem;
-}
-
-.form-section-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 50px;
-  height: 3px;
-  background: #DAA520;
-  border-radius: 3px;
 }
 
 /* Submit Button Enhancement */
@@ -522,32 +456,26 @@
 }
 
 .modern-submit-button {
-  background-color: #000000 !important;
-  color: white !important;
+  background: linear-gradient(45deg, #ffd700, #ffc107) !important;
+  color: #000 !important;
   padding: 12px 24px !important;
-  border-radius: 8px !important;
   font-weight: 600 !important;
+  border-radius: 8px !important;
   text-transform: none !important;
-  width: 100%;
-  margin-top: 1rem !important;
   transition: all 0.3s ease !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .modern-submit-button:hover {
-  background-color: #333333 !important;
+  background: linear-gradient(45deg, #ffc107, #ffd700) !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15) !important;
-}
-
-.modern-submit-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4) !important;
 }
 
 .modern-submit-button:disabled {
-  background-color: #cccccc !important;
-  color: #666666 !important;
+  background: #666 !important;
+  color: #999 !important;
 }
 
 /* Animation for loading state */
@@ -595,4 +523,33 @@
   border-color: #000 !important;
   box-shadow: 0 4px 16px rgba(0,0,0,0.18);
   text-shadow: 0 0 8px #fff2, 0 0 2px #fff4;
+}
+
+/* Add golden shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.report-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 215, 0, 0.1),
+    transparent
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite linear;
+  pointer-events: none;
+  border-radius: 15px;
 } 
