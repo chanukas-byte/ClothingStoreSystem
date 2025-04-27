@@ -169,7 +169,7 @@ function Stock() {
                 sortedProducts.map((product) => (
                   <tr key={product._id}>
                     <td>{product.name}</td>
-                    <td>${(product.price || 0).toFixed(2)}</td>
+                    <td>LKR. {(product.price || 0).toFixed(2)}</td>
                     <td>{product.category}</td>
                     <td>{product.stockQuantity}</td>
                     <td>

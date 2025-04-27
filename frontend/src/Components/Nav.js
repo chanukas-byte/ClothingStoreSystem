@@ -41,11 +41,9 @@ function Nav() {
                 <Link className="nav-link text-white" to="/supplier">Suppliers</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/report">Report</Link>
-              </li>
-              <li className="nav-item">
                 <Link className="nav-link text-white" to="/report">Re-stock</Link>
               </li>
+              
             </ul>
 
             <ul className="navbar-nav ml-auto">
