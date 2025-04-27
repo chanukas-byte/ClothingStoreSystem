@@ -33,6 +33,7 @@ const EmployeeRouter = require("./Routes/EmployeeRoutes");
 const FinanceRouter = require("./Routes/financeRoutes");
 const supplierRoutes = require("./Routes/SupplierRegiRoutes");
 const productRoutes = require("./Routes/ProductRoutes");
+
 const categoryRoutes = require("./Routes/CategoryRoutes"); // Ensure this file exists and is named correctly
 const financialRoutes = require("./Routes/financialRoutes");
 const feedbackRoutes = require("./Routes/FeedbackRoutes");
@@ -45,6 +46,7 @@ app.use("/products", productRoutes);      // Product routes
 app.use("/category", categoryRoutes);     // Category routes
 app.use("/api", financialRoutes);         // Financial routes
 app.use("/api/feedback", feedbackRoutes); // Feedback routes
+
 
 // Test Route
 app.get("/", (req, res) => {

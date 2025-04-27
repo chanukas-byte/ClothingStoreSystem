@@ -169,30 +169,35 @@ function Stock() {
                 sortedProducts.map((product) => (
                   <tr key={product._id}>
                     <td>{product.name}</td>
-                    <td>${(product.price || 0).toFixed(2)}</td>
+                    <td>LKR. {(product.price || 0).toFixed(2)}</td>
                     <td>{product.category}</td>
                     <td>{product.stockQuantity}</td>
                     <td>
-                      <img
-                        src={product.imageUrl || "https://via.placeholder.com/50x50.png?text=No+Image"}
-                        alt={product.name}
-                        width="50"
-                        className="rounded"
-                      />
+                      <div className="position-relative">
+                        <img
+                          src={`http://localhost:4058/${product.imageUrl}`}
+                          alt={product.name}
+                          width="50"
+                          height="50"
+                          className="rounded cursor-pointer"
+                          style={{ objectFit: "cover" }}
+                          onClick={() => window.open(`http://localhost:4058/${product.imageUrl}`, '_blank')}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/placeholder-image.jpg';
+                          }}
+                        />
+                        <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0 hover-opacity-100">
+                          <span className="badge bg-dark">Click to view</span>
+                        </div>
+                      </div>
                     </td>
                     <td>{new Date(product.createdAt).toLocaleString()}</td>
                     <td>{new Date(product.updatedAt).toLocaleString()}</td>
                     <td>
-                      <Link to={`/stock/update/${product._id}`} className="btn btn-sm btn-outline-secondary me-2">
-                        Update
+                      <Link to={`/stock/item/${product._id}`} className="btn btn-sm btn-primary">
+                        View
                       </Link>
-                      <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => handleDelete(product._id)}
-                        disabled={deletingId === product._id}
-                      >
-                        {deletingId === product._id ? "Deleting..." : "Delete"}
-                      </button>
                     </td>
                   </tr>
                 ))
