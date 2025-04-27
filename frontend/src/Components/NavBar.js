@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // ✅ Import Link
 import { FaUserCircle } from 'react-icons/fa'; // Font Awesome User Icon
 import logo from '../assets/logo.png';
+import './Navbar.css';
 
-function NavBar() {
+const Navbar = ({ onGenderSelect, selectedGender }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <div>
       <nav
@@ -42,6 +49,9 @@ function NavBar() {
                 <Link className="nav-link text-white" to="/productlist">Products</Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link text-white" to="/virtual-room">Virtual Room</Link>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link text-white" to="/order-status">Orders</Link>
               </li>
               <li className="nav-item">
@@ -77,6 +87,6 @@ function NavBar() {
       <div style={{ paddingTop: "70px" }}></div>
     </div>
   );
-}
+};
 
-export default NavBar;
+export default Navbar;

@@ -25,6 +25,7 @@ import Aboutus from './Components/Aboutus';
 import OrderStatus from './Components/OrderStatus';
 import Locations from './Components/Locations';
 import Contact from './Components/Contact';
+import VirtualRoom from './Components/VirtualRoom';
 
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
@@ -100,6 +101,7 @@ function App() {
           <Route path="/locations" element={<Locations />} />
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/virtual-room" element={<VirtualRoom />} />
 
           {/* Employee Management Routes*/}
           <Route path="/add-employee" element={<AddEmployee />} />
