@@ -118,7 +118,9 @@ function Notification() {
   return (
     <div style={styles.container}>
       <Nav />
-      <h1 style={styles.title}>Notification</h1>
+      <h1 className="text-center mb-4 display-5 fw-bold text-primary">
+        Notification
+      </h1>
 
       <div>
         {lowStockProducts.length > 0 ? (

@@ -79,13 +79,15 @@ function Category() {
   return (
     <div>
       <Nav />
-      <h1 className="text-center mt-4 mb-3 text-dark">Total Categories</h1>
+      <h1 className="text-center mb-4 display-5 fw-bold text-primary">
+        Categories
+      </h1>
 
-      <div className="d-flex justify-content-center mb-4">
+      <div className="mb-4 d-flex justify-content-center">
         <input
           type="text"
-          className="form-control w-50"
-          placeholder="Search categories..."
+          className="form-control w-50 shadow-sm border-primary"
+          placeholder="🔍 Search products..."
           value={searchQuery}
           onChange={handleSearchChange}
         />
