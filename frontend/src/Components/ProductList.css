@@ -43,7 +43,7 @@ body {
 /* Filters Section */
 .filters-section {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   margin-bottom: 30px;
   flex-wrap: wrap;
   align-items: center;
@@ -54,22 +54,28 @@ body {
   position: relative;
 }
 
+/* Common styles for all input elements */
+.search-input,
+.category-select,
+.price-input {
+  height: 45px;
+  padding: 0 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f8f8f8;
+  color: #333;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
 /* Search Bar */
 .search-input {
   flex: 1;
   min-width: 300px;
-  padding: 12px 20px;
-  padding-right: 50px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  background-color: #f8f8f8;
-  color: #333;
 }
 
 .search-input:focus {
-  outline: none;
   border-color: #333;
   background-color: #ffffff;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
@@ -78,18 +84,16 @@ body {
 /* Category Select */
 .category-select {
   min-width: 180px;
-  padding: 12px 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 14px;
-  background-color: #f8f8f8;
-  color: #333;
   cursor: pointer;
-  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+  padding-right: 40px;
 }
 
 .category-select:focus {
-  outline: none;
   border-color: #333;
   background-color: #ffffff;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
@@ -106,20 +110,41 @@ body {
 
 .price-input {
   width: 120px;
-  padding: 12px 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 14px;
+}
+
+.price-input:focus {
+  border-color: #333;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Menu Icon */
+.nav-menu {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #f8f8f8;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.menu-icon {
+  font-size: 20px;
   color: #333;
   transition: all 0.3s ease;
 }
 
-.price-input:focus {
-  outline: none;
+.nav-menu:hover {
+  background-color: #333;
   border-color: #333;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.nav-menu:hover .menu-icon {
+  color: white;
 }
 
 /* Cart Icon Styles */
@@ -132,14 +157,17 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 8px 12px;
+  padding: 0 15px;
+  height: 45px;
   background-color: #f8f8f8;
   border-radius: 8px;
   transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
 }
 
 .cart-icon-container:hover {
   background-color: #333;
+  border-color: #333;
 }
 
 .cart-icon-container:hover .cart-icon {
@@ -167,34 +195,6 @@ body {
   top: -5px;
   right: -5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Menu Icon */
-.nav-menu {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.menu-icon {
-  font-size: 20px;
-  color: #333;
-  transition: all 0.3s ease;
-}
-
-.nav-menu:hover {
-  background-color: #333;
-}
-
-.nav-menu:hover .menu-icon {
-  color: white;
 }
 
 /* Navigation Menu Styles */
