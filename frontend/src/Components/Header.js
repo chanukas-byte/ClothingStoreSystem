@@ -78,6 +78,11 @@ function Header() {
                   View All Employees
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/dashboard">
+                  Dashboard
+                </Link>
+              </li>
             </ul>
 
             {/* Search Form */}
