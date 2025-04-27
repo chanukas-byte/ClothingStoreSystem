@@ -31,7 +31,6 @@ function Notification() {
 
   const styles = {
     container: {
-      backgroundColor: "#d3d3d3",
       minHeight: "100vh",
       padding: "30px",
       color: "#1a1a1a",
