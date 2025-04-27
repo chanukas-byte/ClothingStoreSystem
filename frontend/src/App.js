@@ -15,6 +15,7 @@ import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
 import FinancialDashboard from "./Components/FinancialDashboard";
 
+
 // Product Manager Components
 import Checkout from './Components/Checkout';
 import Payment from './Components/Payment';
@@ -86,6 +87,8 @@ function App() {
     <Router>
       <div className="container mt-4">
         <Routes>
+
+         
 
           {/* Product Catalogue Routes*/}
           <Route path="/" element={<HomeLiveArt />} />

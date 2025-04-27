@@ -117,9 +117,9 @@ function AddReport() {
       setLoading(true);
       
       // Check if the API endpoint is accessible
-      console.log("Attempting to connect to API endpoint: http://localhost:4058/api/finance/add");
+      console.log("Attempting to connect to API endpoint: http://localhost:5005/api/finance/add");
       
-      const response = await axios.post("http://localhost:4058/api/finance/add", reportData, {
+      const response = await axios.post("http://localhost:5005/api/finance/add", reportData, {
         headers: { 
           "Content-Type": "application/json",
           "Accept": "application/json"

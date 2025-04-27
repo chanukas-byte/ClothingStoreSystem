@@ -1,0 +1,132 @@
+.footer-modern {
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    color: #fff;
+    padding: 2.5rem 0 1rem 0;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 0 40px 0 rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 10;
+  }
+  
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+  }
+  
+  .footer-col {
+    flex: 1 1 220px;
+    min-width: 200px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-col h5 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    color: #ffb300;
+  }
+  
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-col ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer-col ul li a {
+    color: #e0e0e0;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  
+  .footer-col ul li a:hover {
+    color: #ffb300;
+    text-decoration: underline;
+  }
+  
+  .footer-newsletter {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .footer-newsletter input[type="email"] {
+    flex: 1;
+    padding: 0.5rem 0.8rem;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+  }
+  
+  .footer-newsletter button {
+    background: linear-gradient(90deg, #ffb300 0%, #ff2d75 100%);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  
+  .footer-newsletter button:hover {
+    background: linear-gradient(90deg, #ff2d75 0%, #ffb300 100%);
+    transform: scale(1.05);
+  }
+  
+  .footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0 0.5rem 0;
+  }
+  
+  .footer-social a {
+    color: #fff;
+    font-size: 1.7rem;
+    transition: color 0.3s, transform 0.3s;
+    border-radius: 50%;
+    padding: 0.3rem;
+  }
+  
+  .footer-social a:hover {
+    color: #ffb300;
+    background: rgba(255,255,255,0.1);
+    transform: scale(1.2) rotate(-8deg);
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin: 2rem 0 1rem 0;
+  }
+  
+  .footer-copyright {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #bbb;
+    margin: 0.5rem 0 0 0;
+  }
+  
+  @media (max-width: 900px) {
+    .footer-row {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .footer-col {
+      min-width: unset;
+    }
+  }

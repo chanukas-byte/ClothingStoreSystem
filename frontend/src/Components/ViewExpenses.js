@@ -8,7 +8,7 @@ const ViewExpenses = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get('http://localhost:4058/api/expenses');
+        const response = await axios.get('http://localhost:5005/api/expenses');
         setExpenses(response.data);
       } catch (err) {
         console.error('Error fetching expenses:', err);
