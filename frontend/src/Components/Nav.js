@@ -43,12 +43,6 @@ function Nav() {
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/supplier">Suppliers</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link text-white" to="/add-feedback">Feedback Form</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-white" to="/faq">FAQ</Link>
-              </li>
             </ul>
 
             <ul className="navbar-nav ml-auto">
