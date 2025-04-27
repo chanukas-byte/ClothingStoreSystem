@@ -27,7 +27,7 @@ body {
   width: 100%;
   margin: 0;
   box-sizing: border-box;
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 
 /* Main Content Styles */
@@ -391,7 +391,7 @@ body {
   height: 100vh;
   overflow-y: auto;
   z-index: 100;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   border-right: 1px solid #e0e0e0;
 }
 
