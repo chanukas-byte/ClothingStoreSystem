@@ -42,7 +42,6 @@ import Category from "./Components/Category";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import HomeLiveArt from "./Components/HomeLiveArt";
-import FinancialDashboard from './Components/FinancialDashboard';
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -129,9 +128,6 @@ function App() {
           <Route path="/stock/item/:id" element={<Item />} />
           <Route path="/addcategory" element={<AddCategory />} />
           <Route path="/category" element={<Category />} />
-
-          {/* Financial Dashboard Routes*/}
-          <Route path="/dashboard" element={<FinancialDashboard />} />
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}
