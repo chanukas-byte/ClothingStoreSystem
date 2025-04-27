@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NavB from './NavBar';
 import './OrderStatus.css';
 import Swal from 'sweetalert2';
+import './global-modern.css';
 
 const OrderStatus = () => {
   const [orders, setOrders] = useState([]);

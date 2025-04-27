@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import './ProductList.css';
+import './global-modern.css';
 import NavB from './NavBar';
 import Checkout from './Checkout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
