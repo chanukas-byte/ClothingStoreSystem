@@ -5,7 +5,6 @@ import CategoryPieChart from './FinancialDashboard/CategoryPieChart';
 import TopProducts from './FinancialDashboard/TopProducts';
 import RecentTransactions from './FinancialDashboard/RecentTransactions';
 import './FinancialDashboard/dashboard-modern.css';
-import './global-modern.css';
 
 const FinancialDashboard = () => {
   return (

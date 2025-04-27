@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavB from './NavBar';
 import './Locations.css';
-import './global-modern.css';
 import pImage from '../assets/p.png';
 import lImage from '../assets/l.png';
 import logo from '../assets/logo.png';

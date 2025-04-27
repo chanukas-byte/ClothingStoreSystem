@@ -1,6 +1,5 @@
 import React from 'react';
 import './AboutUs.css';
-import './global-modern.css';
 import logo from '../assets/logo.png'; // Replace with your logo file path
 
 const Aboutus = () => {
@@ -15,7 +14,7 @@ const Aboutus = () => {
                 <p>
                     Welcome to <strong>Live Art</strong>, your trusted online clothing management system.
                     We blend fashion with technology to deliver a seamless, elegant, and efficient platform
-                    for managing and browsing clothing products online. Whether you're a customer looking
+                    for managing and browsing clothing products online. Whether you’re a customer looking
                     for the latest trends or an admin managing inventory, Live Art is designed with you in mind.
                 </p>
 
