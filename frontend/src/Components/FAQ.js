@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './FAQ.css';
 import { FaChevronDown, FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import NavB from './NavBar';
 
 const FAQ = () => {
     const [activeIndex, setActiveIndex] = useState(null);
@@ -71,6 +72,8 @@ const FAQ = () => {
     });
 
     return (
+        <div>
+            <NavB />
         <div className="faq-container">
             <div className="faq-header">
                 <h1>Frequently Asked Questions</h1>
@@ -132,6 +135,8 @@ const FAQ = () => {
                 <Link to="/contact" className="contact-button">Contact Us</Link>
             </div>
         </div>
+        </div>
+
     );
 };
 

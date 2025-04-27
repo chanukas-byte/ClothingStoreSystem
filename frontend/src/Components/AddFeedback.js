@@ -5,6 +5,7 @@ import './AddFeedback.css';
 import { FaStar, FaUser, FaEnvelope, FaComment, FaPaperPlane, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import logo from '../assets/logo.png';
+import NavB from './NavBar';
 
 const AddFeedback = () => {
   const [feedback, setFeedback] = useState({
@@ -63,9 +64,6 @@ const AddFeedback = () => {
         isValid = false;
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(feedback.email)) {
         newErrors.email = 'Please enter a valid email address';
-        isValid = false;
-      } else if (/[!@#$%^&*(),.?":{}|<>]/.test(feedback.email)) {
-        newErrors.email = 'Email cannot contain special characters';
         isValid = false;
       }
     }
@@ -143,7 +141,7 @@ const AddFeedback = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post('http://localhost:4058/api/feedback', feedback);
+      await axios.post('http://localhost:4058/api/feedback/submit', feedback);
       
       Swal.fire({
         title: 'Success!',
@@ -167,6 +165,9 @@ const AddFeedback = () => {
   };
 
   return (
+    <div>
+      <NavB />
+
     <div className="add-feedback-container">
       <div className="add-feedback-header">
         <div className="logo-container">
@@ -302,6 +303,7 @@ const AddFeedback = () => {
           )}
         </button>
       </form>
+    </div>
     </div>
   );
 };
