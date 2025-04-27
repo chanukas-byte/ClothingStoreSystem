@@ -565,4 +565,34 @@
 
 .modern-submit-button:disabled {
   animation: pulse 1.5s infinite;
+}
+
+/* Finance report card with black background and white text */
+.finance-header-black {
+  background: #111 !important;
+  color: #fff !important;
+  border-radius: 18px !important;
+}
+.finance-header-black .report-card-header,
+.finance-header-black .report-card-title,
+.finance-header-black .report-card-subtitle {
+  color: #fff !important;
+}
+
+/* Finance action button: white by default, shiny black on hover */
+.finance-action-btn {
+  background: #fff !important;
+  color: #111 !important;
+  border: 2px solid #111 !important;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.finance-action-btn:hover, .finance-action-btn:focus {
+  background: linear-gradient(90deg, #222 60%, #444 100%) !important;
+  color: #fff !important;
+  border-color: #000 !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  text-shadow: 0 0 8px #fff2, 0 0 2px #fff4;
 } 

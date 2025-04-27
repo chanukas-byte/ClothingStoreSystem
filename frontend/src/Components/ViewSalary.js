@@ -6,6 +6,7 @@ import { FaDownload } from "react-icons/fa";
 import { PDFDocument, rgb } from "pdf-lib"; // Import from pdf-lib
 import Header from "./Header";
 import Footer from "./Footer"; 
+import "./ViewSalary.css";
 
 function AllEmployees() {
   const [employees, setEmployees] = useState([]);
@@ -121,7 +122,7 @@ function AllEmployees() {
     <div className="container mt-5">
       
       <div className="card shadow-lg rounded-lg border-0 bg-light">
-        <div className="card-header text-white fw-bold text-center py-3" style={{ backgroundColor: "#673ab7" }}>
+        <div className="card-header salary-header-black fw-bold text-center py-3">
           <h3>Employee Salaries</h3>
         </div>
 
@@ -176,7 +177,7 @@ function AllEmployees() {
                       <td>LKR {etf.toLocaleString("en-LK")}</td>
                       <td>LKR {netSalary.toLocaleString("en-LK")}</td>
                       <td>
-                        <Button variant="success" onClick={() => downloadPDF(employee)}>
+                        <Button className="download-slip-btn" onClick={() => downloadPDF(employee)}>
                           <FaDownload /> Download Salary Slip
                         </Button>
                       </td>
