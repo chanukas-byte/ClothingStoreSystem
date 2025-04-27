@@ -79,13 +79,8 @@ function Header() {
                 </Link>
               </li>
               <li className="nav-item">
-
                 <Link className="nav-link text-white" to="/financial-dashboard">
-                  Financial Dashboard
-
-                <Link className="nav-link text-white" to="/dashboard">
-                  Dashboard
-
+                  Financial Report
                 </Link>
               </li>
             </ul>
