@@ -38,10 +38,10 @@ function Nav() {
                 <Link className="nav-link text-white" to="/category">Categories</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/supplier">Suppliers</Link>
+                <Link className="nav-link text-white" to="/restock">Re-Orders</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/report">Report</Link>
+                <Link className="nav-link text-white" to="/supplier">Suppliers</Link>
               </li>
             </ul>
 
