@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import './ProductList.css';
@@ -25,6 +25,8 @@ const ProductList = () => {
     const [noProductsMessage, setNoProductsMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
 
     const navigate = useNavigate();
 
@@ -32,6 +34,23 @@ const ProductList = () => {
     useEffect(() => {
         fetchProducts();
     }, [filters, activeCategory]);
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setMenuOpen(false);
+            }
+        }
+        if (menuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [menuOpen]);
 
     const fetchProducts = async () => {
         try {
@@ -164,24 +183,24 @@ const ProductList = () => {
             <div className="main-layout">
                 <div className="main-content">
                     <div className="filters-section">
-                        <div className="nav-menu">
+                        <div className="nav-menu" ref={menuRef} onClick={() => setMenuOpen((open) => !open)}>
                             <div className="menu-icon">☰</div>
-                            <div className="nav-content">
+                            <div className="nav-content" style={{ display: menuOpen ? 'block' : 'none' }}>
                                 <button 
                                     className={`nav-btn ${activeTab === 'home' ? 'active' : ''}`}
-                                    onClick={() => setActiveTab('home')}
+                                    onClick={() => { setActiveTab('home'); setMenuOpen(false); }}
                                 >
                                     Home
                                 </button>
                                 <button 
                                     className={`nav-btn ${activeTab === 'cart' ? 'active' : ''}`}
-                                    onClick={() => setActiveTab('cart')}
+                                    onClick={() => { setActiveTab('cart'); setMenuOpen(false); }}
                                 >
                                     Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
                                 </button>
                                 <button 
                                     className="nav-btn"
-                                    onClick={() => navigate("/Home")}
+                                    onClick={() => { navigate("/Home"); setMenuOpen(false); }}
                                 >
                                     Admin
                                 </button>
