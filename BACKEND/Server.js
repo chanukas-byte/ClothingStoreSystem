@@ -41,21 +41,14 @@ const categoryRoutes = require("./Routes/CategoryRoutes");
 const financialRoutes = require("./Routes/financialRoutes");
 const feedbackRoutes = require("./routes/FeedbackRoutes");
 
-const categoryRoutes = require("./Routes/CategoryRoutes");
-const financialRoutes = require("./Routes/financialRoutes");
-
 // Use Routers (correct path and usage)
 app.use("/api/employee", EmployeeRouter); // Employee routes
 app.use("/api/finance", FinanceRouter);   // Finance routes
 app.use("/suppliers", supplierRoutes); //suppliers Route
 app.use("/products", productRoutes); //product Routes
-
 app.use("/category", categoryRoutes); //category Routes
 app.use("/api", financialRoutes);
 app.use("/api/feedback", feedbackRoutes);
-
-app.use("/category", categoryRoutes); //category Routes
-app.use("/api", financialRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
