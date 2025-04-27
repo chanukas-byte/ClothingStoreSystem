@@ -100,7 +100,9 @@ function ReStock() {
   return (
     <div>
       <Nav />
-      <h1>ReStock Page</h1>
+      <h1 className="text-center mb-4 display-5 fw-bold text-primary">
+        Re-stock Status
+      </h1>
 
       {restockList.length === 0 && <p>No items to restock.</p>}
 

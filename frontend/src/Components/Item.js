@@ -20,9 +20,9 @@ function Item() {
         console.log('Fetching product with ID:', id);
         const response = await axios.get(`${URL}/${id}`);
         console.log('API Response:', response.data);
-        
-        if (response.data) {
-          setProduct(response.data);
+        const productData = response.data.product || response.data;
+        if (productData) {
+          setProduct(productData);
         } else {
           setError('No product data received');
         }
@@ -55,6 +55,13 @@ function Item() {
         setDeleting(false);
       }
     }
+  };
+
+  // Helper for safe date formatting
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "N/A";
+    const date = new Date(dateStr);
+    return isNaN(date) ? "N/A" : date.toLocaleString();
   };
 
   if (loading) {
@@ -115,8 +122,7 @@ function Item() {
           <div className="card shadow-lg">
             <div className="card-body">
               <h2 className="card-title text-center mb-4">{product.name}</h2>
-              
-              <div className="row mb-4">
+               <div className="row mb-4">
                 <div className="col-md-6">
                   <img
                     src={`http://localhost:4058/${product.imageUrl}`}
@@ -132,29 +138,29 @@ function Item() {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <h5>Price</h5>
-                    <p className="fs-4">LKR. {(product.price || 0).toFixed(2)}</p>
+                    <p className="fs-4">LKR. {(product.price ?? 0).toFixed(2)}</p>
                   </div>
                   <div className="mb-3">
                     <h5>Category</h5>
-                    <p>{product.category}</p>
+                    <p>{product.category || "N/A"}</p>
                   </div>
                   <div className="mb-3">
                     <h5>Stock Quantity</h5>
                     <p className={product.stockQuantity <= 2 ? "text-danger" : ""}>
-                      {product.stockQuantity} units
+                      {product.stockQuantity ?? "N/A"} units
                     </p>
                   </div>
                   <div className="mb-3">
                     <h5>Description</h5>
-                    <p>{product.description}</p>
+                    <p>{product.description || "No description available"}</p>
                   </div>
                   <div className="mb-3">
                     <h5>Created At</h5>
-                    <p>{new Date(product.createdAt).toLocaleString()}</p>
+                    <p>{formatDate(product.createdAt)}</p>
                   </div>
                   <div className="mb-3">
                     <h5>Updated At</h5>
-                    <p>{new Date(product.updatedAt).toLocaleString()}</p>
+                    <p>{formatDate(product.updatedAt)}</p>
                   </div>
                 </div>
               </div>

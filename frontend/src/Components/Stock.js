@@ -33,6 +33,7 @@ function Stock() {
   const [sortOrder, setSortOrder] = useState("asc");
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [filter, setFilter] = useState("All"); // State for filter
 
   useEffect(() => {
     fetchHandler()
@@ -46,8 +47,11 @@ function Stock() {
 
   const filteredProducts = products.filter(
     (product) =>
-      product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      (product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description?.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (filter === "All" ||
+        (filter === "In Stock" && product.stockQuantity > 4) ||
+        (filter === "Running Low" && product.stockQuantity <= 4))
   );
 
   const sortedProducts = filteredProducts.sort((a, b) => {
@@ -89,9 +93,7 @@ function Stock() {
   return (
     <div className="container-fluid px-5 py-4" style={{ backgroundColor: "#f4f7fa", minHeight: "100vh" }}>
       <Nav />
-      <h1 className="text-center mb-4 display-5 fw-bold text-primary">
-        Product Stock Dashboard
-      </h1>
+      <h1 className="text-center mb-4 display-5 fw-bold text-primary">Product Stock</h1>
 
       <div className="row mb-5 text-white">
         <div className="col-md-4 mb-3">
@@ -122,14 +124,14 @@ function Stock() {
             style={{ backgroundColor: "#e2e2e2", boxShadow: "0 8px 15px rgba(0, 0, 0, 0.2)" }}
           >
             <div className="card-body text-center">
-              <h5 className="card-title fw-bold">Low Stock Alert</h5>
+              <h5 className="card-title fw-bold">Low Stock Items</h5>
               <p className="card-text fs-5">{getLowStockItemsCount()} Items</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mb-4 d-flex justify-content-center">
+      <div className="mb-4 d-flex justify-content-center align-items-center">
         <input
           type="text"
           className="form-control w-50 shadow-sm border-primary"
@@ -137,6 +139,33 @@ function Stock() {
           value={searchQuery}
           onChange={handleSearchChange}
         />
+        <div className="dropdown ms-3">
+          <button
+            className="btn btn-outline-primary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {filter}
+          </button>
+          <ul className="dropdown-menu">
+            <li>
+              <a className="dropdown-item" onClick={() => setFilter("All")}>
+                All
+              </a>
+            </li>
+            <li>
+              <a className="dropdown-item" onClick={() => setFilter("In Stock")}>
+                In Stock
+              </a>
+            </li>
+            <li>
+              <a className="dropdown-item" onClick={() => setFilter("Running Low")}>
+                Running Low
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div className="table-responsive shadow-sm">
@@ -158,9 +187,9 @@ function Stock() {
                 <th onClick={() => handleSortChange("stockQuantity")} style={{ cursor: "pointer" }}>
                   Stock Quantity {sortField === "stockQuantity" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
-                <th>Image</th>
                 <th>Created At</th>
                 <th>Updated At</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -172,28 +201,15 @@ function Stock() {
                     <td>LKR. {(product.price || 0).toFixed(2)}</td>
                     <td>{product.category}</td>
                     <td>{product.stockQuantity}</td>
-                    <td>
-                      <div className="position-relative">
-                        <img
-                          src={`http://localhost:4058/${product.imageUrl}`}
-                          alt={product.name}
-                          width="50"
-                          height="50"
-                          className="rounded cursor-pointer"
-                          style={{ objectFit: "cover" }}
-                          onClick={() => window.open(`http://localhost:4058/${product.imageUrl}`, '_blank')}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = '/placeholder-image.jpg';
-                          }}
-                        />
-                        <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0 hover-opacity-100">
-                          <span className="badge bg-dark">Click to view</span>
-                        </div>
-                      </div>
-                    </td>
                     <td>{new Date(product.createdAt).toLocaleString()}</td>
                     <td>{new Date(product.updatedAt).toLocaleString()}</td>
+                    <td>
+                      {product.stockQuantity <= 4 ? (
+                        <span className="badge bg-warning">Running Low</span>
+                      ) : (
+                        <span className="badge bg-success">In Stock</span>
+                      )}
+                    </td>
                     <td>
                       <Link to={`/stock/item/${product._id}`} className="btn btn-sm btn-primary">
                         View
@@ -217,6 +233,5 @@ function Stock() {
     </div>
   );
 }
-
 
 export default Stock;

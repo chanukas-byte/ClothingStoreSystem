@@ -143,12 +143,7 @@ const AddFeedback = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post('http://localhost:4058/api/feedback', {
-        name: feedback.name,
-        email: feedback.email,
-        rating: feedback.rating,
-        comments: feedback.comments
-      });
+      await axios.post('http://localhost:4058/api/feedback', feedback);
       
       Swal.fire({
         title: 'Success!',

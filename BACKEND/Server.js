@@ -86,7 +86,9 @@ app.use((req, res) => {
 // Start the Server with error handling
 const server = app.listen(PORT, () => {
     console.log(`🚀 Server is up and running on http://localhost:${PORT}`);
+
 });
+;
 
 // Handle server errors
 server.on('error', (error) => {

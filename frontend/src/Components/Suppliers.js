@@ -54,7 +54,10 @@ function Suppliers() {
   return (
     <div className="suppliers-page">
       <Nav />
-      <h1 className="title">Suppliers Page</h1>
+      <h1 className="text-center mb-4 display-5 fw-bold text-primary">
+        Suppliers
+      </h1>
+
       <div className="table-container">
         <table className="supplier-table">
           <thead>
