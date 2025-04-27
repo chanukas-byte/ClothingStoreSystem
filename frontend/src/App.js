@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from 'axios';
+import { FaComments } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 // Finance Manager Components
 import AddEmployee from "./Components/AddEmployee";
@@ -14,7 +16,7 @@ import AssignSalary from "./Components/AssignSalary";
 import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
 import FinancialDashboard from "./Components/FinancialDashboard";
-
+import BudgetPlanner from "./Components/BudgetPlanner";
 
 // Product Manager Components
 import Checkout from './Components/Checkout';
@@ -87,9 +89,6 @@ function App() {
     <Router>
       <div className="container mt-4">
         <Routes>
-
-         
-
           {/* Product Catalogue Routes*/}
           <Route path="/" element={<HomeLiveArt />} />
           <Route path="/productlist" element={<ProductList />} />
@@ -112,11 +111,13 @@ function App() {
           <Route path="/add-report" element={<AddReport />} />
           <Route path="/all-reports" element={<AllReport />} />
           <Route path="/view-report/:id" element={<ReportDetails />} />
+      
 
           {/* Salary Management Routes*/}
           <Route path="/assign-salary" element={<AssignSalary />} />
           <Route path="/view-salary" element={<ViewSalary />} />
           <Route path="/financial-dashboard" element={<FinancialDashboard />} />
+          <Route path="/budget-planner" element={<BudgetPlanner />} />
 
           {/* Inventory Management Routes*/}
           <Route path="/inventory-management-Home" element={<HomeS />} />
@@ -133,7 +134,6 @@ function App() {
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}
-
         </Routes>
       </div>
     </Router>

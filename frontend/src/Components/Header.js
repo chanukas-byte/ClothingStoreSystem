@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom"; // For navigation between routes
 import "bootstrap/dist/css/bootstrap.min.css";
+import { FaComments } from "react-icons/fa";
 
 function Header() {
   return (
@@ -73,6 +74,7 @@ function Header() {
                   Inventory Management
                 </Link>
               </li>
+            
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/all-employees">
                   View All Employees
@@ -83,6 +85,9 @@ function Header() {
                   Financial Report
                 </Link>
               </li>
+
+              <Link className="nav-link text-white" to="/budget-planner">Budget Planner</Link>
+
             </ul>
 
             {/* Search Form */}
