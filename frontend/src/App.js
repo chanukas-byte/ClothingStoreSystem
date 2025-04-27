@@ -13,8 +13,11 @@ import ReportDetails from "./Components/Reportdetails";
 import AssignSalary from "./Components/AssignSalary";
 import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
-import FinancialDashboard from "./Components/FinancialDashboard";
 
+
+// Feedback Components
+import AddFeedback from './Components/AddFeedback';  // Correct import for AddFeedback
+import FeedbackList from './Components/FeedbackList'; // Correct import for FeedbackList
 
 // Product Manager Components
 import Checkout from './Components/Checkout';
@@ -25,7 +28,8 @@ import Aboutus from './Components/Aboutus';
 import OrderStatus from './Components/OrderStatus';
 import Locations from './Components/Locations';
 import Contact from './Components/Contact';
-import VirtualRoom from './Components/VirtualRoom';
+import FAQ from './Components/FAQ'; // Import the FAQ component
+
 
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
@@ -36,9 +40,11 @@ import SupplierRegi from "./Components/SupplierRegi";
 import AddProduct from "./Components/AddProduct";
 import Success from "./Components/Success";
 import UpdateProduct from "./Components/UpdateProduct";
+import PlaceOrder from "./Components/PlaceOrder";
 import Item from "./Components/Item";
 import AddCategory from "./Components/AddCategory";
 import Category from "./Components/Category";
+import ReStock from "./Components/ReStock";
 
 // Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -101,7 +107,8 @@ function App() {
           <Route path="/locations" element={<Locations />} />
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/virtual-room" element={<VirtualRoom />} />
+          <Route path="/faq" element={<FAQ />} /> {/* Add the FAQ route */}
+
 
           {/* Employee Management Routes*/}
           <Route path="/add-employee" element={<AddEmployee />} />
@@ -118,20 +125,26 @@ function App() {
           {/* Salary Management Routes*/}
           <Route path="/assign-salary" element={<AssignSalary />} />
           <Route path="/view-salary" element={<ViewSalary />} />
-          <Route path="/financial-dashboard" element={<FinancialDashboard />} />
 
           {/* Inventory Management Routes*/}
           <Route path="/inventory-management-Home" element={<HomeS />} />
           <Route path="/stock" element={<Stock />} />
           <Route path="/supplier" element={<Supplier />} />
           <Route path="/notify" element={<Notify />} />
+          <Route path="/restock" element={<ReStock />} />
           <Route path="/supplier-register" element={<SupplierRegi />} />
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/success" element={<Success />} />
           <Route path="/stock/update/:id" element={<UpdateProduct />} />
+          <Route path="/notify/placeorder/:id" element={<PlaceOrder />} />
+          <Route path="/place-order/:id" element={<PlaceOrder />} />
           <Route path="/stock/item/:id" element={<Item />} />
           <Route path="/addcategory" element={<AddCategory />} />
           <Route path="/category" element={<Category />} />
+
+          {/* Feedback Routes */}
+          <Route path="/add-feedback" element={<AddFeedback />} />
+          <Route path="/feedback-list" element={<FeedbackList />} />
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}

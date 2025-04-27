@@ -15,6 +15,7 @@ function UpdateProduct() {
     updatedAt: "",
   });
   
+  const [imagePreview, setImagePreview] = useState("");
   const history = useNavigate();
   const { id } = useParams(); // Get product id from URL params
 
@@ -36,6 +37,7 @@ function UpdateProduct() {
           createdAt: res.data.product.createdAt.slice(0, 16), // Convert to 'YYYY-MM-DDTHH:mm'
           updatedAt: res.data.product.updatedAt.slice(0, 16), // Convert to 'YYYY-MM-DDTHH:mm'
         });
+        setImagePreview(res.data.product.imageUrl);
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
@@ -71,6 +73,10 @@ function UpdateProduct() {
       ...prevState,
       [name]: value,
     }));
+
+    if (name === "imageUrl") {
+      setImagePreview(value);
+    }
   };
 
   // Handle form submission
@@ -124,6 +130,17 @@ function UpdateProduct() {
     submitButtonHover: {
       backgroundColor: "#0056b3",
     },
+    imagePreview: {
+      width: "100%",
+      height: "200px",
+      objectFit: "cover",
+      borderRadius: "5px",
+      marginBottom: "10px",
+      border: "1px solid #ccc",
+    },
+    imagePreviewContainer: {
+      marginBottom: "15px",
+    },
   };
 
   return (
@@ -132,6 +149,18 @@ function UpdateProduct() {
       <div style={formStyles.formContainer}>
         <h1 style={formStyles.heading}>Update Product</h1>
         <form onSubmit={handleSubmit}>
+          <div style={formStyles.imagePreviewContainer}>
+            <img
+              src={imagePreview ? `http://localhost:4058/${imagePreview}` : '/placeholder-image.jpg'}
+              alt="Product Preview"
+              style={formStyles.imagePreview}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/placeholder-image.jpg';
+              }}
+            />
+          </div>
+
           <div style={formStyles.inputField}>
             <label htmlFor="name" style={formStyles.label}>
               Product Name
@@ -220,36 +249,7 @@ function UpdateProduct() {
               onChange={handleChange}
               value={inputs.imageUrl}
               style={formStyles.input}
-            />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="createdAt" style={formStyles.label}>
-              Created Date
-            </label>
-            <input
-              type="datetime-local"
-              name="createdAt"
-              id="createdAt"
-              onChange={handleChange}
-              value={inputs.createdAt}
-              style={formStyles.input}
-              required
-            />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="updatedAt" style={formStyles.label}>
-              Updated Date
-            </label>
-            <input
-              type="datetime-local"
-              name="updatedAt"
-              id="updatedAt"
-              onChange={handleChange}
-              value={inputs.updatedAt}
-              style={formStyles.input}
-              required
+              placeholder="Enter image URL"
             />
           </div>
 

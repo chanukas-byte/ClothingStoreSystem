@@ -54,15 +54,18 @@ function Suppliers() {
   return (
     <div className="suppliers-page">
       <Nav />
-      <h1 className="title">Suppliers Page</h1>
+      <h1 className="text-center mb-4 display-5 fw-bold text-primary">
+        Suppliers
+      </h1>
+
       <div className="table-container">
         <table className="supplier-table">
-          <thead>
+          <thead className="bg-dark text-white">
             <tr>
               <th>Name</th>
               <th>Contact Number</th>
               <th>Address</th>
-              <th>Items</th>
+              <th>Available Brands</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -74,8 +77,7 @@ function Suppliers() {
                   <td>{supplier.contactNumber}</td>
                   <td>{supplier.address}</td>
                   <td>{supplier.items}</td>
-                  <td>
-                    <button className="update-button">Update</button>
+                  <td className="action-column">
                     <button
                       className="delete-button"
                       onClick={() => handleDelete(supplier._id)}
@@ -104,13 +106,6 @@ function Suppliers() {
           min-height: 100vh;
         }
 
-        .title {
-          text-align: center;
-          font-size: 2rem;
-          color: #000;  /* Changed color to black */
-          margin-bottom: 20px;
-        }
-
         .table-container {
           display: flex;
           justify-content: center;
@@ -128,8 +123,8 @@ function Suppliers() {
         }
 
         .supplier-table thead {
-          background: linear-gradient(to right, #6a11cb, #2575fc);
-          color: white;
+          background: #343a40; 
+          color: white;  /* Table header text color */
         }
 
         .supplier-table th,
@@ -137,7 +132,10 @@ function Suppliers() {
           padding: 15px;
           text-align: center;
           border-bottom: 1px solid #ddd;
-          color: #000;  /* Changed color to black for text in table rows */
+        }
+
+        .supplier-table td {
+          color: black; /* Table data text color (black) */
         }
 
         .supplier-table tbody tr:hover {
@@ -180,6 +178,12 @@ function Suppliers() {
         .delete-button:hover {
           background: #dc3545;
           transform: translateY(-2px);
+        }
+
+        /* Align Action column buttons to the center */
+        .action-column {
+          display: flex;
+          justify-content: center;  /* Center-align the button */
         }
 
         @media (max-width: 768px) {
