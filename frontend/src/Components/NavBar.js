@@ -48,16 +48,11 @@ function NavBar() {
                 <Link className="nav-link text-white" to="/locations">Locations</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/blog">Blog</Link>
-              </li>
-              <li className="nav-item">
+
                 <Link className="nav-link text-white" to="">Users</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/feedback">Feedback</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-white" to="/faq">FAQ</Link>
+                <Link className="nav-link text-white" to="">feedback</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/contact">Contact Us</Link>

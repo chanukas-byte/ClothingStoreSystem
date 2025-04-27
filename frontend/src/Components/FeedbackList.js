@@ -6,12 +6,6 @@ import Swal from 'sweetalert2';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import logo from '../assets/logo.png';
-// Import Chart.js components
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
-import { Pie, Bar } from 'react-chartjs-2';
-
-// Register Chart.js components
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
 const FeedbackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -20,19 +14,13 @@ const FeedbackList = () => {
   const [editedFeedback, setEditedFeedback] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [chartData, setChartData] = useState({
-    pie: null,
-    bar: null
-  });
 
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const response = await axios.get('http://localhost:4058/api/feedback');
-        const feedbackData = response.data;
-        setFeedbacks(feedbackData);
-        setFilteredFeedbacks(feedbackData);
-        prepareChartData(feedbackData);
+        const response = await axios.get('http://localhost:4058/api/feedback/');
+        setFeedbacks(response.data);
+        setFilteredFeedbacks(response.data);
       } catch (error) {
         console.error("Error fetching feedback:", error);
         Swal.fire({
@@ -48,79 +36,6 @@ const FeedbackList = () => {
 
     fetchFeedback();
   }, []);
-
-  // Prepare chart data from feedback
-  const prepareChartData = (feedbackData) => {
-    if (!feedbackData || feedbackData.length === 0) {
-      setChartData({
-        pie: {
-          labels: ['No Data'],
-          datasets: [{
-            data: [1],
-            backgroundColor: ['#ddd']
-          }]
-        },
-        bar: {
-          labels: ['No Data'],
-          datasets: [{
-            label: 'Feedback Count',
-            data: [0],
-            backgroundColor: '#ddd'
-          }]
-        }
-      });
-      return;
-    }
-
-    // Count ratings
-    const ratingCounts = {};
-    for (let i = 1; i <= 5; i++) {
-      ratingCounts[i] = 0;
-    }
-    feedbackData.forEach(feedback => {
-      const rating = Math.round(feedback.rating) || 0;
-      if (rating >= 1 && rating <= 5) {
-        ratingCounts[rating]++;
-      }
-    });
-
-    // Prepare colors
-    const colors = [
-      '#FF6384',
-      '#36A2EB',
-      '#FFCE56',
-      '#4BC0C0',
-      '#9966FF'
-    ];
-
-    // Prepare pie chart data
-    const pieData = {
-      labels: Object.keys(ratingCounts).map(rating => `${rating} Star${rating !== '1' ? 's' : ''}`),
-      datasets: [{
-        data: Object.values(ratingCounts),
-        backgroundColor: colors,
-        borderColor: colors.map(color => color.replace('0.8', '1')),
-        borderWidth: 1
-      }]
-    };
-
-    // Prepare bar chart data
-    const barData = {
-      labels: Object.keys(ratingCounts).map(rating => `${rating} Star${rating !== '1' ? 's' : ''}`),
-      datasets: [{
-        label: 'Number of Feedbacks',
-        data: Object.values(ratingCounts),
-        backgroundColor: colors[0],
-        borderColor: colors[0].replace('0.8', '1'),
-        borderWidth: 1
-      }]
-    };
-
-    setChartData({
-      pie: pieData,
-      bar: barData
-    });
-  };
 
   // Filter feedbacks based on search term
   useEffect(() => {
@@ -144,14 +59,7 @@ const FeedbackList = () => {
   }, [searchTerm, feedbacks]);
 
   const handleSearch = (e) => {
-    const term = e.target.value.toLowerCase();
-    setSearchTerm(term);
-    const filtered = feedbacks.filter(feedback =>
-      feedback.name?.toLowerCase().includes(term) ||
-      feedback.email?.toLowerCase().includes(term) ||
-      feedback.comments?.toLowerCase().includes(term)
-    );
-    setFilteredFeedbacks(filtered);
+    setSearchTerm(e.target.value);
   };
 
   const deleteFeedback = async (id) => {
@@ -168,14 +76,7 @@ const FeedbackList = () => {
     if (result.isConfirmed) {
       try {
         await axios.delete(`http://localhost:4058/api/feedback/${id}`);
-        
-        // Fetch the updated feedback list instead of trying to update it locally
-        const response = await axios.get('http://localhost:4058/api/feedback');
-        const updatedFeedbacks = response.data;
-        
-        setFeedbacks(updatedFeedbacks);
-        setFilteredFeedbacks(updatedFeedbacks);
-        prepareChartData(updatedFeedbacks);
+        setFeedbacks(feedbacks.filter(feedback => feedback._id !== id));
         
         Swal.fire({
           title: 'Deleted!',
@@ -197,7 +98,7 @@ const FeedbackList = () => {
 
   const editFeedback = (feedback) => {
     setIsEditing(true);
-    setEditedFeedback({ ...feedback });
+    setEditedFeedback(feedback);
   };
 
   const handleChange = (e) => {
@@ -212,15 +113,13 @@ const FeedbackList = () => {
     e.preventDefault();
     
     try {
-      await axios.put(`http://localhost:4058/api/feedback/${editedFeedback._id}`, editedFeedback);
+      const response = await axios.put(`http://localhost:4058/api/feedback/${editedFeedback._id}`, editedFeedback);
       
-      // Fetch the updated feedback list instead of trying to update it locally
-      const response = await axios.get('http://localhost:4058/api/feedback');
-      const updatedFeedbacks = response.data;
+      const updatedFeedbacks = feedbacks.map(feedback =>
+        feedback._id === editedFeedback._id ? response.data : feedback
+      );
       
       setFeedbacks(updatedFeedbacks);
-      setFilteredFeedbacks(updatedFeedbacks);
-      prepareChartData(updatedFeedbacks);
       setIsEditing(false);
       setEditedFeedback(null);
       
@@ -242,22 +141,19 @@ const FeedbackList = () => {
   };
 
   const renderStars = (rating) => {
-    const stars = [];
-    const roundedRating = Math.round(rating) || 0;
-    
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <FaStar
-          key={i}
-          style={{
-            color: i <= roundedRating ? '#FFD700' : '#ddd',
-            fontSize: '1rem'
-          }}
-        />
-      );
-    }
-    
-    return <div className="rating-stars">{stars}</div>;
+    return (
+      <div className="rating-stars">
+        {[...Array(5)].map((_, index) => (
+          <FaStar 
+            key={index} 
+            style={{ 
+              color: index < rating ? '#000000' : '#ddd',
+              fontSize: '1rem'
+            }} 
+          />
+        ))}
+      </div>
+    );
   };
 
   const downloadPDF = () => {
@@ -427,88 +323,6 @@ const FeedbackList = () => {
             <button className="download-button" onClick={downloadPDF}>
               <FaDownload /> Download PDF Report
             </button>
-          </div>
-
-          {/* Charts Section */}
-          <div className="charts-container">
-            <div className="chart-wrapper">
-              <h3>Rating Distribution (Pie Chart)</h3>
-              {chartData.pie && (
-                <div className="chart">
-                  <Pie 
-                    data={chartData.pie} 
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: {
-                          position: 'bottom',
-                          labels: {
-                            padding: 20,
-                            font: {
-                              size: 12
-                            }
-                          }
-                        },
-                        title: {
-                          display: true,
-                          text: 'Feedback Rating Distribution',
-                          font: {
-                            size: 16,
-                            weight: 'bold'
-                          }
-                        }
-                      }
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="chart-wrapper">
-              <h3>Rating Distribution (Bar Chart)</h3>
-              {chartData.bar && (
-                <div className="chart">
-                  <Bar 
-                    data={chartData.bar} 
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: {
-                          display: false
-                        },
-                        title: {
-                          display: true,
-                          text: 'Feedback Rating Distribution',
-                          font: {
-                            size: 16,
-                            weight: 'bold'
-                          }
-                        }
-                      },
-                      scales: {
-                        y: {
-                          beginAtZero: true,
-                          ticks: {
-                            stepSize: 1,
-                            font: {
-                              size: 12
-                            }
-                          }
-                        },
-                        x: {
-                          ticks: {
-                            font: {
-                              size: 12
-                            }
-                          }
-                        }
-                      }
-                    }}
-                  />
-                </div>
-              )}
-            </div>
           </div>
 
           {filteredFeedbacks.length > 0 ? (

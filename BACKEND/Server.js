@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config(); // Load .env variables
 
 const app = express();
@@ -12,6 +13,9 @@ const PORT = process.env.PORT || 4058; // Fixed port number
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB Connection URL
 const URL = process.env.MONGODB_URL;
@@ -28,25 +32,23 @@ mongoose
     console.error("❌ MongoDB Connection Error:", error);
   });
 
-// Import Routers (Ensure these are the correct paths)
+// Import Routers (Fixed path and naming)
 const EmployeeRouter = require("./Routes/EmployeeRoutes");
 const FinanceRouter = require("./Routes/financeRoutes");
 const supplierRoutes = require("./Routes/SupplierRegiRoutes");
 const productRoutes = require("./Routes/ProductRoutes");
-
-const categoryRoutes = require("./Routes/CategoryRoutes"); // Ensure this file exists and is named correctly
+const categoryRoutes = require("./Routes/CategoryRoutes");
 const financialRoutes = require("./Routes/financialRoutes");
-const feedbackRoutes = require("./Routes/FeedbackRoutes");
+const feedbackRoutes = require("./routes/FeedbackRoutes");
 
-// Use Routers (Ensure you're using the correct paths and naming conventions)
+// Use Routers (correct path and usage)
 app.use("/api/employee", EmployeeRouter); // Employee routes
 app.use("/api/finance", FinanceRouter);   // Finance routes
-app.use("/suppliers", supplierRoutes);    // Suppliers routes
-app.use("/products", productRoutes);      // Product routes
-app.use("/category", categoryRoutes);     // Category routes
-app.use("/api", financialRoutes);         // Financial routes
-app.use("/api/feedback", feedbackRoutes); // Feedback routes
-
+app.use("/suppliers", supplierRoutes); //suppliers Route
+app.use("/products", productRoutes); //product Routes
+app.use("/category", categoryRoutes); //category Routes
+app.use("/api", financialRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
