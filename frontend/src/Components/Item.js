@@ -119,10 +119,14 @@ function Item() {
               <div className="row mb-4">
                 <div className="col-md-6">
                   <img
-                    src={product.imageUrl || "https://via.placeholder.com/400x400.png?text=No+Image"}
+                    src={`http://localhost:4058/${product.imageUrl}`}
                     alt={product.name}
                     className="img-fluid rounded"
                     style={{ maxHeight: "400px", objectFit: "contain" }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/placeholder-image.jpg';
+                    }}
                   />
                 </div>
                 <div className="col-md-6">
