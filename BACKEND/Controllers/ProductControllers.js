@@ -1,4 +1,4 @@
-const Product = require("../Models/ProductModel");
+const Product = require("../Models/ProductModel"); 
 const upload = require("../config/upload");
 const path = require('path');
 
@@ -34,24 +34,24 @@ const addProduct = async (req, res) => {
 //Get By ID
 const getById = async (req, res) => {
     try {
-        const id = req.params.id;
+    const id = req.params.id;
         const product = await Product.findById(id);
 
         if (!product) {
-            return res.status(404).json({ message: "Product not found" });
-        }
+        return res.status(404).json({ message: "Product not found" }); 
+    }
 
         return res.status(200).json({ product });
     } catch (err) {
         console.error("Error fetching product:", err);
         return res.status(500).json({ message: "Internal Server Error", error: err.message });
-    }
+}
 };
 
 //Update Product
 const updateProduct = async (req, res) => {
     try {
-        const id = req.params.id;
+    const id = req.params.id;
         const updateData = { ...req.body };
         
         if (req.file) {
@@ -66,20 +66,20 @@ const updateProduct = async (req, res) => {
         );
 
         if (!product) {
-            return res.status(404).json({ message: "Product not found" });
-        }
+        return res.status(404).json({ message: "Product not found" }); 
+    }
 
         return res.status(200).json({ product });
     } catch (err) {
         console.error("Error updating product:", err);
         return res.status(500).json({ message: "Error updating product", error: err.message });
-    }
+}
 };
 
 //Delete Product
 const deleteProduct = async (req, res) => {
     try {
-        const id = req.params.id;
+    const id = req.params.id;
         const product = await Product.findByIdAndDelete(id);
 
         if (!product) {
@@ -97,30 +97,30 @@ const deleteProduct = async (req, res) => {
 const getAllProduct = async (req, res) => {
     try {
         const { name, category, minPrice, maxPrice, isActive } = req.query;
-        let filter = {};
+    let filter = {};
 
-        if (name) {
+    if (name) {
             filter.name = { $regex: name, $options: 'i' };
-        }
-        if (category) {
-            filter.category = category;
-        }
+    }
+    if (category) {
+        filter.category = category;
+    }
         if (minPrice || maxPrice) {
             filter.price = {};
             if (minPrice) filter.price.$gte = parseFloat(minPrice);
             if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
-        }
+    }
         if (isActive !== undefined) {
             filter.isActive = isActive === 'true';
         }
 
         const products = await Product.find(filter).sort({ createdAt: -1 });
 
-        if (!products || products.length === 0) {
-            return res.status(404).json({ message: "No products found matching filters" });
-        }
+    if (!products || products.length === 0) {
+        return res.status(404).json({ message: "No products found matching filters" });
+    }
 
-        return res.status(200).json({ products });
+    return res.status(200).json({ products });
     } catch (err) {
         console.error("Error fetching products:", err);
         return res.status(500).json({ message: "Internal Server Error", error: err.message });

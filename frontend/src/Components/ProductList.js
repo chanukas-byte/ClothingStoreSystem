@@ -27,6 +27,11 @@ const ProductList = () => {
     const [error, setError] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
+    // Admin login popup state
+    const [showAdminLogin, setShowAdminLogin] = useState(false);
+    const [adminUsername, setAdminUsername] = useState("");
+    const [adminPassword, setAdminPassword] = useState("");
+    const [adminError, setAdminError] = useState("");
 
     const navigate = useNavigate();
 
@@ -176,15 +181,28 @@ const ProductList = () => {
         navigate(`/product/${productId}`);
     };
 
+    const handleAdminLogin = (e) => {
+        e.preventDefault();
+        if (adminUsername === "admin123" && adminPassword === "admin123") {
+            setShowAdminLogin(false);
+            setAdminUsername("");
+            setAdminPassword("");
+            setAdminError("");
+            navigate("/Home");
+        } else {
+            setAdminError("Invalid username or password.");
+        }
+    };
+
     return (
         <div className="app-container">
             <NavB />
-            
+
             <div className="main-layout">
                 <div className="main-content">
                     <div className="filters-section">
                         <div className="nav-menu" ref={menuRef} onClick={() => setMenuOpen((open) => !open)}>
-                            <div className="menu-icon">☰</div>
+                    <div className="menu-icon">☰</div>
                             <div className="nav-content" style={{ display: menuOpen ? 'block' : 'none' }}>
                                 <button 
                                     className={`nav-btn ${activeTab === 'home' ? 'active' : ''}`}
@@ -196,22 +214,22 @@ const ProductList = () => {
                                     className={`nav-btn ${activeTab === 'cart' ? 'active' : ''}`}
                                     onClick={() => { setActiveTab('cart'); setMenuOpen(false); }}
                                 >
-                                    Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
-                                </button>
+                                Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
+                            </button>
                                 <button 
                                     className="nav-btn"
-                                    onClick={() => { navigate("/Home"); setMenuOpen(false); }}
+                                    onClick={() => { setShowAdminLogin(true); setMenuOpen(false); }}
                                 >
                                     Admin
                                 </button>
                             </div>
                         </div>
-                        <input
-                            type="text"
-                            name="name"
-                            value={filters.name}
-                            onChange={handleFilterChange}
-                            placeholder="Search products..."
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={filters.name}
+                                    onChange={handleFilterChange}
+                                    placeholder="Search products..."
                             className="search-input"
                         />
                         <div className="cart-icon-container" onClick={() => setActiveTab('cart')}>
@@ -226,7 +244,7 @@ const ProductList = () => {
                             onChange={handleFilterChange}
                             className="category-select"
                         >
-                            <option value="">All Categories</option>
+                                    <option value="">All Categories</option>
                             <option value="GENTS-SHIRTS">Men's Shirts</option>
                             <option value="GENTS-T-SHIRTS">Men's T-Shirts</option>
                             <option value="GENTS-PANTS">Men's Pants</option>
@@ -234,7 +252,7 @@ const ProductList = () => {
                             <option value="WOMENS-TOPS">Women's Tops</option>
                             <option value="WOMENS-PANTS">Women's Pants</option>
                             <option value="WOMENS-SKIRTS">Women's Skirts</option>
-                        </select>
+                                </select>
                         <div className="price-filters">
                             <input 
                                 type="text"
@@ -253,7 +271,7 @@ const ProductList = () => {
                                 className="price-input"
                             />
                         </div>
-                    </div>
+                            </div>
 
                     {activeTab === 'cart' ? (
                         <div className="cart-section">
@@ -263,25 +281,25 @@ const ProductList = () => {
                             ) : (
                                 <div className="cart-table-container">
                                     <table className="cart-table">
-                                        <thead>
-                                            <tr>
+                                    <thead>
+                                        <tr>
                                                 <th>Product</th>
-                                                <th>Category</th>
-                                                <th>Price</th>
-                                                <th>Quantity</th>
-                                                <th>Total</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {cart.map((item, index) => (
-                                                <tr key={index}>
-                                                    <td>{item.name}</td>
-                                                    <td>{item.category}</td>
-                                                    <td>Rs. {item.price}</td>
-                                                    <td>{item.quantity}</td>
-                                                    <td>Rs. {item.price * item.quantity}</td>
-                                                    <td>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {cart.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{item.name}</td>
+                                                <td>{item.category}</td>
+                                                <td>Rs. {item.price}</td>
+                                                <td>{item.quantity}</td>
+                                                <td>Rs. {item.price * item.quantity}</td>
+                                                <td>
                                                         <button 
                                                             className="remove-btn"
                                                             onClick={() => handleRemoveFromCart(item._id)}
@@ -289,11 +307,11 @@ const ProductList = () => {
                                                         >
                                                             <FontAwesomeIcon icon={faTrash} />
                                                         </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                                     <button 
                                         className="checkout-all-btn"
                                         onClick={handleSendAllToCheckout}
@@ -344,25 +362,57 @@ const ProductList = () => {
                                                     disabled={product.stockQuantity <= 0}
                                                 >
                                                     {product.stockQuantity > 0 ? 'Add to Cart' : 'Out of Stock'}
-                                                </button>
+                            </button>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                            )}
-                        </div>
                     )}
                 </div>
-
+                    )}
+            </div>
+            
                 <div className="checkout-sidebar">
-                    <Checkout 
-                        checkoutProducts={checkoutProducts} 
-                        handleRemoveFromCart={handleRemoveFromCart} 
-                        setCheckoutProducts={setCheckoutProducts} 
-                        setFilters={setFilters} 
-                    />
+            <Checkout 
+                checkoutProducts={checkoutProducts} 
+                handleRemoveFromCart={handleRemoveFromCart} 
+                setCheckoutProducts={setCheckoutProducts} 
+                setFilters={setFilters} 
+            />
                 </div>
             </div>
+
+            {/* Admin Login Popup */}
+            {showAdminLogin && (
+                <div className="admin-login-modal-overlay">
+                    <div className="admin-login-modal">
+                        <h2 className="admin-login-title">Admin Login</h2>
+                        <form onSubmit={handleAdminLogin} className="admin-login-form">
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                value={adminUsername}
+                                onChange={e => setAdminUsername(e.target.value)}
+                                className="admin-login-input"
+                                autoFocus
+                            />
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={adminPassword}
+                                onChange={e => setAdminPassword(e.target.value)}
+                                className="admin-login-input"
+                            />
+                            {adminError && <div className="admin-login-error">{adminError}</div>}
+                            <div className="admin-login-actions">
+                                <button type="submit" className="admin-login-btn">Login</button>
+                                <button type="button" className="admin-cancel-btn" onClick={() => { setShowAdminLogin(false); setAdminError(""); }}>Cancel</button>
+                            </div>
+                        </form>
+                        <div className="admin-login-footer">Only authorized admins can access this area.</div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

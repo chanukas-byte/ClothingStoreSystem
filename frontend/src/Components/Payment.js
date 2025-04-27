@@ -445,7 +445,7 @@ const Payment = () => {
 
     // Create PDF after validation
     const doc = new jsPDF();
-    
+
     // Add black border around the page
     doc.setDrawColor(0, 0, 0);
     doc.setLineWidth(0.5);
@@ -459,7 +459,7 @@ const Payment = () => {
     // Add invoice title
     doc.setFontSize(16);
     doc.text("INVOICE", 20, 45);
-    
+
     // Add Date and Time
     const date = new Date();
     const formattedDate = date.toLocaleString();
@@ -624,7 +624,7 @@ const Payment = () => {
     doc.setLineWidth(0.5);
     doc.line(20, yPos, 80, yPos);
     doc.text("Customer Signature", 20, yPos + 5);
-    
+
     // Save the PDF
     doc.save('invoice.pdf');
     
@@ -856,15 +856,15 @@ const Payment = () => {
 
         <div className="payment-amount-section">
           <label className="payment-label">Total Amount (Rs.)</label>
-          <input
+        <input
             type="text"
             value={formatAmount(totalAmount)}
-            onChange={handleAmountChange}
-            placeholder="Enter Total Amount"
+          onChange={handleAmountChange}
+          placeholder="Enter Total Amount"
             className="payment-input"
             readOnly
-          />
-        </div>
+        />
+      </div>
 
         <div className="payment-method-section">
           <label className="payment-label">Select Payment Method</label>
@@ -1060,9 +1060,9 @@ const Payment = () => {
               <div className="form-group">
                 <label>Upload Bank Slip</label>
                 <div className="file-upload-container">
-                  <input
-                    type="file"
-                    onChange={handleSlipUpload}
+          <input
+            type="file"
+            onChange={handleSlipUpload}
                     className="file-upload-input"
                     accept=".jpg,.jpeg,.png,.pdf"
                     required
@@ -1079,7 +1079,7 @@ const Payment = () => {
           </div>
         </div>
       )}
-      
+
       {/* Delivery Popup */}
       {showDeliveryPopup && (
         <div className="card-popup-overlay">
@@ -1229,8 +1229,8 @@ const Payment = () => {
                     </button>
                   </div>
                 </div>
-              </div>
-              
+    </div>
+
               <div className="card-popup-actions">
                 <button type="submit" className="submit-btn">Save</button>
                 <button type="button" className="download-btn" onClick={generateHomeDeliveryPDF}>Download</button>
