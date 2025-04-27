@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Nav from "./Nav";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Notification() {
   const [lowStockProducts, setLowStockProducts] = useState([]);
@@ -57,6 +58,9 @@ function Notification() {
       margin: 0,
     },
     listItem: (isHovered) => ({
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center", // Align items in the center vertically
       padding: "20px",
       marginBottom: "15px",
       background: isHovered
@@ -96,18 +100,31 @@ function Notification() {
       color: "#333333",
       boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
     },
+    button: {
+      backgroundColor: "#4CAF50",
+      color: "white",
+      padding: "10px 20px",
+      borderRadius: "5px",
+      border: "none",
+      cursor: "pointer",
+      fontSize: "1rem",
+      transition: "background-color 0.3s",
+    },
+    buttonHover: {
+      backgroundColor: "#45a049",
+    },
   };
 
   return (
     <div style={styles.container}>
       <Nav />
-      <h1 style={styles.title}>🚨 Low Stock Alerts 🚨</h1>
+      <h1 style={styles.title}>Notification</h1>
 
       <div>
         {lowStockProducts.length > 0 ? (
           <div style={styles.alertBox}>
             <h2 className="text-center">
-              ⚠️ Attention! These Products are Running Low on Stock:
+              These Products are Running Low on Stock:
             </h2>
             <ul style={styles.listGroup}>
               {lowStockProducts.map((product, index) => (
@@ -117,20 +134,31 @@ function Notification() {
                   onMouseEnter={() => setHoverIndex(index)}
                   onMouseLeave={() => setHoverIndex(null)}
                 >
-                  <div style={styles.productName}>{product.name}</div>
-                  <div style={styles.productCategory}>
-                    Category: <strong>{product.category}</strong>
+                  <div>
+                    <div style={styles.productName}>{product.name}</div>
+                    <div style={styles.productCategory}>
+                      Category: <strong>{product.category}</strong>
+                    </div>
+                    <div style={styles.stockInfo}>
+                      Current Stock: <strong>{product.stockQuantity}</strong>
+                    </div>
                   </div>
-                  <div style={styles.stockInfo}>
-                    Current Stock: <strong>{product.stockQuantity}</strong>
-                  </div>
+                  <button
+                    style={styles.button}
+                    onMouseEnter={() => setHoverIndex(index)}
+                    onMouseLeave={() => setHoverIndex(null)}
+                  >
+                    <Link to={`/notify/placeorder/${product._id}`} style={{ textDecoration: 'none', color: 'black' }}>
+                      Order Stock
+                    </Link>
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
         ) : (
           <p style={styles.successMessage}>
-            🎉 All products have sufficient stock! Keep up the good work! 🎉
+             All products have sufficient stock!
           </p>
         )}
       </div>

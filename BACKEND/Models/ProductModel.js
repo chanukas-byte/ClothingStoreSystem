@@ -4,36 +4,47 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     description: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     price: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     },
     category: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     stockQuantity: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     },
     imageUrl: {
         type: String,
         required: true
     },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     createdAt: {
         type: Date,
-        required: true
+        default: Date.now
     },
     updatedAt: {
         type: Date,
-        required: true
+        default: Date.now
     }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model("Product", productSchema);  

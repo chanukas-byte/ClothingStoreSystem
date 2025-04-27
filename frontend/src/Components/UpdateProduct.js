@@ -103,6 +103,7 @@ function UpdateProduct() {
       display: "block",
       fontWeight: "bold",
       marginBottom: "5px",
+      color: "black",
     },
     input: {
       width: "100%",
@@ -219,36 +220,6 @@ function UpdateProduct() {
               onChange={handleChange}
               value={inputs.imageUrl}
               style={formStyles.input}
-            />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="createdAt" style={formStyles.label}>
-              Created Date
-            </label>
-            <input
-              type="datetime-local"
-              name="createdAt"
-              id="createdAt"
-              onChange={handleChange}
-              value={inputs.createdAt}
-              style={formStyles.input}
-              required
-            />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="updatedAt" style={formStyles.label}>
-              Updated Date
-            </label>
-            <input
-              type="datetime-local"
-              name="updatedAt"
-              id="updatedAt"
-              onChange={handleChange}
-              value={inputs.updatedAt}
-              style={formStyles.input}
-              required
             />
           </div>
 

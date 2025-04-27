@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config(); // Load .env variables
 
 const app = express();
@@ -12,6 +13,9 @@ const PORT = process.env.PORT || 4058; // Fixed port number
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB Connection URL
 const URL = process.env.MONGODB_URL;
@@ -33,24 +37,25 @@ const EmployeeRouter = require("./Routes/EmployeeRoutes");
 const FinanceRouter = require("./Routes/financeRoutes");
 const supplierRoutes = require("./Routes/SupplierRegiRoutes");
 const productRoutes = require("./Routes/ProductRoutes");
-<<<<<<< Updated upstream
-=======
 const categoryRoutes = require("./Routes/CategoryRoutes");
 const financialRoutes = require("./Routes/financialRoutes");
 const feedbackRoutes = require("./routes/FeedbackRoutes");
->>>>>>> Stashed changes
+
+const categoryRoutes = require("./Routes/CategoryRoutes");
+const financialRoutes = require("./Routes/financialRoutes");
 
 // Use Routers (correct path and usage)
 app.use("/api/employee", EmployeeRouter); // Employee routes
 app.use("/api/finance", FinanceRouter);   // Finance routes
 app.use("/suppliers", supplierRoutes); //suppliers Route
 app.use("/products", productRoutes); //product Routes
-<<<<<<< Updated upstream
-=======
+
 app.use("/category", categoryRoutes); //category Routes
 app.use("/api", financialRoutes);
 app.use("/api/feedback", feedbackRoutes);
->>>>>>> Stashed changes
+
+app.use("/category", categoryRoutes); //category Routes
+app.use("/api", financialRoutes);
 
 // Test Route
 app.get("/", (req, res) => {

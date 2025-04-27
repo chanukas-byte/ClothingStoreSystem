@@ -35,10 +35,16 @@ function Nav() {
                 <Link className="nav-link text-white" to="/stock">Stock</Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link text-white" to="/category">Categories</Link>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link text-white" to="/supplier">Suppliers</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/report">Report</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/report">Re-stock</Link>
               </li>
             </ul>
 

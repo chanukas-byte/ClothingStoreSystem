@@ -14,26 +14,23 @@ import AssignSalary from "./Components/AssignSalary";
 import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
 
-<<<<<<< Updated upstream
-=======
+
 // Feedback Components
 import AddFeedback from './Components/AddFeedback';  // Correct import for AddFeedback
 import FeedbackList from './Components/FeedbackList'; // Correct import for FeedbackList
 
->>>>>>> Stashed changes
 // Product Manager Components
 import Checkout from './Components/Checkout';
 import Payment from './Components/Payment';
 import ProductList from './Components/ProductList';
 import ProductDetail from './Components/ProductDetail';
 import Aboutus from './Components/Aboutus';
-<<<<<<< Updated upstream
-=======
+
 import OrderStatus from './Components/OrderStatus';
 import Locations from './Components/Locations';
 import Contact from './Components/Contact';
 import FAQ from './Components/FAQ'; // Import the FAQ component
->>>>>>> Stashed changes
+
 
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
@@ -44,10 +41,15 @@ import SupplierRegi from "./Components/SupplierRegi";
 import AddProduct from "./Components/AddProduct";
 import Success from "./Components/Success";
 import UpdateProduct from "./Components/UpdateProduct";
+import PlaceOrder from "./Components/PlaceOrder";
+import Item from "./Components/Item";
+import AddCategory from "./Components/AddCategory";
+import Category from "./Components/Category";
 
 // Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import HomeLiveArt from "./Components/HomeLiveArt";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -93,18 +95,20 @@ function App() {
       <div className="container mt-4">
         <Routes>
 
+         
+
           {/* Product Catalogue Routes*/}
-          <Route path="/" element={<ProductList />} />
+          <Route path="/" element={<HomeLiveArt />} />
+          <Route path="/productlist" element={<ProductList />} />
           <Route path="/product/:productId" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
           <Route path="/checkout" element={<Checkout checkoutProducts={checkoutProducts} handleRemoveFromCart={handleRemoveFromCart} />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/order-status" element={<OrderStatus />} />
+          <Route path="/locations" element={<Locations />} />
           <Route path="/aboutus" element={<Aboutus />} />
-<<<<<<< Updated upstream
-
-=======
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={<FAQ />} /> {/* Add the FAQ route */}
->>>>>>> Stashed changes
+
 
           {/* Employee Management Routes*/}
           <Route path="/add-employee" element={<AddEmployee />} />
@@ -131,6 +135,10 @@ function App() {
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/success" element={<Success />} />
           <Route path="/stock/update/:id" element={<UpdateProduct />} />
+          <Route path="/notify/placeorder/:id" element={<PlaceOrder />} />
+          <Route path="/stock/item/:id" element={<Item />} />
+          <Route path="/addcategory" element={<AddCategory />} />
+          <Route path="/category" element={<Category />} />
 
           {/* Feedback Routes */}
           <Route path="/add-feedback" element={<AddFeedback />} />
