@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom'; // ✅ Import Link
 import { FaUserCircle } from 'react-icons/fa'; // Font Awesome User Icon
 import logo from '../assets/logo.png';
-import './Navbar.css';
 
-const Navbar = ({ onGenderSelect, selectedGender }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
+function NavBar() {
   return (
     <div>
       <nav
@@ -49,9 +42,6 @@ const Navbar = ({ onGenderSelect, selectedGender }) => {
                 <Link className="nav-link text-white" to="/productlist">Products</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/virtual-room">Virtual Room</Link>
-              </li>
-              <li className="nav-item">
                 <Link className="nav-link text-white" to="/order-status">Orders</Link>
               </li>
               <li className="nav-item">
@@ -61,7 +51,10 @@ const Navbar = ({ onGenderSelect, selectedGender }) => {
                 <Link className="nav-link text-white" to="">Users</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="">feedback</Link>
+                <Link className="nav-link text-white" to="/add-feedback">Feedback Form</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/faq">FAQ</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/contact">Contact Us</Link>
@@ -87,6 +80,6 @@ const Navbar = ({ onGenderSelect, selectedGender }) => {
       <div style={{ paddingTop: "70px" }}></div>
     </div>
   );
-};
+}
 
-export default Navbar;
+export default NavBar;
