@@ -18,6 +18,7 @@ import Home from "./Components/Home";
 // Feedback Components
 import AddFeedback from './Components/AddFeedback';  // Correct import for AddFeedback
 import FeedbackList from './Components/FeedbackList'; // Correct import for FeedbackList
+import Feedback from './Components/Feedback'; // Import the Feedback component
 
 // Product Manager Components
 import Checkout from './Components/Checkout';
@@ -29,7 +30,6 @@ import OrderStatus from './Components/OrderStatus';
 import Locations from './Components/Locations';
 import Contact from './Components/Contact';
 import FAQ from './Components/FAQ'; // Import the FAQ component
-
 
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
@@ -107,7 +107,8 @@ function App() {
           <Route path="/locations" element={<Locations />} />
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/faq" element={<FAQ />} /> {/* Add the FAQ route */}
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/feedback" element={<Feedback />} />
 
 
           {/* Employee Management Routes*/}
