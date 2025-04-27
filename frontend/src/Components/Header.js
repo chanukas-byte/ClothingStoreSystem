@@ -87,6 +87,11 @@ function Header() {
               </li>
 
               <Link className="nav-link text-white" to="/budget-planner">Budget Planner</Link>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/finance-spirit">
+                  AI Spirit
+                </Link>
+              </li>
 
             </ul>
 

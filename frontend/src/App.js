@@ -17,6 +17,8 @@ import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
 import FinancialDashboard from "./Components/FinancialDashboard";
 import BudgetPlanner from "./Components/BudgetPlanner";
+import FinanceSpirit from "./Components/FinanceSpirit";
+
 
 // Product Manager Components
 import Checkout from './Components/Checkout';
@@ -111,6 +113,8 @@ function App() {
           <Route path="/add-report" element={<AddReport />} />
           <Route path="/all-reports" element={<AllReport />} />
           <Route path="/view-report/:id" element={<ReportDetails />} />
+   
+         
       
 
           {/* Salary Management Routes*/}
@@ -118,6 +122,7 @@ function App() {
           <Route path="/view-salary" element={<ViewSalary />} />
           <Route path="/financial-dashboard" element={<FinancialDashboard />} />
           <Route path="/budget-planner" element={<BudgetPlanner />} />
+          <Route path="/finance-spirit" element={<FinanceSpirit />} />
 
           {/* Inventory Management Routes*/}
           <Route path="/inventory-management-Home" element={<HomeS />} />

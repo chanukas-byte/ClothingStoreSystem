@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { PDFDocument, rgb } from "pdf-lib";
 import Header from "./Header";
 import Footer from "./Footer";
+import './AddEmployee.css';
 
 
 function AddEmployee({ isAdmin }) {
@@ -235,7 +236,7 @@ Salary     : $${employee.salary}
               </div>
 
               <div className="text-center mt-4">
-                <button type="submit" className="btn btn-primary btn-lg rounded-pill">
+                <button type="submit" className="modern-btn">
                   Register Employee
                 </button>
               </div>
