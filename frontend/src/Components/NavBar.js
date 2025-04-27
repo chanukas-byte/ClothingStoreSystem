@@ -43,7 +43,23 @@ function NavBar() {
                 <Link className="nav-link text-white" to="">contact us</Link>{/* add this feedback link*/}
               </li>
               <li className="nav-item">
+<<<<<<< Updated upstream
                 <Link className="nav-link text-white" to="/aboutus">About us</Link>{/* add this feedback link*/}
+=======
+                <Link className="nav-link text-white" to="">Users</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/add-feedback">Feedback</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/faq">FAQ</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/contact">Contact Us</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/aboutus">About us</Link>
+>>>>>>> Stashed changes
               </li>
 
             </ul>

@@ -14,12 +14,26 @@ import AssignSalary from "./Components/AssignSalary";
 import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
 
+<<<<<<< Updated upstream
+=======
+// Feedback Components
+import AddFeedback from './Components/AddFeedback';  // Correct import for AddFeedback
+import FeedbackList from './Components/FeedbackList'; // Correct import for FeedbackList
+
+>>>>>>> Stashed changes
 // Product Manager Components
 import Checkout from './Components/Checkout';
 import Payment from './Components/Payment';
 import ProductList from './Components/ProductList';
 import ProductDetail from './Components/ProductDetail';
 import Aboutus from './Components/Aboutus';
+<<<<<<< Updated upstream
+=======
+import OrderStatus from './Components/OrderStatus';
+import Locations from './Components/Locations';
+import Contact from './Components/Contact';
+import FAQ from './Components/FAQ'; // Import the FAQ component
+>>>>>>> Stashed changes
 
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
@@ -85,7 +99,12 @@ function App() {
           <Route path="/checkout" element={<Checkout checkoutProducts={checkoutProducts} handleRemoveFromCart={handleRemoveFromCart} />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/aboutus" element={<Aboutus />} />
+<<<<<<< Updated upstream
 
+=======
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} /> {/* Add the FAQ route */}
+>>>>>>> Stashed changes
 
           {/* Employee Management Routes*/}
           <Route path="/add-employee" element={<AddEmployee />} />
@@ -112,6 +131,10 @@ function App() {
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/success" element={<Success />} />
           <Route path="/stock/update/:id" element={<UpdateProduct />} />
+
+          {/* Feedback Routes */}
+          <Route path="/add-feedback" element={<AddFeedback />} />
+          <Route path="/feedback-list" element={<FeedbackList />} />
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}

@@ -1,6 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Header from "./Header";
 
 function Footer() {
@@ -20,10 +21,11 @@ function Footer() {
           <div className="col-md-3 mb-4">
             <h5 className="text-uppercase mb-3 font-weight-bold">Quick Links</h5>
             <ul className="list-unstyled">
-              <li><a href="#" className="text-muted text-decoration-none">Home</a></li>
-              <li><a href="#" className="text-muted text-decoration-none">Join Us</a></li>
-              <li><a href="#" className="text-muted text-decoration-none">Salary Management</a></li>
-              <li><a href="#" className="text-muted text-decoration-none">Report Analyze</a></li>
+              <li><Link to="/" className="text-muted text-decoration-none">Home</Link></li>
+              <li><Link to="/aboutus" className="text-muted text-decoration-none">About Us</Link></li>
+              <li><Link to="/contact" className="text-muted text-decoration-none">Contact</Link></li>
+              <li><Link to="/faq" className="text-muted text-decoration-none">FAQ</Link></li>
+              <li><Link to="/locations" className="text-muted text-decoration-none">Locations</Link></li>
             </ul>
           </div>
 
@@ -99,11 +101,14 @@ function Footer() {
           0% {
             color: rgb(255, 0, 0); /* Red */
           }
-          33% {
+          25% {
             color: rgb(0, 255, 0); /* Green */
           }
-          66% {
+          50% {
             color: rgb(0, 0, 255); /* Blue */
+          }
+          75% {
+            color: rgb(255, 255, 0); /* Yellow */
           }
           100% {
             color: rgb(255, 0, 0); /* Back to Red */
