@@ -130,12 +130,17 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid #e0e0e0;
+  position: relative;
+  z-index: 10;
+  margin-right: 10px;
 }
 
 .menu-icon {
-  font-size: 20px;
+  font-size: 22px;
   color: #333;
   transition: all 0.3s ease;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
 .nav-menu:hover {
@@ -200,15 +205,16 @@ body {
 /* Navigation Menu Styles */
 .nav-content {
   position: absolute;
-  top: 100%;
+  top: 55px;
   left: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  padding: 10px 0;
   display: none;
-  min-width: 150px;
-  z-index: 1000;
+  min-width: 170px;
+  z-index: 100;
+  border: 1px solid #e0e0e0;
 }
 
 .nav-menu:hover .nav-content {
@@ -218,21 +224,22 @@ body {
 .nav-btn {
   display: block;
   width: 100%;
-  padding: 12px 15px;
+  padding: 12px 20px;
   background: none;
   border: none;
-  border-radius: 8px;
+  border-radius: 0;
   color: #333;
-  font-size: 14px;
+  font-size: 15px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.2s, color 0.2s;
   white-space: nowrap;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 
 .nav-btn:hover {
   background: #f0f0f0;
+  color: #111;
 }
 
 .nav-btn.active {
