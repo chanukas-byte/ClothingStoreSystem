@@ -1,5 +1,7 @@
 import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import Header from "./Header";
 import "./Footer.css"; // We'll add custom styles here
 
 function Footer() {
@@ -14,14 +16,17 @@ function Footer() {
               Live Art empowers creativity, uniting artists to transform visions into reality. Join us in celebrating artistic expression.
             </p>
           </div>
-          {/* Quick Links */}
-          <div className="footer-col">
-            <h5>Quick Links</h5>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/join">Join Us</a></li>
-              <li><a href="/salary-management">Salary Management</a></li>
-              <li><a href="/report-analyze">Report Analyze</a></li>
+
+          {/* Quick Links Section */}
+          <div className="col-md-3 mb-4">
+            <h5 className="text-uppercase mb-3 font-weight-bold">Quick Links</h5>
+            <ul className="list-unstyled">
+              <li><Link to="/" className="text-muted text-decoration-none">Home</Link></li>
+              <li><Link to="/aboutus" className="text-muted text-decoration-none">About Us</Link></li>
+              <li><Link to="/contact" className="text-muted text-decoration-none">Contact</Link></li>
+              <li><Link to="/faq" className="text-muted text-decoration-none">FAQ</Link></li>
+              <li><Link to="/locations" className="text-muted text-decoration-none">Locations</Link></li>
+
             </ul>
           </div>
           {/* Google Maps */}
@@ -59,6 +64,37 @@ function Footer() {
           © 2025 Live Art Clothings | All Rights Reserved
         </p>
       </div>
+
+      {/* Embedded CSS for Animation */}
+      <style jsx>{`
+        .animated-icon {
+          color: white;
+          transition: all 0.3s ease-in-out;
+        }
+
+        .animated-icon:hover {
+          animation: rgbColorShift 2s infinite;
+        }
+
+        @keyframes rgbColorShift {
+          0% {
+            color: rgb(255, 0, 0); /* Red */
+          }
+          25% {
+            color: rgb(0, 255, 0); /* Green */
+          }
+          50% {
+            color: rgb(0, 0, 255); /* Blue */
+          }
+          75% {
+            color: rgb(255, 255, 0); /* Yellow */
+          }
+          100% {
+            color: rgb(255, 0, 0); /* Back to Red */
+          }
+        }
+      `}</style>
+
     </footer>
   );
 }

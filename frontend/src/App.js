@@ -15,15 +15,22 @@ import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
 
 
+// Feedback Components
+import AddFeedback from './Components/AddFeedback';  // Correct import for AddFeedback
+import FeedbackList from './Components/FeedbackList'; // Correct import for FeedbackList
+
 // Product Manager Components
 import Checkout from './Components/Checkout';
 import Payment from './Components/Payment';
 import ProductList from './Components/ProductList';
 import ProductDetail from './Components/ProductDetail';
 import Aboutus from './Components/Aboutus';
+
 import OrderStatus from './Components/OrderStatus';
 import Locations from './Components/Locations';
 import Contact from './Components/Contact';
+import FAQ from './Components/FAQ'; // Import the FAQ component
+
 
 // Inventory Manager Components
 import HomeS from "./Components/HomeS";
@@ -100,6 +107,8 @@ function App() {
           <Route path="/locations" element={<Locations />} />
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} /> {/* Add the FAQ route */}
+
 
           {/* Employee Management Routes*/}
           <Route path="/add-employee" element={<AddEmployee />} />
@@ -130,6 +139,10 @@ function App() {
           <Route path="/stock/item/:id" element={<Item />} />
           <Route path="/addcategory" element={<AddCategory />} />
           <Route path="/category" element={<Category />} />
+
+          {/* Feedback Routes */}
+          <Route path="/add-feedback" element={<AddFeedback />} />
+          <Route path="/feedback-list" element={<FeedbackList />} />
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}
