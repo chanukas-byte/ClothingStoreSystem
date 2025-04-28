@@ -93,32 +93,39 @@ function Category() {
         />
       </div>
 
-      <div className="container-fluid">
+      <div style={{
+        maxWidth: '900px',
+        margin: '40px auto',
+        background: '#fff',
+        borderRadius: '18px',
+        boxShadow: '0 8px 32px rgba(60,60,60,0.12)',
+        padding: '32px 24px',
+      }}>
         <div className="table-responsive">
-          <table className="table table-striped table-bordered table-hover">
-            <thead className="bg-dark text-white">
+          <table className="table table-bordered table-hover" style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: 0 }}>
+            <thead style={{ background: 'linear-gradient(90deg, #212529 60%, #343a40 100%)', color: '#fff', fontSize: '1.15rem', fontWeight: 700 }}>
               <tr>
                 <th
                   onClick={() => handleSortChange("name")}
-                  style={{ cursor: "pointer" }}
-                  className="text-center"
+                  style={{ cursor: "pointer", textAlign: 'center', letterSpacing: '1px' }}
+                  className="align-middle"
                 >
-                  Category Name{" "}
-                  {sortField === "name" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
+                  Category Name {sortField === "name" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
                 </th>
-                <th className="text-center">Type</th>
-                <th className="text-center">Action</th>
+                <th className="align-middle text-center">Type</th>
+                <th className="align-middle text-center">Action</th>
               </tr>
             </thead>
             <tbody>
               {filteredCategories.length > 0 ? (
                 filteredCategories.map((category) => (
-                  <tr key={category._id}>
-                    <td className="text-center">{category.name}</td>
-                    <td className="text-center">{category.types}</td>
-                    <td className="text-center">
+                  <tr key={category._id} style={{ transition: 'background 0.2s', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background='#f8f9fa'} onMouseOut={e => e.currentTarget.style.background=''}>
+                    <td className="text-center align-middle" style={{ fontSize: '1.05rem', padding: '14px 0' }}>{category.name}</td>
+                    <td className="text-center align-middle" style={{ fontSize: '1.05rem', padding: '14px 0' }}>{category.types}</td>
+                    <td className="text-center align-middle">
                       <button
                         className="btn btn-danger btn-sm"
+                        style={{ borderRadius: '6px', fontWeight: 600, letterSpacing: '0.5px' }}
                         onClick={() => handleDelete(category._id)}
                       >
                         Delete
@@ -128,7 +135,7 @@ function Category() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="text-center">
+                  <td colSpan="3" className="text-center align-middle" style={{ padding: '24px 0', color: '#888' }}>
                     No categories available
                   </td>
                 </tr>

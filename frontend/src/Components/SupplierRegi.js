@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Nav from "./Nav";
+import Header from "./Header";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +9,7 @@ function SupplierRegi() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   const onSubmit = async (data) => {
     try {
@@ -22,10 +24,10 @@ function SupplierRegi() {
 
   return (
     <div style={styles.mainContainer}>
+      <Header />
       <Nav />
       <div style={styles.formWrapper}>
         <h2 style={styles.formTitle}>Register Supplier</h2>
-
         {message && (
           <p
             style={{
@@ -72,7 +74,15 @@ function SupplierRegi() {
             <input type="text" {...register("items", { required: true })} placeholder="Enter supplied items" style={styles.input} />
           </div>
 
-          <button type="submit" style={styles.submitButton}>
+          <button
+            type="submit"
+            style={{
+              ...styles.submitButton,
+              ...(isButtonHovered ? styles.submitButtonHover : {}),
+            }}
+            onMouseEnter={() => setIsButtonHovered(true)}
+            onMouseLeave={() => setIsButtonHovered(false)}
+          >
             Register Supplier
           </button>
         </form>
@@ -94,6 +104,7 @@ const styles = {
   },
   formWrapper: {
     backgroundColor: "#fff",
+    color: "#333",
     padding: "30px 40px",
     borderRadius: "10px",
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
@@ -103,7 +114,7 @@ const styles = {
   formTitle: {
     textAlign: "center",
     fontSize: "28px",
-    color: "#333",
+    color: "#000",
     marginBottom: "20px",
   },
   message: {
@@ -130,7 +141,7 @@ const styles = {
   },
   label: {
     fontSize: "16px",
-    color: "#555",
+    color: "#fff",
     marginBottom: "5px",
     display: "block",
   },
@@ -143,21 +154,23 @@ const styles = {
   },
   submitButton: {
     width: "100%",
-    background: "linear-gradient(to right, #007bff, #0056b3)",
-    color: "white",
+    background: "#fff",
+    color: "#000",
     padding: "12px",
     fontSize: "18px",
     fontWeight: "bold",
-    border: "none",
+    border: "2px solid #000",
     borderRadius: "5px",
     cursor: "pointer",
-    transition: "background 0.3s ease",
+    transition: "background 0.3s, color 0.3s",
   },
   submitButtonHover: {
-    background: "#0056b3",
+    background: "#000",
+    color: "#fff",
+    border: "2px solid #fff",
   },
   errorMessage: {
-    color: "#721c24",
+    color: "#f8d7da",
     fontSize: "12px",
     marginTop: "5px",
   },
