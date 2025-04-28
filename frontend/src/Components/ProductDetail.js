@@ -101,8 +101,8 @@ const ProductDetail = () => {
       <div className="product-detail-container">
         <div className="product-image-section">
           <img 
-            src={`http://localhost:4058/${product.imageUrl}`} 
-            alt={product.name} 
+            src={product.imageUrl ? `http://localhost:4058/${product.imageUrl}` : '/default-image.png'}
+            alt={product.name}
             className="product-image"
           />
         </div>
