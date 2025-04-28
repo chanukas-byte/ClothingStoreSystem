@@ -51,7 +51,7 @@ function NavBar() {
                 <Link className="nav-link text-white" to="">Users</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/add-feedback">Feedback</Link>
+                <Link className="nav-link text-white" to="/add-feedback">Feedback Form</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-white" to="/faq">FAQ</Link>

@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import logo from '../assets/logo.png';
+import NavB from './NavBar';
 // Import Chart.js components
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
@@ -460,6 +461,8 @@ const FeedbackList = () => {
   };
 
   return (
+    <div>
+      <NavB />
     <div className="feedback-list-container">
       <div className="feedback-list-header">
         <h2>Customer Feedback</h2>
@@ -478,6 +481,75 @@ const FeedbackList = () => {
           </button>
         </div>
       </div>
+
+      {/* Edit Feedback Modal */}
+      {isEditing && editedFeedback && (
+        <div className="edit-modal-overlay">
+          <div className="edit-modal">
+            <h3>Edit Feedback</h3>
+            <form onSubmit={updateFeedback}>
+              <div className="form-group">
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={editedFeedback.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={editedFeedback.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="rating">Rating</label>
+                <div className="rating-input">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <FaStar
+                      key={star}
+                      className={`rating-star ${editedFeedback.rating >= star ? 'active' : ''}`}
+                      onClick={() => setEditedFeedback({ ...editedFeedback, rating: star })}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="comments">Comments</label>
+                <textarea
+                  id="comments"
+                  name="comments"
+                  value={editedFeedback.comments}
+                  onChange={handleChange}
+                  required
+                  rows="4"
+                ></textarea>
+              </div>
+              <div className="modal-buttons">
+                <button type="submit" className="save-button">Save Changes</button>
+                <button 
+                  type="button" 
+                  className="cancel-button"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditedFeedback(null);
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {activeTab === 'list' ? (
         <>
@@ -571,12 +643,20 @@ const FeedbackList = () => {
                       {new Date(feedback.createdAt).toLocaleDateString()}
                     </div>
                   </div>
-                  <button
-                    className="delete-button"
-                    onClick={() => deleteFeedback(feedback._id)}
-                  >
-                    <FaTrash /> Delete
-                  </button>
+                  <div className="button-container">
+                    <button
+                      className="update-button"
+                      onClick={() => editFeedback(feedback)}
+                    >
+                      <FaEdit /> Update
+                    </button>
+                    <button
+                      className="delete-button"
+                      onClick={() => deleteFeedback(feedback._id)}
+                    >
+                      <FaTrash /> Delete
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
@@ -598,6 +678,7 @@ const FeedbackList = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };
