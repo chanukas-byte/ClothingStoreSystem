@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 import { FaRobot, FaFileUpload } from "react-icons/fa";
 import * as pdfjsLib from "pdfjs-dist";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter, Label } from "recharts";
 
 // PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
@@ -69,7 +69,7 @@ export default function FinanceSpirit() {
         const parsed = [];
         for (let row of rows) {
           // Example: "Marketing 12000 9000"
-          const match = row.match(/([A-Za-z ]+)\\s+(\\d+)\\s+(\\d+)/);
+          const match = row.match(/([A-Za-z ]+)\s+(\d+)\s+(\d+)/);
           if (match) {
             parsed.push({
               category: match[1].trim(),
@@ -107,11 +107,16 @@ export default function FinanceSpirit() {
         {fileName ? fileName : "Choose CSV or PDF File"}
         <input type="file" accept=".csv,.pdf" style={{ display: "none" }} onChange={handleFile} />
       </label>
-      {loading && <div style={{ margin: 16 }}>Analyzing...</div>}
+      {loading && (
+        <div style={{ margin: 16 }}>
+          <div className="spinner" style={{ margin: "0 auto", border: "4px solid #eee", borderTop: "4px solid #a020f0", borderRadius: "50%", width: 40, height: 40, animation: "spin 1s linear infinite" }} />
+          <div style={{ marginTop: 8 }}>Analyzing...</div>
+        </div>
+      )}
       {insights && (
         <div style={{
           marginTop: 24, background: "#f3e8ff", borderRadius: 8, padding: 20, color: "#4b006e",
-          fontWeight: 500, fontSize: "1.1rem"
+          fontWeight: 500, fontSize: "1.1rem", boxShadow: "0 2px 8px #a020f033"
         }}>
           <strong>Spirit says:</strong> {insights}
         </div>
@@ -120,30 +125,45 @@ export default function FinanceSpirit() {
       {data && data.length > 0 && (
         <div style={{ marginTop: 32 }}>
           <h4>Budget vs Actual (Bar Chart)</h4>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="budget" fill="#60a5fa" name="Budget" />
-              <Bar dataKey="actual" fill="#f87171" name="Actual" />
+          <ResponsiveContainer width="100%" height={320}>
+            <BarChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="category">
+                <Label value="Category" offset={-10} position="insideBottom" />
+              </XAxis>
+              <YAxis>
+                <Label value="Amount" angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }} />
+              </YAxis>
+              <Tooltip formatter={(value, name) => [value, name === 'budget' ? 'Budget' : 'Actual']} />
+              <Legend verticalAlign="top" height={36} />
+              <Bar dataKey="budget" fill="#60a5fa" name="Budget" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="actual" fill="#f87171" name="Actual" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
           <h4 style={{ marginTop: 32 }}>Budget vs Actual (Scatter Plot)</h4>
-          <ResponsiveContainer width="100%" height={300}>
-            <ScatterChart>
-              <CartesianGrid />
-              <XAxis dataKey="budget" name="Budget" />
-              <YAxis dataKey="actual" name="Actual" />
-              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-              <Legend />
+          <ResponsiveContainer width="100%" height={320}>
+            <ScatterChart margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
+              <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
+              <XAxis dataKey="budget" name="Budget" type="number">
+                <Label value="Budget" offset={-10} position="insideBottom" />
+              </XAxis>
+              <YAxis dataKey="actual" name="Actual" type="number">
+                <Label value="Actual" angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }} />
+              </YAxis>
+              <Tooltip cursor={{ strokeDasharray: '3 3' }} formatter={(value, name) => [value, name.charAt(0).toUpperCase() + name.slice(1)]} />
+              <Legend verticalAlign="top" height={36} />
               <Scatter name="Categories" data={data} fill="#a020f0" />
             </ScatterChart>
           </ResponsiveContainer>
         </div>
       )}
+      {/* Spinner keyframes for loading */}
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
