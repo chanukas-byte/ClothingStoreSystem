@@ -198,6 +198,17 @@ function UpdateProduct() {
               value={inputs.name}
               style={formStyles.input}
               required
+              onKeyPress={(e) => {
+                if (!/[A-Za-z\s]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              onPaste={(e) => {
+                const paste = (e.clipboardData || window.clipboardData).getData('text');
+                if (/[^A-Za-z\s]/.test(paste)) {
+                  e.preventDefault();
+                }
+              }}
             />
           </div>
 
