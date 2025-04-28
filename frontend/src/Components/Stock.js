@@ -156,6 +156,7 @@ function Stock() {
     printWindow.document.write("<html><head><title>Stock Report</title>" + printStyles + "</head><body>");
     printWindow.document.write(`
       <div class='print-header'>
+        <img src='assets/logo.jpg' alt='Logo' style='width: 100px; margin-bottom: 10px;' />
         <div class='print-title'>Live Art Clothings <br>Stock Report</div>
         <div style='height: 10px;'></div>
         <div class='print-date'>Generated on: ${formattedDate}</div>
