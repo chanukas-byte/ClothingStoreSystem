@@ -86,25 +86,22 @@ function Header() {
               </li>
 
               <li className="nav-item">
-  <Link className="nav-link text-white" to="/finance-management">
-    Financial Management
-  </Link>
-</li>
+                <Link className="nav-link text-white" to="/finance-management">
+                  Financial Management
+                </Link>
+              </li>
 
               <li className="nav-item">
-     c<Link className="nav-link text-white" to="/finance-chatbot">
-    Finance Chatbot
-  </Link>
-</li> 
+                <Link className="nav-link text-white" to="/budget-planner">
+                  Budget Planner
+                </Link>
+              </li>
 
-<li className="nav-item">
-  <Link className="nav-link text-white" to="/finance-spirit">
-    AI Spirit
-  </Link>
-</li>
-
-              <Link className="nav-link text-white" to="/budget-planner">Budget Planner</Link>
-
+              <li className="nav-item">
+                <Link className="nav-link text-white" to="/finance-spirit">
+                  AI Spirit
+                </Link>
+              </li>
             </ul>
 
             {/* Search Form */}

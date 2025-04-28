@@ -48,9 +48,6 @@ function NavBar() {
                 <Link className="nav-link text-white" to="/locations">Locations</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/virtual-room">Virtual Room</Link>
-              </li>
-              <li className="nav-item">
                 <Link className="nav-link text-white" to="">Users</Link>
               </li>
               <li className="nav-item">
