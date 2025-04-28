@@ -253,6 +253,9 @@ const AddProduct = () => {
               <option value="WOMENS-TOPS">Women's Tops</option>
               <option value="WOMENS-PANTS">Women's Pants</option>
               <option value="WOMENS-SKIRTS">Women's Skirts</option>
+              <option value="KIDS-SHIRTS">Kids's Shirts</option>
+              <option value="KIDS-T-SHIRTS">Kids's T-Shirts</option>
+              <option value="KIDS-PANTS">Kids's Pants</option>
             </select>
           </div>
 

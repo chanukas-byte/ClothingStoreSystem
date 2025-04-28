@@ -16,6 +16,7 @@ function UpdateProduct() {
   });
   
   const [imagePreview, setImagePreview] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
   const history = useNavigate();
   const { id } = useParams(); // Get product id from URL params
 
@@ -37,7 +38,7 @@ function UpdateProduct() {
           createdAt: res.data.product.createdAt.slice(0, 16), // Convert to 'YYYY-MM-DDTHH:mm'
           updatedAt: res.data.product.updatedAt.slice(0, 16), // Convert to 'YYYY-MM-DDTHH:mm'
         });
-        setImagePreview(res.data.product.imageUrl);
+        setImagePreview(res.data.product.imageUrl ? `http://localhost:4058/${res.data.product.imageUrl}` : "");
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
@@ -45,25 +46,42 @@ function UpdateProduct() {
     fetchHandler();
   }, [id]); // Fetch data when the id changes
 
+  // Handle image file selection and preview
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Send the updated request to the backend
   const sendRequest = async () => {
-    await axios
-      .put(`http://localhost:4058/products/${id}`, {
-        name: inputs.name,
-        description: inputs.description,
-        price: Number(inputs.price),
-        category: inputs.category,
-        stockQuantity: Number(inputs.stockQuantity),
-        imageUrl: inputs.imageUrl,
-        createdAt: new Date(inputs.createdAt).toISOString(), // Ensure correct date format
-        updatedAt: new Date(inputs.updatedAt).toISOString(), // Ensure correct date format
-      })
-      .then(() => {
-        history("/stock"); // Navigate back to the stock page after successful update
-      })
-      .catch((err) => {
-        console.error("Error updating product:", err);
+    try {
+      const formData = new FormData();
+      formData.append('name', inputs.name);
+      formData.append('description', inputs.description);
+      formData.append('price', inputs.price);
+      formData.append('category', inputs.category);
+      formData.append('stockQuantity', inputs.stockQuantity);
+      formData.append('createdAt', new Date(inputs.createdAt).toISOString());
+      formData.append('updatedAt', new Date(inputs.updatedAt).toISOString());
+      if (selectedImage) {
+        formData.append('image', selectedImage);
+      }
+      await axios.put(`http://localhost:4058/products/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
+      history("/stock");
+    } catch (err) {
+      console.error("Error updating product:", err);
+    }
   };
 
   // Handle input changes
@@ -150,15 +168,17 @@ function UpdateProduct() {
         <h1 style={formStyles.heading}>Update Product</h1>
         <form onSubmit={handleSubmit}>
           <div style={formStyles.imagePreviewContainer}>
-            <img
-              src={imagePreview ? `http://localhost:4058/${imagePreview}` : '/placeholder-image.jpg'}
-              alt="Product Preview"
-              style={formStyles.imagePreview}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = '/placeholder-image.jpg';
-              }}
-            />
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Product Preview"
+                style={formStyles.imagePreview}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/placeholder-image.jpg';
+                }}
+              />
+            )}
           </div>
 
           <div style={formStyles.inputField}>
@@ -193,7 +213,7 @@ function UpdateProduct() {
 
           <div style={formStyles.inputField}>
             <label htmlFor="price" style={formStyles.label}>
-              Price
+              Price Rs.
             </label>
             <input
               type="number"
@@ -203,21 +223,6 @@ function UpdateProduct() {
               value={inputs.price}
               style={formStyles.input}
               min="0"
-              required
-            />
-          </div>
-
-          <div style={formStyles.inputField}>
-            <label htmlFor="category" style={formStyles.label}>
-              Category
-            </label>
-            <input
-              type="text"
-              name="category"
-              id="category"
-              onChange={handleChange}
-              value={inputs.category}
-              style={formStyles.input}
               required
             />
           </div>
@@ -239,17 +244,15 @@ function UpdateProduct() {
           </div>
 
           <div style={formStyles.inputField}>
-            <label htmlFor="imageUrl" style={formStyles.label}>
-              Image URL
+            <label htmlFor="image" style={formStyles.label}>
+              Product Image
             </label>
             <input
-              type="text"
-              name="imageUrl"
-              id="imageUrl"
-              onChange={handleChange}
-              value={inputs.imageUrl}
-              style={formStyles.input}
-              placeholder="Enter image URL"
+              type="file"
+              name="image"
+              id="image"
+              onChange={handleImageChange}
+              accept="image/*"
             />
           </div>
 
