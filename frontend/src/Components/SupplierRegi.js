@@ -42,7 +42,26 @@ function SupplierRegi() {
         <form onSubmit={handleSubmit(onSubmit)} style={styles.formContainer}>
           <div style={styles.formGroup}>
             <label style={styles.label}>Name</label>
-            <input type="text" {...register("name", { required: true })} placeholder="Enter supplier name" style={styles.input} />
+            <input 
+              type="text" 
+              {...register("name", { 
+                required: "Name is required",
+                pattern: {
+                  value: /^[A-Za-z\s]+$/,
+                  message: "Name can only contain letters and spaces"
+                }
+              })} 
+              placeholder="Enter supplier name" 
+              style={styles.input} 
+              onKeyPress={(e) => {
+                if (!/[A-Za-z\s]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+            />
+            {errors.name && (
+              <p style={styles.errorMessage}>{errors.name.message}</p>
+            )}
           </div>
 
           <div style={styles.formGroup}>

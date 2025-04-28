@@ -101,6 +101,17 @@ const AddCategory = () => {
               style={formStyles.input}
               required
               aria-label="Category Name"
+              onKeyPress={(e) => {
+                if (!/[A-Za-z\s]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              onPaste={(e) => {
+                const paste = (e.clipboardData || window.clipboardData).getData('text');
+                if (/[^A-Za-z\s]/.test(paste)) {
+                  e.preventDefault();
+                }
+              }}
             />
             <label htmlFor="types" style={formStyles.label}>
               Category Type
