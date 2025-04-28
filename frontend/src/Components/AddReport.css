@@ -2,10 +2,10 @@
 
 /* Main Container */
 .report-container {
+  background: #fff !important;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
   color: #333;
   padding: 2rem 0;
 }
@@ -562,4 +562,21 @@
   animation: shimmer 3s infinite linear;
   pointer-events: none;
   border-radius: 15px;
+}
+
+/* Style the submit and download button */
+.modern-submit-button.finance-action-btn {
+  background: #111 !important;
+  color: #fff !important;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.modern-submit-button.finance-action-btn:hover,
+.modern-submit-button.finance-action-btn:focus {
+  background: #FFD700 !important; /* Gold highlight */
+  color: #111 !important;
+  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2);
 } 

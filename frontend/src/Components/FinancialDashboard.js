@@ -150,12 +150,8 @@ const FinancialDashboard = () => {
   };
 
   const formatLargeNumber = (value) => {
-    if (value >= 1000000) {
-      return `Rs. ${(value / 1000000).toFixed(2)}M`;
-    } else if (value >= 1000) {
-      return `Rs. ${(value / 1000).toFixed(2)}K`;
-    }
-    return `Rs. ${value.toString()}`;
+    // Format with commas for thousands, lakhs, etc. (Indian style)
+    return value.toLocaleString('en-IN');
   };
 
   const formatPercentage = (value) => {
