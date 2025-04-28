@@ -155,8 +155,8 @@
 }
 
 .submit-button {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: #000000;
+  color: #ffffff;
   border: 2px solid #000000;
   padding: 1rem 2rem;
   border-radius: 50px;
@@ -203,6 +203,10 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+.submit-button:disabled .submit-icon {
+  color: #999;
 }
 
 /* Responsive Design */
@@ -314,17 +318,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.submit-button:disabled {
-  background-color: #f5f5f5;
-  color: #999;
-  border-color: #ddd;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.submit-button:disabled .submit-icon {
-  color: #999;
 } 
