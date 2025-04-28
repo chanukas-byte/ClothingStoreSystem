@@ -97,20 +97,37 @@ function Stock() {
         .no-print, .no-print * { display: none !important; }
         .print-header { display: block !important; }
         .print-table th, .print-table td { border: 1px solid #333 !important; text-align: center; }
-        .print-table th { background: #e2e2e2; color: #111; font-size: 16px; }
+        .print-table th { background: #f2f2f2; color: #000; font-size: 16px; }
         .print-table td { font-size: 14px; }
-        .print-table tr:nth-child(even) { background: #f2f2f2; }
-        .print-table { width: 100%; border-collapse: collapse; }
+        .print-table tr:nth-child(even) { background: #f9f9f9; }
+        .print-table { width: 100%; border-collapse: collapse; border: 2px solid #000; }
         .print-table th.price-col, .print-table td.price-col { width: 90px !important; }
         .print-table th.category-col, .print-table td.category-col { width: 180px !important; }
         .print-table th.stock-col, .print-table td.stock-col { width: 60px !important; }
         .print-table th.updated-col, .print-table td.updated-col { width: 120px !important; }
         body { font-family: 'Segoe UI', Arial, sans-serif; }
+        .report-container { border: 2px solid #000; padding: 20px; margin: 10px; }
+        .company-header { text-align: center; margin-bottom: 20px; }
+        .company-name { font-size: 24px; font-weight: bold; color: #000; margin-bottom: 5px; }
+        .company-address { font-size: 14px; color: #333; margin-bottom: 5px; }
+        .company-contact { font-size: 14px; color: #333; margin-bottom: 15px; }
+        .report-title { font-size: 20px; font-weight: bold; color: #000; margin: 15px 0; text-align: center; }
+        .report-date { font-size: 14px; color: #333; margin-bottom: 15px; text-align: right; }
+        .horizontal-line { border-top: 1px solid #000; margin: 10px 0; }
+        .report-summary { margin: 15px 0; padding: 10px; background: #f2f2f2; border: 1px solid #ddd; }
+        .summary-item { margin: 5px 0; }
+        .table-container { border: 2px solid #000; padding: 10px; margin: 15px 0; }
+        .report-footer { margin-top: 30px; display: flex; justify-content: space-between; }
+        .signature-section { width: 45%; }
+        .signature-line { border-top: 1px solid #000; margin-top: 50px; width: 100%; }
+        .signature-title { text-align: center; margin-top: 5px; font-weight: bold; }
+        .date-section { width: 45%; text-align: right; }
+        .date-line { border-top: 1px solid #000; margin-top: 50px; width: 100%; }
+        .date-title { text-align: center; margin-top: 5px; font-weight: bold; }
+        @page { margin: 0; }
+        html, body { margin: 0; padding: 0; }
       }
-      .print-header { display: none; text-align: center; margin-bottom: 20px; }
-      .print-title { font-size: 2rem; font-weight: bold; color: #1a237e; margin-bottom: 18px; }
-      .print-date { font-size: 1rem; color: #333; margin-bottom: 10px; }
-      .print-table th, .print-table td { padding: 8px 12px; }
+      .print-header { display: none; }
     </style>
   `;
 
@@ -155,16 +172,40 @@ function Stock() {
     const printWindow = window.open("", "", "width=900,height=700");
     printWindow.document.write("<html><head><title>Stock Report</title>" + printStyles + "</head><body>");
     printWindow.document.write(`
-      <div class='print-header'>
-        <img src='assets/logo.jpg' alt='Logo' style='width: 100px; margin-bottom: 10px;' />
-        <div class='print-title'>Live Art Clothings <br>Stock Report</div>
-        <div style='height: 10px;'></div>
-        <div class='print-date'>Generated on: ${formattedDate}</div>
-        <hr style='margin: 10px 0 20px 0; border: none; border-top: 2px solid #1a237e;'>
+      <div class='report-container'>
+        <div class='print-header'>
+          <div class='company-header'>
+            <div class='company-name'>LiveArt Clothing PVT LTD</div>
+            <div class='company-address'>123 Main Street, Colombo 03, Sri Lanka</div>
+            <div class='company-contact'>Tel: +94 11 234 5678 | Email: info@liveartclothing.com</div>
+          </div>
+          <div class='horizontal-line'></div>
+          <div class='report-title'>STOCK REPORT</div>
+          <div class='report-date'>Generated on: ${formattedDate}</div>
+          <div class='horizontal-line'></div>
+          <div class='report-summary'>
+            <div class='summary-item'><strong>Total Products:</strong> ${getTotalAvailableItems()}</div>
+            <div class='summary-item'><strong>Total Stock Quantity:</strong> ${getTotalStockQuantity()}</div>
+            <div class='summary-item'><strong>Low Stock Items:</strong> ${getLowStockItemsCount()}</div>
+          </div>
+          <div class='horizontal-line'></div>
+          <div class='table-container'>
+        </div>
       </div>
     `);
     printWindow.document.write(generatePrintTable(sortedProducts));
-    printWindow.document.write("</body></html>");
+    printWindow.document.write(`
+      <div class='report-footer'>
+        <div class='signature-section'>
+          <div class='signature-line'></div>
+          <div class='signature-title'>Inventory Manager</div>
+        </div>
+        <div class='date-section'>
+          <div class='date-line'></div>
+          <div class='date-title'>Date</div>
+        </div>
+      </div>
+    </div></body></html>`);
     printWindow.document.close();
     printWindow.document.title = "Stock Report";
     printWindow.print();
