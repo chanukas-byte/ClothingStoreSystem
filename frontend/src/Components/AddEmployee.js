@@ -5,6 +5,7 @@ import { PDFDocument, rgb } from "pdf-lib";
 import Header from "./Header";
 import Footer from "./Footer";
 import './AddEmployee.css';
+import logo from '../assets/logo.png';
 
 
 function AddEmployee({ isAdmin }) {
@@ -121,24 +122,125 @@ function AddEmployee({ isAdmin }) {
   const generatePDF = async (employee) => {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 800]);
-    const fontSize = 12;
+    const { width, height } = page.getSize();
 
-    page.drawText("Employee Registration Receipt", { x: 200, y: 750, size: 18, color: rgb(0.2, 0.4, 0.8) });
-    page.drawText(`Registration Date: ${new Date().toLocaleString()}`, { x: 150, y: 720, size: fontSize });
+    // Add decorative border with gold color
+    page.drawRectangle({
+      x: 20,
+      y: 20,
+      width: width - 40,
+      height: height - 40,
+      borderColor: rgb(0.85, 0.65, 0.13), // Gold color
+      borderWidth: 2,
+    });
 
-    const content = `
-ID         : ${employee.employeeid}
-Name       : ${employee.name}
-Age        : ${employee.age}
-Department : ${employee.department}
-Email      : ${employee.email}
-Mobile     : ${employee.mobile}
-Status     : ${employee.status}
-Address    : ${employee.address}
-Salary     : $${employee.salary}
-    `;
+    // Add inner border with black color
+    page.drawRectangle({
+      x: 25,
+      y: 25,
+      width: width - 50,
+      height: height - 50,
+      borderColor: rgb(0, 0, 0),
+      borderWidth: 1,
+    });
 
-    page.drawText(content, { x: 50, y: 650, size: fontSize, color: rgb(0.1, 0.1, 0.1) });
+    // Add logo
+    const logoImage = await pdfDoc.embedPng(logo);
+    const logoDims = logoImage.scale(0.2);
+    page.drawImage(logoImage, {
+      x: 50,
+      y: height - 100,
+      width: logoDims.width,
+      height: logoDims.height,
+    });
+
+    // Add header with modern styling
+    page.drawText("Employee Registration Receipt", {
+      x: 200,
+      y: height - 80,
+      size: 24,
+      color: rgb(0, 0, 0),
+    });
+
+    // Add registration date with gold color
+    page.drawText(`Registration Date: ${new Date().toLocaleString()}`, {
+      x: 200,
+      y: height - 110,
+      size: 12,
+      color: rgb(0.85, 0.65, 0.13),
+    });
+
+    // Add decorative line
+    page.drawLine({
+      start: { x: 50, y: height - 130 },
+      end: { x: width - 50, y: height - 130 },
+      color: rgb(0.85, 0.65, 0.13),
+      thickness: 1,
+    });
+
+    // Add employee details with modern styling
+    const details = [
+      { label: "Employee ID", value: employee.employeeid },
+      { label: "Name", value: employee.name },
+      { label: "Age", value: employee.age },
+      { label: "Department", value: employee.department },
+      { label: "Mobile", value: employee.mobile },
+      { label: "Status", value: employee.status },
+      { label: "Address", value: employee.address },
+    ];
+
+    let yPosition = height - 170;
+    details.forEach(({ label, value }) => {
+      // Draw label in gold
+      page.drawText(`${label}:`, {
+        x: 50,
+        y: yPosition,
+        size: 12,
+        color: rgb(0.85, 0.65, 0.13),
+      });
+
+      // Draw value in black
+      page.drawText(value, {
+        x: 200,
+        y: yPosition,
+        size: 12,
+        color: rgb(0, 0, 0),
+      });
+
+      yPosition -= 30;
+    });
+
+    // Add signature section
+    yPosition -= 30;
+    page.drawLine({
+      start: { x: 50, y: yPosition },
+      end: { x: 250, y: yPosition },
+      color: rgb(0.85, 0.65, 0.13),
+      thickness: 1,
+    });
+
+    page.drawText("Finance Manager", {
+      x: 50,
+      y: yPosition - 20,
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+
+    page.drawText("Signature", {
+      x: 50,
+      y: yPosition - 40,
+      size: 10,
+      color: rgb(0.85, 0.65, 0.13),
+    });
+
+    // Add footer with modern styling
+    page.drawText("Live Art Clothing - Employee Management System", {
+      x: width / 2,
+      y: 50,
+      size: 10,
+      color: rgb(0.85, 0.65, 0.13),
+      align: 'center',
+    });
 
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });

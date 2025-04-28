@@ -13,7 +13,9 @@ import ReportDetails from "./Components/Reportdetails";
 import AssignSalary from "./Components/AssignSalary";
 import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
-
+import BudgetPlanner from "./Components/BudgetPlanner";
+import FinancialDashboard from "./Components/FinancialDashboard";
+import FinanceSpirit from "./Components/FinanceSpirit";
 
 // Feedback Components
 import AddFeedback from './Components/AddFeedback';  // Correct import for AddFeedback
@@ -125,6 +127,10 @@ function App() {
           {/* Salary Management Routes*/}
           <Route path="/assign-salary" element={<AssignSalary />} />
           <Route path="/view-salary" element={<ViewSalary />} />
+          <Route path="/budget-planner" element={<BudgetPlanner />} />
+          <Route path="/financial-dashboard" element={<FinancialDashboard />} />
+          <Route path="/finance-management" element={<FinancialDashboard />} />
+          <Route path="/finance-spirit" element={<FinanceSpirit />} />
 
           {/* Inventory Management Routes*/}
           <Route path="/inventory-management-Home" element={<HomeS />} />

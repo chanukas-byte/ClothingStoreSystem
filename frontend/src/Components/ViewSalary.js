@@ -7,6 +7,7 @@ import { PDFDocument, rgb } from "pdf-lib"; // Import from pdf-lib
 import Header from "./Header";
 import Footer from "./Footer"; 
 import "./ViewSalary.css";
+import logo from '../assets/logo.png';
 
 function AllEmployees() {
   const [employees, setEmployees] = useState([]);
@@ -65,31 +66,131 @@ function AllEmployees() {
   const downloadPDF = async (employee) => {
     const { grossSalary, epf, etf, netSalary } = calculateSalary(employee);
     const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 400]);
-    const { height } = page.getSize();
+    const page = pdfDoc.addPage([600, 800]);
+    const { width, height } = page.getSize();
 
-    // Add text content
-    page.drawText("Live Art Clothing - Employee Salary Slip", {
+    // Add decorative border with gold color
+    page.drawRectangle({
       x: 20,
-      y: height - 40,
-      size: 20,
-      color: rgb(0.2, 0.4, 0.8),
+      y: 20,
+      width: width - 40,
+      height: height - 40,
+      borderColor: rgb(0.85, 0.65, 0.13), // Gold color
+      borderWidth: 2,
     });
 
-    page.drawText(`Generated on: ${new Date().toLocaleString()}`, {
-      x: 20,
-      y: height - 60,
+    // Add inner border with black color
+    page.drawRectangle({
+      x: 25,
+      y: 25,
+      width: width - 50,
+      height: height - 50,
+      borderColor: rgb(0, 0, 0),
+      borderWidth: 1,
+    });
+
+    try {
+      // Add logo with error handling
+      const logoImage = await pdfDoc.embedPng(logo);
+      const logoDims = logoImage.scale(0.2);
+      page.drawImage(logoImage, {
+        x: 50,
+        y: height - 100,
+        width: logoDims.width,
+        height: logoDims.height,
+      });
+    } catch (error) {
+      console.warn('Could not embed logo:', error);
+      // Continue without logo if there's an error
+    }
+
+    // Add header with modern styling
+    page.drawText("Live Art Clothing - Salary Slip", {
+      x: 200,
+      y: height - 80,
+      size: 24,
+      color: rgb(0, 0, 0),
+    });
+
+    // Add date with gold color
+    page.drawText(`Date: ${new Date().toLocaleDateString()}`, {
+      x: 200,
+      y: height - 110,
       size: 12,
+      color: rgb(0.85, 0.65, 0.13),
     });
 
-    page.drawText(`Employee ID: ${employee.employeeid}`, { x: 20, y: height - 100, size: 12 });
-    page.drawText(`Name: ${employee.name}`, { x: 20, y: height - 120, size: 12 });
-    page.drawText(`Department: ${formatDepartment(employee.department)}`, { x: 20, y: height - 140, size: 12 });
+    // Add decorative line
+    page.drawLine({
+      start: { x: 50, y: height - 130 },
+      end: { x: width - 50, y: height - 130 },
+      color: rgb(0.85, 0.65, 0.13),
+      thickness: 1,
+    });
 
-    page.drawText(`Gross Salary: LKR ${grossSalary.toLocaleString("en-LK")}`, { x: 20, y: height - 180, size: 12 });
-    page.drawText(`EPF (12%): LKR ${epf.toLocaleString("en-LK")}`, { x: 20, y: height - 200, size: 12 });
-    page.drawText(`ETF (3%): LKR ${etf.toLocaleString("en-LK")}`, { x: 20, y: height - 220, size: 12 });
-    page.drawText(`Net Salary: LKR ${netSalary.toLocaleString("en-LK")}`, { x: 20, y: height - 240, size: 12 });
+    // Add employee details with modern styling
+    const details = [
+      { label: "Employee ID", value: employee.employeeid },
+      { label: "Name", value: employee.name },
+      { label: "Department", value: formatDepartment(employee.department) },
+      { label: "Gross Salary", value: `LKR ${grossSalary.toLocaleString("en-LK")}` },
+      { label: "EPF (12%)", value: `LKR ${epf.toLocaleString("en-LK")}` },
+      { label: "ETF (3%)", value: `LKR ${etf.toLocaleString("en-LK")}` },
+      { label: "Net Salary", value: `LKR ${netSalary.toLocaleString("en-LK")}` },
+    ];
+
+    let yPosition = height - 170;
+    details.forEach(({ label, value }) => {
+      // Draw label in gold
+      page.drawText(`${label}:`, {
+        x: 50,
+        y: yPosition,
+        size: 12,
+        color: rgb(0.85, 0.65, 0.13),
+      });
+
+      // Draw value in black
+      page.drawText(value, {
+        x: 200,
+        y: yPosition,
+        size: 12,
+        color: rgb(0, 0, 0),
+      });
+
+      yPosition -= 30;
+    });
+
+    // Add signature section at the bottom right
+    yPosition = 100;
+    page.drawLine({
+      start: { x: width - 200, y: yPosition },
+      end: { x: width - 50, y: yPosition },
+      color: rgb(0.85, 0.65, 0.13),
+      thickness: 1,
+    });
+
+    page.drawText("Finance Manager", {
+      x: width - 200,
+      y: yPosition - 20,
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+
+    page.drawText("Signature", {
+      x: width - 200,
+      y: yPosition - 40,
+      size: 10,
+      color: rgb(0.85, 0.65, 0.13),
+    });
+
+    // Add footer with modern styling
+    page.drawText("Live Art Clothing - Employee Management System", {
+      x: width / 2,
+      y: 50,
+      size: 10,
+      color: rgb(0.85, 0.65, 0.13),
+      align: 'center',
+    });
 
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
