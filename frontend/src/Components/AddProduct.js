@@ -146,7 +146,7 @@ const AddProduct = () => {
     submitButton: {
       width: "100%",
       padding: "10px",
-      backgroundColor: "#007bff",
+      backgroundColor: "#000",
       color: "#fff",
       border: "none",
       borderRadius: "5px",
