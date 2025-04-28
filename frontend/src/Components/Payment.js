@@ -24,6 +24,9 @@ const Payment = () => {
   const [slipUpload, setSlipUpload] = useState(null);
   const [isValid, setIsValid] = useState(true);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [cardNumberError, setCardNumberError] = useState("");
+  const [cardNameError, setCardNameError] = useState("");
+  const [nicError, setNicError] = useState("");
   
   // Delivery options state
   const [deliveryMethod, setDeliveryMethod] = useState('');
@@ -116,21 +119,22 @@ const Payment = () => {
 
   // Handle NIC input
   const handleNICChange = (e) => {
-    setCustomerNIC(e.target.value);
+    // Only allow digits
+    const value = e.target.value.replace(/\D/g, "");
+    setCustomerNIC(value);
+    if (value.length !== 12 && value.length > 0) {
+      setNicError("NIC must be exactly 12 digits");
+    } else {
+      setNicError("");
+    }
   };
 
   // Handle customer name input with validation
   const handleCustomerNameChange = (e) => {
-    const name = e.target.value;
-    setCustomerName(name);
-    
-    // Validate name (no special characters)
-    const nameRegex = /^[a-zA-Z\s]*$/;
-    if (!nameRegex.test(name) && name !== '') {
-      setNameError('Name cannot contain special characters');
-    } else {
-      setNameError('');
-    }
+    // Only allow letters and spaces
+    const filteredValue = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+    setCustomerName(filteredValue);
+    setNameError(""); // No error needed since invalid chars are blocked
   };
 
   // Handle customer email input with validation
@@ -173,6 +177,25 @@ const Payment = () => {
       }
       setSlipUpload(file);
     }
+  };
+
+  // Card number validation
+  const handleCardNumberChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ""); // Only digits
+    setCardNumber(value);
+    if (value.length !== 16) {
+      setCardNumberError("Card number must be exactly 16 digits");
+    } else {
+      setCardNumberError("");
+    }
+  };
+
+  // Card name validation
+  const handleCardNameChange = (e) => {
+    // Only allow letters and spaces
+    const filteredValue = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+    setCardName(filteredValue);
+    setCardNameError(""); // No error needed since invalid chars are blocked
   };
 
   // Show verification popup
@@ -220,19 +243,37 @@ const Payment = () => {
   // Handle card form submission
   const handleCardSubmit = (e) => {
     e.preventDefault();
-    if (cardNumber && cardName && expiryDate && cvv) {
-      setShowCardPopup(false);
-      showVerificationPopup();
+    let valid = true;
+    if (cardNumber.length !== 16) {
+      setCardNumberError("Card number must be exactly 16 digits");
+      valid = false;
     }
+    if (!/^[a-zA-Z\s]+$/.test(cardName)) {
+      setCardNameError("Name can only contain letters and spaces");
+      valid = false;
+    }
+    if (!cardNumber || !cardName || !expiryDate || !cvv) {
+      valid = false;
+    }
+    if (!valid) return;
+    setShowCardPopup(false);
+    showVerificationPopup();
   };
 
   // Handle slip form submission
   const handleSlipSubmit = (e) => {
     e.preventDefault();
-    if (selectedBank && customerNIC && slipUpload) {
-      setShowSlipPopup(false);
-      showVerificationPopup();
+    let valid = true;
+    if (customerNIC.length !== 12) {
+      setNicError("NIC must be exactly 12 digits");
+      valid = false;
     }
+    if (!selectedBank || !customerNIC || !slipUpload) {
+      valid = false;
+    }
+    if (!valid) return;
+    setShowSlipPopup(false);
+    showVerificationPopup();
   };
 
   // Handle customer address input
@@ -445,7 +486,7 @@ const Payment = () => {
 
     // Create PDF after validation
     const doc = new jsPDF();
-    
+
     // Add black border around the page
     doc.setDrawColor(0, 0, 0);
     doc.setLineWidth(0.5);
@@ -459,7 +500,7 @@ const Payment = () => {
     // Add invoice title
     doc.setFontSize(16);
     doc.text("INVOICE", 20, 45);
-    
+
     // Add Date and Time
     const date = new Date();
     const formattedDate = date.toLocaleString();
@@ -624,7 +665,7 @@ const Payment = () => {
     doc.setLineWidth(0.5);
     doc.line(20, yPos, 80, yPos);
     doc.text("Customer Signature", 20, yPos + 5);
-    
+
     // Save the PDF
     doc.save('invoice.pdf');
     
@@ -856,15 +897,15 @@ const Payment = () => {
 
         <div className="payment-amount-section">
           <label className="payment-label">Total Amount (Rs.)</label>
-          <input
+        <input
             type="text"
             value={formatAmount(totalAmount)}
-            onChange={handleAmountChange}
-            placeholder="Enter Total Amount"
+          onChange={handleAmountChange}
+          placeholder="Enter Total Amount"
             className="payment-input"
             readOnly
-          />
-        </div>
+        />
+      </div>
 
         <div className="payment-method-section">
           <label className="payment-label">Select Payment Method</label>
@@ -971,11 +1012,12 @@ const Payment = () => {
                 <input
                   type="text"
                   value={cardNumber}
-                  onChange={(e) => setCardNumber(e.target.value)}
+                  onChange={handleCardNumberChange}
                   placeholder="1234 5678 9012 3456"
-                  maxLength="19"
+                  maxLength="16"
                   required
                 />
+                {cardNumberError && <div className="error-text">{cardNumberError}</div>}
               </div>
               
               <div className="form-group">
@@ -983,10 +1025,11 @@ const Payment = () => {
                 <input
                   type="text"
                   value={cardName}
-                  onChange={(e) => setCardName(e.target.value)}
+                  onChange={handleCardNameChange}
                   placeholder="John Doe"
                   required
                 />
+                {cardNameError && <div className="error-text">{cardNameError}</div>}
               </div>
               
               <div className="form-row">
@@ -1054,15 +1097,17 @@ const Payment = () => {
                   onChange={handleNICChange}
                   placeholder="Enter your NIC number"
                   required
+                  maxLength="12"
                 />
+                {nicError && <div className="error-text">{nicError}</div>}
               </div>
               
               <div className="form-group">
                 <label>Upload Bank Slip</label>
                 <div className="file-upload-container">
-                  <input
-                    type="file"
-                    onChange={handleSlipUpload}
+          <input
+            type="file"
+            onChange={handleSlipUpload}
                     className="file-upload-input"
                     accept=".jpg,.jpeg,.png,.pdf"
                     required
@@ -1079,7 +1124,7 @@ const Payment = () => {
           </div>
         </div>
       )}
-      
+
       {/* Delivery Popup */}
       {showDeliveryPopup && (
         <div className="card-popup-overlay">
@@ -1229,8 +1274,8 @@ const Payment = () => {
                     </button>
                   </div>
                 </div>
-              </div>
-              
+    </div>
+
               <div className="card-popup-actions">
                 <button type="submit" className="submit-btn">Save</button>
                 <button type="button" className="download-btn" onClick={generateHomeDeliveryPDF}>Download</button>

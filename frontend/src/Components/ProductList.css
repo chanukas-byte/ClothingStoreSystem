@@ -43,15 +43,16 @@ body {
 /* Filters Section */
 .filters-section {
   display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
+  flex-direction: row;
   align-items: center;
-  padding: 15px 25px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  gap: 18px;
+  margin-bottom: 30px;
+  padding: 18px 24px;
+  background-color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.07);
   position: relative;
+  flex-wrap: wrap;
 }
 
 /* Common styles for all input elements */
@@ -71,8 +72,9 @@ body {
 
 /* Search Bar */
 .search-input {
-  flex: 1;
-  min-width: 300px;
+  flex: 1 1 260px;
+  min-width: 200px;
+  max-width: 400px;
 }
 
 .search-input:focus {
@@ -83,7 +85,8 @@ body {
 
 /* Category Select */
 .category-select {
-  min-width: 180px;
+  min-width: 170px;
+  margin-left: 0;
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -104,8 +107,7 @@ body {
   display: flex;
   gap: 10px;
   align-items: center;
-  position: relative;
-  padding-right: 50px;
+  margin-left: 0;
 }
 
 .price-input {
@@ -132,7 +134,7 @@ body {
   border: 1px solid #e0e0e0;
   position: relative;
   z-index: 10;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .menu-icon {
@@ -168,6 +170,7 @@ body {
   border-radius: 8px;
   transition: all 0.3s ease;
   border: 1px solid #e0e0e0;
+  margin-left: 0;
 }
 
 .cart-icon-container:hover {
@@ -517,7 +520,7 @@ body {
   }
   
   .checkout-sidebar {
-    width: 100%;
+      width: 100%;
     position: relative;
     height: auto;
     border-right: none;
@@ -528,7 +531,7 @@ body {
     padding: 15px;
     gap: 15px;
   }
-  
+
   .search-input,
   .category-select {
     min-width: 200px;
@@ -539,27 +542,157 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .filters-section {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 8px;
+  }
+  .search-input, .category-select, .price-input {
+    min-width: 120px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
   .filters-section {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
+    padding: 10px 4px;
   }
-  
-  .search-input,
-  .category-select,
-  .price-input {
+  .search-input, .category-select, .price-input {
     width: 100%;
-    min-width: auto;
+    min-width: 0;
+    max-width: 100%;
   }
-  
   .price-filters {
-    padding-right: 0;
+    width: 100%;
+    justify-content: flex-start;
   }
-  
-  .cart-icon-container {
-    position: static;
-    transform: none;
-    margin-top: 10px;
-    justify-content: center;
+}
+
+/* Admin Login Modal Styles */
+.admin-login-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30, 30, 30, 0.75);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
   }
+
+.admin-login-modal {
+  background: #181818;
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+  padding: 2.5rem 2rem 2rem 2rem;
+  min-width: 340px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1.5px solid #333;
+}
+
+.admin-login-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px #0002;
+}
+
+.admin-login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.admin-login-input {
+  background: #232323;
+  color: #fff;
+  border: 1.5px solid #444;
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  font-size: 1.1rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.admin-login-input:focus {
+  border: 1.5px solid #888;
+  box-shadow: 0 0 0 2px #8882;
+  background: #222;
+  }
+
+.admin-login-error {
+  color: #ff4444;
+  background: #222;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.admin-login-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.admin-login-btn {
+  background: linear-gradient(90deg, #333 60%, #555 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px #0002;
+}
+.admin-login-btn:hover {
+  background: linear-gradient(90deg, #444 60%, #888 100%);
+}
+
+.admin-cancel-btn {
+  background: #fff;
+  color: #222;
+  border: 1.5px solid #bbb;
+  border-radius: 8px;
+  padding: 0.7rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.admin-cancel-btn:hover {
+  background: #eee;
+  color: #000;
+  border: 1.5px solid #888;
+  }
+
+.admin-login-footer {
+  margin-top: 1.5rem;
+  color: #bbb;
+  font-size: 0.98rem;
+  text-align: center;
+  letter-spacing: 0.2px;
+  font-style: italic;
 }

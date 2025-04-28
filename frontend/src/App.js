@@ -13,8 +13,9 @@ import ReportDetails from "./Components/Reportdetails";
 import AssignSalary from "./Components/AssignSalary";
 import ViewSalary from "./Components/ViewSalary";
 import Home from "./Components/Home";
+import BudgetPlanner from "./Components/BudgetPlanner";
+import FinancialDashboard from "./Components/FinancialDashboard";
 import FinanceSpirit from "./Components/FinanceSpirit";
-
 
 // Feedback Components
 import AddFeedback from './Components/AddFeedback';  // Correct import for AddFeedback
@@ -46,14 +47,11 @@ import Item from "./Components/Item";
 import AddCategory from "./Components/AddCategory";
 import Category from "./Components/Category";
 import ReStock from "./Components/ReStock";
-import VirtualRoom from "./Components/VirtualRoom";
-
 
 // Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import HomeLiveArt from "./Components/HomeLiveArt";
-import FinancialDashboard from "./Components/FinancialDashboard";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -129,6 +127,10 @@ function App() {
           {/* Salary Management Routes*/}
           <Route path="/assign-salary" element={<AssignSalary />} />
           <Route path="/view-salary" element={<ViewSalary />} />
+          <Route path="/budget-planner" element={<BudgetPlanner />} />
+          <Route path="/financial-dashboard" element={<FinancialDashboard />} />
+          <Route path="/finance-management" element={<FinancialDashboard />} />
+          <Route path="/finance-spirit" element={<FinanceSpirit />} />
 
           {/* Inventory Management Routes*/}
           <Route path="/inventory-management-Home" element={<HomeS />} />
@@ -149,13 +151,6 @@ function App() {
           {/* Feedback Routes */}
           <Route path="/add-feedback" element={<AddFeedback />} />
           <Route path="/feedback-list" element={<FeedbackList />} />
-
-          {/* Financial Routes */}
-          <Route path="/financial-dashboard" element={<FinancialDashboard />} />
-          <Route path="/finance-spirit" element={<FinanceSpirit />} />
-
-          {/* Virtual Room Routes */}
-          <Route path="/virtual-room" element={<VirtualRoom />} />
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}
