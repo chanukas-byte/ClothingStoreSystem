@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const ProductController = require("../Controllers/ProductControllers");
+const ProductController = require("../Controllers/ProductControllers"); 
 const upload = require("../config/upload");
 
 // Get all products with filters
