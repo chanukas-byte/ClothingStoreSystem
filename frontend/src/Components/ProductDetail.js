@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './ProductDetail.css';
 import NavBar from './NavBar';
+import { FaShoppingCart } from 'react-icons/fa';
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -11,6 +12,8 @@ const ProductDetail = () => {
   const [error, setError] = useState(null);
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
+  const [showCart, setShowCart] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -28,6 +31,12 @@ const ProductDetail = () => {
     fetchProduct();
   }, [productId]);
 
+  useEffect(() => {
+    // Load cart from localStorage
+    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    setCartItems(storedCart);
+  }, [showCart]);
+
   const handleColorSelect = (color) => {
     setSelectedColor(color);
   };
@@ -41,18 +50,11 @@ const ProductDetail = () => {
       alert('Please select both color and size before adding to cart');
       return;
     }
-    
-    // Get existing cart from localStorage or initialize empty array
     const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    // Check if product already exists in cart
-    const existingProductIndex = existingCart.findIndex(item => item._id === product._id);
-    
+    const existingProductIndex = existingCart.findIndex(item => item._id === product._id && item.selectedColor === selectedColor && item.selectedSize === selectedSize);
     if (existingProductIndex >= 0) {
-      // Update quantity if product exists
       existingCart[existingProductIndex].quantity += 1;
     } else {
-      // Add new product to cart
       existingCart.push({
         ...product,
         quantity: 1,
@@ -60,11 +62,8 @@ const ProductDetail = () => {
         selectedSize
       });
     }
-    
-    // Save updated cart to localStorage
     localStorage.setItem('cart', JSON.stringify(existingCart));
-    
-    // Show success message
+    setCartItems(existingCart);
     alert('Product added to cart!');
   };
 
@@ -98,6 +97,36 @@ const ProductDetail = () => {
   return (
     <div className="page-container">
       <NavBar />
+      {/* Cart Icon at top right */}
+      <div style={{ position: 'fixed', top: 20, right: 30, zIndex: 2000 }}>
+        <FaShoppingCart size={32} style={{ cursor: 'pointer' }} onClick={() => setShowCart(true)} />
+        {cartItems.length > 0 && (
+          <span style={{ position: 'absolute', top: -8, right: -8, background: 'red', color: 'white', borderRadius: '50%', padding: '2px 7px', fontSize: 12 }}>{cartItems.length}</span>
+        )}
+      </div>
+      {/* Cart Popup */}
+      {showCart && (
+        <div style={{ position: 'fixed', top: 60, right: 30, width: 350, background: '#fff', boxShadow: '0 2px 16px rgba(0,0,0,0.2)', borderRadius: 8, zIndex: 3000, padding: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <h3 style={{ margin: 0 }}>Cart</h3>
+            <button onClick={() => setShowCart(false)} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer' }}>&times;</button>
+          </div>
+          {cartItems.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
+            <ul style={{ listStyle: 'none', padding: 0, maxHeight: 300, overflowY: 'auto' }}>
+              {cartItems.map((item, idx) => (
+                <li key={item._id + item.selectedColor + item.selectedSize + idx} style={{ borderBottom: '1px solid #eee', marginBottom: 8, paddingBottom: 8 }}>
+                  <div style={{ fontWeight: 'bold' }}>{item.name}</div>
+                  <div>Color: {item.selectedColor} | Size: {item.selectedSize}</div>
+                  <div>Qty: {item.quantity}</div>
+                  <div>Price: Rs. {item.price * item.quantity}</div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
       <div className="product-detail-container">
         <div className="product-image-section">
           <img 
@@ -118,19 +147,15 @@ const ProductDetail = () => {
           <div className="color-selection">
             <h3>Select Color</h3>
             <div className="color-options">
-              {product.colors ? (
-                product.colors.map((color) => (
-                  <div
-                    key={color}
-                    className={`color-option ${selectedColor === color ? 'selected' : ''}`}
-                    style={{ backgroundColor: color }}
-                    onClick={() => handleColorSelect(color)}
-                    title={color}
-                  />
-                ))
-              ) : (
-                <p>No color options available</p>
-              )}
+              {['Red', 'Blue', 'Black'].map((color) => (
+                <div
+                  key={color}
+                  className={`color-option ${selectedColor === color ? 'selected' : ''}`}
+                  style={{ backgroundColor: color.toLowerCase(), border: selectedColor === color ? '2px solid #000' : '2px solid transparent' }}
+                  onClick={() => setSelectedColor(color)}
+                  title={color}
+                />
+              ))}
             </div>
             {selectedColor && (
               <p className="selected-color">Selected: {selectedColor}</p>
@@ -142,22 +167,12 @@ const ProductDetail = () => {
             <select 
               className="size-select"
               value={selectedSize}
-              onChange={handleSizeSelect}
+              onChange={e => setSelectedSize(e.target.value)}
             >
               <option value="">Choose a size</option>
-              {product.sizes ? (
-                product.sizes.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))
-              ) : (
-                <>
-                  <option value="S">S</option>
-                  <option value="M">M</option>
-                  <option value="L">L</option>
-                </>
-              )}
+              {['S', 'M', 'L'].map((size) => (
+                <option key={size} value={size}>{size}</option>
+              ))}
             </select>
           </div>
           
