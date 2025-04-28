@@ -63,8 +63,8 @@ function PlaceOrder() {
           message: "Product order has been successfully updated!",
           orderDetails: {
             name: inputs.name,
-            reorderQuantity: inputs.reorderQuantity,
-            currentStock: inputs.stockQuantity,
+            reorderQuantity: Number(inputs.reorderQuantity),
+            currentStock: Number(inputs.stockQuantity),
             id: id,
           },
         },

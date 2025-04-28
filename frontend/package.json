@@ -61,5 +61,8 @@
   "resolutions": {
     "@babel/runtime": "^7.20.0",
     "source-map": "^0.7.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
