@@ -89,19 +89,20 @@ function AllEmployees() {
       borderWidth: 1,
     });
 
+    // Fetch the logo as an array buffer and embed it
     try {
-      // Add logo with error handling
-      const logoImage = await pdfDoc.embedPng(logo);
-      const logoDims = logoImage.scale(0.2);
+      const response = await fetch(logo);
+      const logoBytes = await response.arrayBuffer();
+      const logoImage = await pdfDoc.embedPng(logoBytes);
+      const logoDims = logoImage.scale(0.15);
       page.drawImage(logoImage, {
         x: 50,
-        y: height - 100,
+        y: height - 120,
         width: logoDims.width,
         height: logoDims.height,
       });
     } catch (error) {
       console.warn('Could not embed logo:', error);
-      // Continue without logo if there's an error
     }
 
     // Add header with modern styling
