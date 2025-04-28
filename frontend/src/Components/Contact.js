@@ -23,6 +23,15 @@ const Contact = () => {
     }));
   };
 
+  const handleNameChange = (e) => {
+    // Only allow letters and spaces
+    const filteredValue = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+    setFormData(prevState => ({
+      ...prevState,
+      name: filteredValue
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Here you would typically send the form data to your backend
@@ -93,7 +102,7 @@ const Contact = () => {
                     id="name"
                     name="name"
                     value={formData.name}
-                    onChange={handleChange}
+                    onChange={handleNameChange}
                     required
                   />
                 </div>
