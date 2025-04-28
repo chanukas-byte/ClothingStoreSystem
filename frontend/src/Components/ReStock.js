@@ -27,10 +27,12 @@ function ReStock() {
       setRestockList((prevList) => {
         const exists = prevList.some(item => item.id === orderDetails.id);
         if (!exists) {
+          const restockQuantity = Number(orderDetails.reorderQuantity) || 0;
+          const currentStock = Number(orderDetails.currentStock) || 0;
           const newItem = {
             ...orderDetails,
-            restockQuantity: orderDetails.reorderQuantity || 0,
-            totalStock: (orderDetails.currentStock || 0) + (orderDetails.reorderQuantity || 0),
+            restockQuantity: restockQuantity,
+            totalStock: currentStock + restockQuantity,
           };
           const updatedList = [...prevList, newItem];
           saveRestockList(updatedList);
