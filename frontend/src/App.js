@@ -47,6 +47,7 @@ import Item from "./Components/Item";
 import AddCategory from "./Components/AddCategory";
 import Category from "./Components/Category";
 import ReStock from "./Components/ReStock";
+import VirtualRoom from './Components/VirtualRoom';
 
 // Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -151,6 +152,9 @@ function App() {
           {/* Feedback Routes */}
           <Route path="/add-feedback" element={<AddFeedback />} />
           <Route path="/feedback-list" element={<FeedbackList />} />
+
+          {/* Virtual Room Routes */}
+          <Route path="/virtual-room" element={<VirtualRoom />} />
 
           {/* 404 - Page Not Found (Optional) */}
           {/* <Route path="*" element={<NotFound />} /> */}
