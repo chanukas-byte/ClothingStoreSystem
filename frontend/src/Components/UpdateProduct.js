@@ -119,6 +119,7 @@ function UpdateProduct() {
       marginBottom: "20px",
       fontSize: "1.5rem",
       color: "#333",
+      fontWeight: "bold",
     },
     inputField: {
       marginBottom: "15px",
@@ -134,19 +135,23 @@ function UpdateProduct() {
       padding: "10px",
       borderRadius: "5px",
       border: "1px solid #ccc",
+      fontWeight: "bold",
     },
     submitButton: {
       width: "100%",
       padding: "10px",
-      backgroundColor: "#007bff",
+      backgroundColor: "#000000",
       color: "#fff",
       border: "none",
       borderRadius: "5px",
       fontWeight: "bold",
       cursor: "pointer",
+      transition: "all 0.3s ease",
     },
     submitButtonHover: {
-      backgroundColor: "#0056b3",
+      backgroundColor: "#333333",
+      boxShadow: "0 0 15px rgba(255, 255, 255, 0.7)",
+      transform: "scale(1.02)",
     },
     imagePreview: {
       width: "100%",
@@ -272,6 +277,16 @@ function UpdateProduct() {
             style={{
               ...formStyles.submitButton,
               ":hover": formStyles.submitButtonHover,
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = "#333333";
+              e.currentTarget.style.boxShadow = "0 0 15px rgba(255, 255, 255, 0.7)";
+              e.currentTarget.style.transform = "scale(1.02)";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = "#000000";
+              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.transform = "scale(1)";
             }}
           >
             Update Product
